@@ -1,2 +1,2 @@
 # cart253
-This is Pippin Barr’s coursework repository for CART253 (sabine?)
+This is yann kruplewicz coursework repository for CART253 (sabine?)

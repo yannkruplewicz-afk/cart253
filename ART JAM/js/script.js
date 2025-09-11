@@ -21,7 +21,7 @@ function setup() {
 function draw() {
     background("#2D302E");
 
-     DrawFrame();
+    DrawFrame();
 
 }
 
@@ -29,38 +29,38 @@ function draw() {
 
 function DrawFrame() {
     //frame
-    push ();
+    push();
     noFill();
     stroke("grey");
     strokeWeight(20);
     rect(50, 50, 1100, 700);
-    pop ();
+    pop();
 
 
-    push ();
+    push();
     noFill();
     stroke("white");
     strokeWeight(10);
     rect(50, 50, 1100, 700);
-    pop ();
-   
+    pop();
+
     // core of the frame
-    push ();
+    push();
     fill("white");
     noStroke();
     strokeWeight(2);
     rect(600, 400, 700, 500);
-    pop ();
-    
+    pop();
+
     //head
-    push ();
+    push();
     fill("#17E6C0");
     noStroke();
     strokeWeight(2);
     ellipse(600, 400, 1110, 700);
 
-    pop ();
-   
-   
-    
+    pop();
+
+
+
 }

@@ -18,4 +18,16 @@ function setup() {
 function draw() {
     background(255, 100, 100);
     rect    (200,80,240,320);
+
+    push ();
+    fill (0, 255, 0);
+    stroke (120);
+    ellipse (100, 100, 80, 80);
+    pop  ();
+
+    push ();
+    fill (black);
+    noStroke (120);
+    ellipse (50, 50, 40, 40);
+    pop  ();
 }

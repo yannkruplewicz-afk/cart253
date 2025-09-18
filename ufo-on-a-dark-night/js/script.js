@@ -22,6 +22,12 @@ let ufo = {
 // Shade to fill the sky (background)
 let skyShade = 0;
 
+let bug = {
+    x: 0,
+    y: 200,
+    size: 10
+};
+
 /**
  * Creates the canvas
 */
@@ -50,4 +56,11 @@ function draw() {
     noStroke();
     ellipse(ufo.x, ufo.y, ufo.width, ufo.height);
     pop();
+
+
+
+    // Add a random number between 1 and 5 to the big's position
+    // to make it move jerkily
+    bug.x += random(1, 5);
+    ellipse(bug.x, bug.y, bug.size);
 }

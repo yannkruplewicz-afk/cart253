@@ -16,15 +16,30 @@ function setup() {
 
 
 /**
- * sets the bqckground 
+ * sets the background 
 */
 function draw() {
     background("#2D302E");
 
     DrawFrame();
 
+    clip(frameMask, { invert: false });
+
+    //head
+    push();
+    fill("#17E6C0");
+    noStroke();
+    strokeWeight(2);
+    ellipse(600, 400, 1110, 700);
+
+    pop();
+
+
 }
 
+function frameMask() {
+    rect(100, 100, width - 200, height - 200);
+}
 
 
 function DrawFrame() {
@@ -45,21 +60,8 @@ function DrawFrame() {
     pop();
 
     // core of the frame
-    push();
-    fill("white");
-    noStroke();
-    strokeWeight(2);
-    rect(600, 400, 700, 500);
-    pop();
 
-    //head
-    push();
-    fill("#17E6C0");
-    noStroke();
-    strokeWeight(2);
-    ellipse(600, 400, 1110, 700);
 
-    pop();
 
 
 

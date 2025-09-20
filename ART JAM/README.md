@@ -1,24 +1,26 @@
-# TITLE OF PROJECT
+# ART JAM YANN K
 
-AUTHOR NAME
+YANN KRUPLEWICZ
 
 [View this project online](URL_FOR_THE_RUNNING_PROJECT)
 
 ## Description
 
-This description should help the reader understand what the program is, anything they should know to be able to experience it (controls, special features, etc.), and what the desired user experience is. For example:
+This autoportrait represents me in a picture my mother took with her camera, i have tried to represent it as realistic as possible, hence the use of shadows. Altough the cartoon style gives it a sense of uniqueness
 
-> *The Mayor of Clown Town* is a simulator experience that allows the user to control a small town populated entirely by clowns.
 
-> The experience is controlled via the mouse, with left click selecting a clown and bringing up a menu of options such as "slip of banana peel" or "get into impossible capacious clown-car."
-
-> The project is meant to give the user a sense of what it would be the mayor of a town of clowns, eventually getting the sense that clowns are not taking their civic duties seriously.
 
 ## Screenshot(s)
 
 This bit should have some images of the program running so that the reader has a sense of what it looks like. For example:
 
-> ![Image of a clown face](./assets/images/clown.png)
+> ![Coding advancement](./assets/images/art jam advancement coding.png)
+> ![Coding advancement, screenshot of the render, sept 20](./assets/images/art jam.jpg)
+
+As we can see in the pictures, the functions are organised and there is a mask function. In this program i have used a function 'FrameMask' to block my portait into a frame, but if we look closely we  can see that the hair are out of the frame, which was my intention because the character looks like a cartoon and lots of gags in cartoons are based on breaking rules like that. I have also used different functions that i haven't used before to help me be more accurate regarding the details, hence the function called 'DetailsNeck' in my program.
+
+
+> ![Original photo](./assets/images/clown.png)
 
 ## Attribution
 

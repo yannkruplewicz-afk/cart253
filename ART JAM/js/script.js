@@ -52,6 +52,7 @@ function draw() {
     DrawFace(); // draws the top of the head
     DrawDetailsNeck(); // draws the details of the neck
     DrawHair(); // draws the hair
+    DrawEyes(); // draws the eyes 
 
 }
 
@@ -478,6 +479,39 @@ function DrawFace() {
     pop();
 
 } // end of ears and drawing of the face
+
+function DrawEyes() { // it's funny because the auto completions helped me a lot until this point but now i have reached the max quotas for the free version so i really have to know the codes format, and not write 'pull' rather than 'pop' cause we are not at the gym here !
+
+    push();
+    fill("white");
+    translate(200, 400); // Move the origin to the ellipse center
+    rotate(radians(-9));
+    ellipse(500, 100, 200, 100)
+    pop();
+
+    push();
+    fill("white");
+    translate(200, 400); // Move the origin to the ellipse center
+    rotate(radians(-9));
+    ellipse(300, 100, 200, 100)
+    pop();
+
+    push();
+    fill("white");
+    translate(200, 400); // Move the origin to the ellipse center
+    rotate(radians(-9));
+    arc(590, 330, 150, 150, PI + QUARTER_PI, 0 + TWO_PI, OPEN);
+    pop();
+
+    push();
+    fill("white");
+    translate(200, 400); // Move the origin to the ellipse center
+    rotate(radians(-9));
+    arc(790, 330, 150, 150, PI + QUARTER_PI, 0 + TWO_PI, OPEN);
+    pop();
+
+
+}
 
 
 

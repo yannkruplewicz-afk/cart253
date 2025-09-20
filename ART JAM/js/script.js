@@ -53,7 +53,7 @@ function draw() {
     DrawDetailsNeck(); // draws the details of the neck
     DrawHair(); // draws the hair
     DrawEyes(); // draws the eyes 
-    DrawNoose();// draws the noose (nez)
+    DrawDetailshead();// draws the noose (nez)
 
 }
 
@@ -660,12 +660,103 @@ function DrawEyes() { // it's funny because the auto completions helped me a lot
     }
     pop();
 
+
+    //eyebrows
+    // Sourcil gauche
+    push();
+    stroke("#3B2A1A");
+    strokeWeight(20);
+    noFill();
+    translate(470, 610); // position au-dessus de l'œil gauche
+    rotate(radians(-8)); // légère inclinaison
+    arc(0, 0, 300, 170, PI + QUARTER_PI, TWO_PI - QUARTER_PI);
+    pop();
+
+    // Sourcil droit
+    push();
+    stroke("#3B2A1A");
+    strokeWeight(23);
+    noFill();
+    translate(840, 620); // position au-dessus de l'œil droit
+    rotate(radians(4)); // légère inclinaison
+    arc(0, 0, 240, 140, PI + QUARTER_PI, TWO_PI - QUARTER_PI);
+    pop();
+
 }
 
 
-function DrawNoose(cx = 650, cy = 500, size = 40, roundness = 90) {
+function DrawDetailshead() {
+
+    //draws shadows of left ear
+    push();
+    translate(0, 400); // MY MISTAKE I HAVE PUT TWO TRANSLATE' BUT IT WORKS RIGHT 
+    fill("#ebeffdff");
+    noStroke();
+    translate(-230, -347); // Move the origin to the ellipse center
+    rotate(radians(-9)); // Rotate 
+    ellipse(300, 800, 100, 180);
+    pop();
+
+    push();
+    translate(0, 400); // MMY MISTAKE I HAVE PUT TWO TRANSLATE' BUT IT WORKS RIGHT 
+    fill("#0a0b0dff");
+    noStroke();
+    translate(-210, -347); // Move the origin to the ellipse center
+    rotate(radians(-9)); // Rotate 
+    ellipse(300, 800, 100, 180);
+    pop();
+
+
+    push();
+    translate(0, 400); // MY MISTAKE I HAVE PUT TWO TRANSLATE' BUT IT WORKS RIGHT 
+    noStroke();
+    translate(-212, -331); // Move the origin to the ellipse center
+    rotate(radians(-9)); // Rotate 
+    ellipse(300, 800, 60, 90);
+    pop();
+
+    push();
+    translate(0, 400); // MY MISTAKE I HAVE PUT TWO TRANSLATE' BUT IT WORKS RIGHT 
+    fill("#2e57ecff");
+    noStroke();
+    translate(142, -431); // Move the origin to the ellipse center
+    rotate(radians(15)); // Rotate 
+    ellipse(300, 800, 70, 100);
+    pop();
+
+    // END OF SHADWOS OF LEFT EAR
+
+    //draws shadows of right ear
+
+    push();
+    fill("#ebeffdff");
+    noStroke();
+    translate(840, -47); // Move the origin to the ellipse center
+    rotate(radians(9)); // Rotate 
+    ellipse(300, 800, 36, 140);
+    pop();
+
+    push();
+    fill("#0a0b0dff");
+    noStroke();
+    translate(805, -47); // Move the origin to the ellipse center
+    rotate(radians(9)); // Rotate 
+    ellipse(330, 800, 30, 126);
+    pop();
+
+
+    push();
+    fill("white");
+    noStroke();
+    translate(832, -31); // Move the origin to the ellipse center
+    rotate(radians(9)); // Rotate 
+    ellipse(300, 800, 20, 60);
+    pop();
+    // right EAR FINISHED
 
 }
+
+
 
 
 

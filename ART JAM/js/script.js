@@ -53,6 +53,7 @@ function draw() {
     DrawDetailsNeck(); // draws the details of the neck
     DrawHair(); // draws the hair
     DrawEyes(); // draws the eyes 
+    DrawNoose();// draws the noose (nez)
 
 }
 
@@ -482,37 +483,189 @@ function DrawFace() {
 
 function DrawEyes() { // it's funny because the auto completions helped me a lot until this point but now i have reached the max quotas for the free version so i really have to know the codes format, and not write 'pull' rather than 'pop' cause we are not at the gym here !
 
+
+
     push();
     fill("white");
-    translate(200, 400); // Move the origin to the ellipse center
-    rotate(radians(-9));
-    ellipse(500, 100, 200, 100)
+    noStroke();
+    translate(-30, 539); // completes the drawing of left eye
+    rotate(radians(-5));
+    ellipse(500, 100, 140, 70)
     pop();
 
     push();
     fill("white");
-    translate(200, 400); // Move the origin to the ellipse center
-    rotate(radians(-9));
-    ellipse(300, 100, 200, 100)
+    noStroke();
+    translate(320, 468); // completes the drawing of right eye
+    rotate(radians(2));
+    ellipse(507, 100, 140, 70)
     pop();
 
     push();
     fill("white");
-    translate(200, 400); // Move the origin to the ellipse center
-    rotate(radians(-9));
-    arc(590, 330, 150, 150, PI + QUARTER_PI, 0 + TWO_PI, OPEN);
+    translate(-180, 600); // draws left eye
+    rotate(radians(-25));
+    arc(590, 330, 150, 170, PI + QUARTER_PI, 0 + TWO_PI, OPEN);
     pop();
 
     push();
     fill("white");
-    translate(200, 400); // Move the origin to the ellipse center
-    rotate(radians(-9));
-    arc(790, 330, 150, 150, PI + QUARTER_PI, 0 + TWO_PI, OPEN);
+    translate(100, 600); // Draws right eye
+    rotate(radians(-25));
+    arc(630, 332, 165, 150, PI + QUARTER_PI, 0 + TWO_PI, OPEN);
     pop();
 
+    push();
+    fill("#4b5b00ff")
+    stroke("#747474ff")
+    strokeWeight(5);
+    translate(0, 0); // Draws right eye
+    rotate(radians(-5));
+    ellipse(767, 660, 66, 68)
+    pop();
+
+    push();
+    fill("#4b5b00ff")
+    stroke("#747474ff")
+    strokeWeight(5);
+    ellipse(485, 600, 66, 68)
+    fill("black")
+    noStroke();
+    ellipse(478, 600, 33, 30)
+    ellipse(810, 590, 33, 30)
+    fill("white")
+    noStroke();
+    ellipse(468, 595, 13, 10)
+    ellipse(800, 585, 13, 10)
+    fill("#d9bfbfff")
+    noStroke();
+    ellipse(830, 590, 9, 6)
+
+    fill("#693737ff")
+    noStroke();
+    ellipse(478, 600, 13, 10)
+    ellipse(810, 590, 13, 10)
+    pop();
+
+    // Add of a triangle with rounded corners for more details in the eyes
+    push();
+    fill("pink");
+    noStroke();
+    translate(-76, 148); // completes the drawing of left eye
+    rotate(radians(-14));
+    beginShape();
+    curveVertex(470, 600); // control point for smoothness
+    curveVertex(475, 610); // first corner (bottom left)
+    curveVertex(490, 590); // second corner (top)
+    curveVertex(505, 610); // third corner (bottom right)
+
+    endShape(CLOSE);
+    pop();
+
+    push();
+    fill("pink");
+    noStroke();
+    // Place le repère au centre du triangle, puis applique le miroir horizontal
+    translate(755, 601); // centre du triangle
+    scale(-1, 1);        // miroir horizontal
+    rotate(radians(-14));
+    beginShape();
+    curveVertex(-20, 0);   // control point for smoothness
+    curveVertex(-15, 10);  // premier coin (bas gauche)
+    curveVertex(0, -10);   // deuxième coin (haut)
+    curveVertex(15, 10);   // troisième coin (bas droit)
+    endShape(CLOSE);
+    pop();
+
+
+    // Cils pour l'œil gauche
+
+    push();
+    stroke(60);
+    strokeWeight(1);
+    noFill();
+    translate(489, 607); // centre de l'œil gauche
+    rotate(radians(-29)); // ajuster l'orientation
+    for (let i = -2; i <= 2; i++) {
+        let angle = radians(-60 + i * 30);
+        let r1 = 50;
+        let r2 = 60;
+        let yOffset = (i >= -1 && i <= 1) ? 10 : 0; // décale les 3 cils du milieu vers le bas
+        let x1 = r1 * cos(angle);
+        let y1 = r1 * sin(angle) + yOffset;
+        let x2 = r2 * cos(angle);
+        let y2 = r2 * sin(angle) + yOffset;
+        line(x1, y1, x2, y2);
+    }
+    pop();
+
+    push();
+    stroke(60);
+    strokeWeight(1);
+    noFill();
+    translate(478, 607); // centre de l'œil gauche
+    rotate(radians(-40)); // ajuster l'orientation
+    for (let i = -2; i <= 2; i++) {
+        let angle = radians(-60 + i * 30);
+        let r1 = 50;
+        let r2 = 60;
+        let yOffset = (i >= -1 && i <= 1) ? 10 : 0; // décale les 3 cils du milieu vers le bas
+        let x1 = r1 * cos(angle);
+        let y1 = r1 * sin(angle) + yOffset;
+        let x2 = r2 * cos(angle);
+        let y2 = r2 * sin(angle) + yOffset;
+        line(x1, y1, x2, y2);
+    }
+    pop();
+
+
+
+    // Cils pour l'œil droit
+
+    push();
+    stroke(60);
+    strokeWeight(1);
+    noFill();
+    translate(823, 596); // centre de l'œil gauche
+    rotate(radians(-21)); // ajuster l'orientation
+    for (let i = -2; i <= 2; i++) {
+        let angle = radians(-60 + i * 30);
+        let r1 = 50;
+        let r2 = 60;
+        let yOffset = (i >= -1 && i <= 1) ? 10 : 0; // décale les 3 cils du milieu vers le bas
+        let x1 = r1 * cos(angle);
+        let y1 = r1 * sin(angle) + yOffset;
+        let x2 = r2 * cos(angle);
+        let y2 = r2 * sin(angle) + yOffset;
+        line(x1, y1, x2, y2);
+    }
+    pop();
+
+    push();
+    stroke(60);
+    strokeWeight(1);
+    noFill();
+    translate(828, 597); // centre de l'œil gauche
+    rotate(radians(-11)); // ajuster l'orientation
+    for (let i = -2; i <= 2; i++) {
+        let angle = radians(-60 + i * 30);
+        let r1 = 50;
+        let r2 = 60;
+        let yOffset = (i >= -1 && i <= 1) ? 10 : 0; // décale les 3 cils du milieu vers le bas
+        let x1 = r1 * cos(angle);
+        let y1 = r1 * sin(angle) + yOffset;
+        let x2 = r2 * cos(angle);
+        let y2 = r2 * sin(angle) + yOffset;
+        line(x1, y1, x2, y2);
+    }
+    pop();
 
 }
 
+
+function DrawNoose(cx = 650, cy = 500, size = 40, roundness = 90) {
+
+}
 
 
 

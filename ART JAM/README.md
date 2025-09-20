@@ -20,7 +20,7 @@ This bit should have some images of the program running so that the reader has a
 As we can see in the pictures, the functions are organised and there is a mask function. In this program i have used a function 'FrameMask' to block my portait into a frame, but if we look closely we  can see that the hair are out of the frame, which was my intention because the character looks like a cartoon and lots of gags in cartoons are based on breaking rules like that. I have also used different functions that i haven't used before to help me be more accurate regarding the details, hence the function called 'DetailsNeck' in my program.
 
 
-> ![Original photo](./assets/images/clown.png)
+> ![Original photo](./assets/images/photobaseARTJAM.JPG)
 
 ## Attribution
 

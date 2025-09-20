@@ -420,11 +420,50 @@ function DrawFace() {
     ellipse(600, 300, 800, 850);
     pop();
 
-    push(); // head itself
-    translate(0, 400); // Move it down because i changed the height of the canvas
+    push(); // head detail to complete right hand corner of head
+    translate(0, 400);
     fill("#FCC6BB");
     noStroke();
     ellipse(800, 100, 400, 450);
+    pop();
+
+    push(); // head shadow middle
+    translate(-300, -90);
+    rotate("0.5")
+    fill("#c77463ff")
+    stroke("#c77463ff")
+    strokeWeight(46)
+    ellipse(800, 100, 100, 450);
+    pop();
+
+
+
+    push(); // head shadow right
+    translate(300, 960);
+    rotate("-1")
+    fill("#eb9383")
+    stroke("#eb9383")
+    strokeWeight(46)
+    ellipse(800, 100, 100, 290);
+    pop();
+
+    push(); // head shadow right
+    translate(300, 920);
+    rotate("-1")
+    fill("#c77463ff");
+    stroke("#c77463ff")
+    strokeWeight(46)
+    ellipse(800, 100, 100, 290);
+    pop();
+
+
+    push(); // head itself
+    translate(-230, 155); // Move it down because i changed the height of the canvas
+    rotate("0")
+    fill("#c85c46ff")
+    stroke("#c85c46ff")
+    strokeWeight(46)
+    ellipse(800, 100, 450, 100);
     pop();
 
 

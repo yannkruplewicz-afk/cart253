@@ -285,7 +285,7 @@ function DrawHair() {
     ellipse(640, 165, 300, 200);
     translate(1100, -410); // right side of hair
     rotate(radians(86));
-    ellipse(960, 165, 300, 60);
+    ellipse(960, 165, 230, 60);
     pop();
 
     push();
@@ -327,9 +327,21 @@ function DrawHair() {
     translate(0, 0); // right side of hair
     rotate(radians(0));
     arc(790, 330, 100, 150, PI + QUARTER_PI, 0 + TWO_PI, OPEN);
-
-
     pop();
+
+    push();
+    fill("#2C1B0B");
+    noStroke();
+    translate(35, -25); // right side of hair
+    rotate(radians(0));
+    arc(790, 400, 300, 450, PI + QUARTER_PI, 0 + TWO_PI, OPEN);
+
+    push();// shadow of previous arc
+    fill("#24100B");
+    noStroke();
+    translate(10, 10); // right side of hair
+    rotate(radians(0));
+    arc(790, 330, 170, 230, PI + QUARTER_PI, 0 + TWO_PI, OPEN);
 
 
     pop();
@@ -407,9 +419,9 @@ function DrawFace() {
     //right ear
     push();
     translate(0, 400); // Move it down because i changed the height of the canvas
-    fill("#D76D56");
+    fill("#e08773f6");
     noStroke();
-    translate(100, -180); // Move the origin to the ellipse center
+    translate(100, -214); // Move the origin to the ellipse center
     rotate(radians(12));
     ellipse(990, 380, 90, 200);
     pop();
@@ -665,11 +677,29 @@ function DrawEyes() { // it's funny because the auto completions helped me a lot
     // Sourcil gauche
     push();
     stroke("#3B2A1A");
-    strokeWeight(20);
+    strokeWeight(24);
     noFill();
-    translate(470, 610); // position au-dessus de l'œil gauche
+    translate(470, 650); // position au-dessus de l'œil gauche
     rotate(radians(-8)); // légère inclinaison
     arc(0, 0, 300, 170, PI + QUARTER_PI, TWO_PI - QUARTER_PI);
+    pop();
+
+    push();
+    stroke("#3b2a1aff");
+    strokeWeight(15);
+    noFill();
+    translate(477, 635); // position au-dessus de l'œil droit
+    rotate(radians(0)); // légère inclinaison
+    arc(0, 0, 440, 140, PI + QUARTER_PI, TWO_PI - QUARTER_PI);
+    pop();
+
+    push();
+    stroke("#3B2A1A");
+    strokeWeight(13);
+    noFill();
+    translate(528, 585); // position au-dessus de l'œil droit
+    rotate(radians(0)); // légère inclinaison
+    arc(0, 0, 340, 40, PI + QUARTER_PI, TWO_PI - QUARTER_PI);
     pop();
 
     // Sourcil droit
@@ -677,11 +707,58 @@ function DrawEyes() { // it's funny because the auto completions helped me a lot
     stroke("#3B2A1A");
     strokeWeight(23);
     noFill();
-    translate(840, 620); // position au-dessus de l'œil droit
-    rotate(radians(4)); // légère inclinaison
+    translate(868, 620); // position au-dessus de l'œil droit
+    rotate(radians(11)); // légère inclinaison
     arc(0, 0, 240, 140, PI + QUARTER_PI, TWO_PI - QUARTER_PI);
     pop();
 
+    // Sourcil droit
+    push();
+    stroke("#3b2a1ae3");
+    strokeWeight(13);
+    noFill();
+    translate(868, 595); // position au-dessus de l'œil droit
+    rotate(radians(-5)); // légère inclinaison
+    arc(0, 0, 340, 100, PI + QUARTER_PI, TWO_PI - QUARTER_PI);
+    pop();
+
+    push();
+    stroke("#3b2a1ace");
+    strokeWeight(13);
+    noFill();
+    translate(800, 570); // position au-dessus de l'œil droit
+    rotate(radians(-11)); // légère inclinaison
+    arc(0, 0, 340, 40, PI + QUARTER_PI, TWO_PI - QUARTER_PI);
+    pop();
+
+    push();
+    stroke("#3B2A1A");
+    strokeWeight(19);
+    noFill();
+    translate(809, 570); // position au-dessus de l'œil droit
+    rotate(radians(-11)); // légère inclinaison
+    arc(0, 0, 360, 40, PI + QUARTER_PI, TWO_PI - QUARTER_PI);
+    pop();
+
+    push();
+    stroke("#3B2A1A");
+    strokeWeight(19);
+    noFill();
+    translate(839, 607); // position au-dessus de l'œil droit
+    rotate(radians(-3)); // légère inclinaison
+    arc(0, 0, 360, 100, PI + QUARTER_PI, TWO_PI - QUARTER_PI);
+    pop();
+
+
+
+    push();
+    stroke("#fcb8a7f1");
+    strokeWeight(6);
+    noFill();
+    translate(857, 575); // position au-dessus de l'œil droit
+    rotate(radians(22)); // légère inclinaison
+    arc(0, 0, 340, 72, PI + QUARTER_PI, TWO_PI - QUARTER_PI);
+    pop();
 }
 
 
@@ -690,7 +767,7 @@ function DrawDetailshead() {
     //draws shadows of left ear
     push();
     translate(0, 400); // MY MISTAKE I HAVE PUT TWO TRANSLATE' BUT IT WORKS RIGHT 
-    fill("#ebeffdff");
+    fill("#D76D56");
     noStroke();
     translate(-230, -347); // Move the origin to the ellipse center
     rotate(radians(-9)); // Rotate 
@@ -698,8 +775,8 @@ function DrawDetailshead() {
     pop();
 
     push();
-    translate(0, 400); // MMY MISTAKE I HAVE PUT TWO TRANSLATE' BUT IT WORKS RIGHT 
-    fill("#0a0b0dff");
+    translate(0, 420); // MMY MISTAKE I HAVE PUT TWO TRANSLATE' BUT IT WORKS RIGHT 
+    fill("#eb9383");
     noStroke();
     translate(-210, -347); // Move the origin to the ellipse center
     rotate(radians(-9)); // Rotate 
@@ -710,6 +787,7 @@ function DrawDetailshead() {
     push();
     translate(0, 400); // MY MISTAKE I HAVE PUT TWO TRANSLATE' BUT IT WORKS RIGHT 
     noStroke();
+    fill("#d26951bb");
     translate(-212, -331); // Move the origin to the ellipse center
     rotate(radians(-9)); // Rotate 
     ellipse(300, 800, 60, 90);
@@ -717,7 +795,7 @@ function DrawDetailshead() {
 
     push();
     translate(0, 400); // MY MISTAKE I HAVE PUT TWO TRANSLATE' BUT IT WORKS RIGHT 
-    fill("#2e57ecff");
+    fill("#eb9383");
     noStroke();
     translate(142, -431); // Move the origin to the ellipse center
     rotate(radians(15)); // Rotate 
@@ -729,28 +807,28 @@ function DrawDetailshead() {
     //draws shadows of right ear
 
     push();
-    fill("#ebeffdff");
+    fill("#d76d56");
     noStroke();
-    translate(840, -47); // Move the origin to the ellipse center
+    translate(840, -77); // Move the origin to the ellipse center
     rotate(radians(9)); // Rotate 
-    ellipse(300, 800, 36, 140);
+    ellipse(300, 800, 30, 140);
     pop();
 
     push();
-    fill("#0a0b0dff");
+    fill("#e08773ff");
     noStroke();
-    translate(805, -47); // Move the origin to the ellipse center
+    translate(805, -77); // Move the origin to the ellipse center
     rotate(radians(9)); // Rotate 
-    ellipse(330, 800, 30, 126);
+    ellipse(330, 800, 20, 126);
     pop();
 
 
     push();
-    fill("white");
+    fill("#d26951ff");
     noStroke();
-    translate(832, -31); // Move the origin to the ellipse center
+    translate(832, -71); // Move the origin to the ellipse center
     rotate(radians(9)); // Rotate 
-    ellipse(300, 800, 20, 60);
+    ellipse(300, 800, 18, 60);
     pop();
     // right EAR FINISHED
 

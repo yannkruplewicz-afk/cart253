@@ -854,7 +854,7 @@ function DrawEyes() { // it's funny because the auto completions helped me a lot
     fill("red");
     noStroke();
     // Place le triangle au centre de la pupille gauche
-    translate(418, 622); // centre de la pupille gauche
+    translate(718, 622); // centre de la pupille gauche
     scale(1.2); // ajuste la taille (1.2 = un peu plus grand que la pupille)
     beginShape();
     curveVertex(-10, 10);   // coin bas gauche
@@ -868,13 +868,28 @@ function DrawEyes() { // it's funny because the auto completions helped me a lot
     fill("blue");
     noStroke();
     // Place le triangle au centre de la pupille gauche
-    translate(408, 622); // centre de la pupille gauche
+    translate(423, 637); // centre de la pupille gauche
     scale(1.2); // ajuste la taille (1.2 = un peu plus grand que la pupille)
     beginShape();
     curveVertex(-10, 10);   // coin bas gauche
     curveVertex(0, -12);    // sommet haut
     curveVertex(10, 10);    // coin bas droit
     curveVertex(-10, 10);   // referme la courbe
+    endShape(CLOSE);
+    pop();
+
+    push();
+    noFill();
+    stroke("red");
+    strokeWeight("4");
+    // Place le triangle au centre de la pupille gauche
+    translate(453, 637); // centre de la pupille gauche
+    scale(1.2); // ajuste la taille (1.2 = un peu plus grand que la pupille)
+    beginShape();
+    curveVertex(-30, 10);   // coin bas gauche
+    curveVertex(0, -12);    // sommet haut
+    curveVertex(17, 9);    // coin bas droit
+    curveVertex(-22, 10);   // referme la courbe
     endShape(CLOSE);
     pop();
 

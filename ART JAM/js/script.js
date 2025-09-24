@@ -781,6 +781,53 @@ function DrawEyes() { // it's funny because the auto completions helped me a lot
     endShape(CLOSE);
     pop();
 
+    //skin that has to be seen prior to the eye at the top, LEFT EYE
+    push();
+    stroke("#f39f9fff");
+    strokeWeight(14);
+    noFill();
+    translate(495, 444); // position au-dessus de l'œil gauche
+    scale(1, -1); // miroir vertical
+    rotate(radians(181)); // légère inclinaison
+    arc(0, 200, 160, 100, PI + QUARTER_PI, TWO_PI - QUARTER_PI);
+    pop();
+
+
+    //skin that has to be seen prior to the eye at the BOTTOM, LEFT EYE
+    push();
+    stroke("#f39f9fff");
+    strokeWeight(14);
+    noFill();
+    translate(491, 493); // position au-dessus de l'œil gauche
+    scale(1, -1); // miroir vertical
+    rotate(radians(181)); // légère inclinaison
+    arc(0, 200, 120, 60, PI + QUARTER_PI, TWO_PI - QUARTER_PI);
+    pop();
+
+
+    //skin that has to be seen prior to the eye at the top, RIGHT EYE
+    push();
+    stroke("#f39f9fff");
+    strokeWeight(18);
+    noFill();
+    translate(855, 440); // position au-dessus de l'œil gauche
+    scale(1, -1); // miroir vertical
+    rotate(radians(174)); // légère inclinaison
+    arc(0, 200, 160, 100, PI + QUARTER_PI, TWO_PI - QUARTER_PI);
+    pop();
+
+    //skin that has to be seen prior to the eye at the BOTTOM, RIGHT EYE
+    push();
+    stroke("#f39f9fff");
+    strokeWeight(14);
+    noFill();
+    translate(838, 477); // position au-dessus de l'œil gauche
+    scale(1, -1); // miroir vertical
+    rotate(radians(175)); // légère inclinaison
+    arc(0, 200, 120, 40, PI + QUARTER_PI, TWO_PI - QUARTER_PI);
+    pop();
+
+
     // Add of a triangle with rounded corners for more details in the eyes
     push();
     fill("pink");
@@ -801,10 +848,10 @@ function DrawEyes() { // it's funny because the auto completions helped me a lot
     // Cils pour l'œil gauche
 
     push();
-    stroke(60);
+    stroke("#ff");
     strokeWeight(1);
     noFill();
-    translate(489, 622); // centre de l'œil gauche
+    translate(489, 640); // centre de l'œil gauche
     rotate(radians(-39)); // ajuster l'orientation
     for (let i = -2; i <= 2; i++) {
         let angle = radians(-60 + i * 30);
@@ -823,7 +870,7 @@ function DrawEyes() { // it's funny because the auto completions helped me a lot
     stroke(60);
     strokeWeight(1);
     noFill();
-    translate(481, 622); // centre de l'œil gauche
+    translate(481, 640); // centre de l'œil gauche
     rotate(radians(-40)); // ajuster l'orientation
     for (let i = -2; i <= 2; i++) {
         let angle = radians(-60 + i * 30);
@@ -846,7 +893,7 @@ function DrawEyes() { // it's funny because the auto completions helped me a lot
     stroke(60);
     strokeWeight(1);
     noFill();
-    translate(823, 616); // centre de l'œil gauche
+    translate(823, 630); // centre de l'œil gauche
     rotate(radians(-31)); // ajuster l'orientation
     for (let i = -2; i <= 2; i++) {
         let angle = radians(-60 + i * 30);
@@ -865,7 +912,7 @@ function DrawEyes() { // it's funny because the auto completions helped me a lot
     stroke(60);
     strokeWeight(1);
     noFill();
-    translate(833, 618); // centre de l'œil gauche
+    translate(833, 630); // centre de l'œil gauche
     rotate(radians(-22)); // ajuster l'orientation
     for (let i = -2; i <= 2; i++) {
         let angle = radians(-60 + i * 30);

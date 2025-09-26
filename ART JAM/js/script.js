@@ -504,9 +504,9 @@ function DrawEyes() { // it's funny because the auto completions helped me a lot
     // draws a shadow between both eyes 
     push();
     noStroke();
-    translate(133, 15); // completes the drawing of left eye
+    translate(142, 15); // completes the drawing of left eye
     rotate(radians(-1));
-    fill("#d47a7af4");
+    fill("#d47a7a77");
     ellipse(530, 570, 190, 90)
     pop();
 
@@ -523,14 +523,14 @@ function DrawEyes() { // it's funny because the auto completions helped me a lot
     // draws shadows above and around eyes this is FOR LEFT EYE
     push();
     noStroke();
-    fill("#c51212cb");
+    fill("#bb2424cb");
     ellipse(530, 570, 120, 70)
     pop();
 
     push();
     noStroke();
-    fill("#c51212cb");
-    translate(459, -59); // completes the drawing of left eye
+    fill("#bb2424cb");
+    translate(459, -59); // completes the drawing of right eye, red shadow in the right corner
     rotate(radians(9));
     ellipse(530, 570, 150, 90)
     pop();
@@ -540,7 +540,7 @@ function DrawEyes() { // it's funny because the auto completions helped me a lot
     noStroke();
     translate(-51, 45); // completes the drawing of left eye
     rotate(radians(-5));
-    fill("#43f65bff");
+    fill("#5b121269");
     ellipse(490, 610, 140, 70)
     pop();
 
@@ -618,7 +618,7 @@ function DrawEyes() { // it's funny because the auto completions helped me a lot
     noStroke();
     translate(333, -45);
     rotate(radians(5));
-    fill("#c51212cb");
+    fill("#bb2424ff");
     ellipse(530, 570, 120, 70)
     pop();
 
@@ -626,7 +626,7 @@ function DrawEyes() { // it's funny because the auto completions helped me a lot
     noStroke();
     translate(401, -41); // completes the drawing of RIGHT eye
     rotate(radians(5));
-    fill("#43f65bff");
+    fill("#5b121269");
     ellipse(490, 610, 140, 70)
     pop();
 
@@ -672,8 +672,7 @@ function DrawEyes() { // it's funny because the auto completions helped me a lot
     noFill();
     stroke("#f39f9fff");
     strokeWeight("4");
-    // Place le triangle au centre de la pupille DROITE
-    translate(520, 659); // centre de la pupille DROITE
+    translate(520, 659);
     rotate(radians(177));
     scale(1.2); // ajuste la taille (1.2 = un peu plus grand que la pupille)
     beginShape();
@@ -688,8 +687,7 @@ function DrawEyes() { // it's funny because the auto completions helped me a lot
     noFill();
     stroke("#f39f9fff");
     strokeWeight("4");
-    // Place le triangle au centre de la pupille DROITE
-    translate(850, 653); // centre de la pupille DROITE
+    translate(850, 653);
     rotate(radians(177));
     scale(1.2); // ajuste la taille (1.2 = un peu plus grand que la pupille)
     beginShape();
@@ -746,19 +744,44 @@ function DrawEyes() { // it's funny because the auto completions helped me a lot
     // DETAILS OF BOTH EYES (retina, eyebowl, eye corners)
 
     push();// THIS IF FOR RIGHT EYE, IT DRAWS THE EYEBOWL
-    fill("#4b5b00ff")
+    fill("#3d4a04ff")
     stroke("#747474ff")
     strokeWeight(5);
     translate(5, 35);
     rotate(radians(-5));
     ellipse(764, 655, 66, 68)
     pop();
+
+    // creates a shadow in the right eye
+    push();
+    fill("#2a3014ff")
+    noStroke();
+    strokeWeight(5);
+    translate(172, 214);
+    rotate(radians(-22));
+    ellipse(469, 619, 28, 46)
+    pop();
+
+
     // NOW IT'S LEFT EYE
     push();
-    fill("#4b5b00ff")
+    fill("#3d4a04ff")
     stroke("#747474ff")
     strokeWeight(5);
     ellipse(495, 625, 66, 68)
+    pop();
+
+    // creates a shadow in the left eye
+    push();
+    fill("#2a3014ff")
+    noStroke();
+    strokeWeight(5);
+    translate(227, -117);
+    rotate(radians(15));
+    ellipse(434, 645, 28, 46)
+    pop();
+
+    push();
     fill("black")
     noStroke();
     ellipse(498, 622, 33, 30) // retina of left eye
@@ -767,6 +790,8 @@ function DrawEyes() { // it's funny because the auto completions helped me a lot
     noStroke();
     ellipse(497, 625, 13, 10)
     ellipse(818, 620, 13, 10)
+    pop();
+
 
 
     fill("#693737ff")
@@ -938,7 +963,7 @@ function DrawEyes() { // it's funny because the auto completions helped me a lot
     // EYELAHES RIGHT EYE
 
     push();
-    stroke(60);
+    stroke("white");
     strokeWeight(1);
     noFill();
     translate(823, 630); // centre de l'œil gauche
@@ -960,8 +985,8 @@ function DrawEyes() { // it's funny because the auto completions helped me a lot
     stroke(60);
     strokeWeight(1);
     noFill();
-    translate(833, 630); // centre de l'œil gauche
-    rotate(radians(-22)); // ajuster l'orientation
+    translate(833, 632); // centre de l'œil gauche
+    rotate(radians(-27)); // ajuster l'orientation
     for (let i = -2; i <= 2; i++) {
         let angle = radians(-60 + i * 30);
         let r1 = 50;
@@ -1094,6 +1119,27 @@ function DrawEyes() { // it's funny because the auto completions helped me a lot
     curveVertex(-10, 10);   // referme la courbe
     endShape(CLOSE);
     pop();
+
+    // DRAWS BLACK SHAODOWS JUST ABOVE THE EYEBOWL, left eye
+    push();
+    stroke("#140404f1");
+    strokeWeight(2);
+    noFill();
+    translate(480, 628); // position au-dessus de l'œil droit
+    rotate(radians(-12)); // légère inclinaison
+    arc(0, 0, 140, 47, PI + QUARTER_PI, TWO_PI - QUARTER_PI);
+    pop();
+
+    // DRAWS BLACK SHAODOWS JUST ABOVE THE EYEBOWL, right eye
+    push();
+    stroke("#140404f1");
+    strokeWeight(2);
+    noFill();
+    translate(850, 623); // position au-dessus de l'œil droit
+    rotate(radians(12)); // légère inclinaison
+    arc(0, 0, 140, 47, PI + QUARTER_PI, TWO_PI - QUARTER_PI);
+    pop();
+
 
 
 

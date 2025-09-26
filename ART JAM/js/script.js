@@ -510,16 +510,6 @@ function DrawEyes() { // it's funny because the auto completions helped me a lot
     ellipse(530, 570, 190, 90)
     pop();
 
-    // draws a shadow behind, at the bottom of left eye
-    push();
-    noStroke();
-    translate(133, 15); // completes the drawing of left eye
-    rotate(radians(-1));
-    fill("#f39f9fff");
-    ellipse(349, 620, 140, 95)
-    pop();
-
-
     // draws shadows above and around eyes this is FOR LEFT EYE
     push();
     noStroke();
@@ -580,9 +570,9 @@ function DrawEyes() { // it's funny because the auto completions helped me a lot
 
     push();
     noStroke();
-    translate(-51, 51); // completes the drawing of left eye
+    translate(-51, 53); // completes the drawing of left eye
     rotate(radians(-5));
-    fill("#f39f9fff");
+    fill("#f0b6a3ff");
     ellipse(490, 610, 140, 70)
     pop();
 
@@ -593,6 +583,8 @@ function DrawEyes() { // it's funny because the auto completions helped me a lot
     arc(590, 330, 150, 170, PI + QUARTER_PI, 0 + TWO_PI, OPEN);
     pop();
 
+
+    // creates bottom border of left eye
     push();
     noFill();
     stroke("#f39f9fff");
@@ -609,40 +601,15 @@ function DrawEyes() { // it's funny because the auto completions helped me a lot
     endShape(CLOSE);
     pop();
 
-    push();
-    noFill();
-    stroke("#f39f9fff");
-    strokeWeight("4");
-    // Place le triangle au centre de la pupille gauche
-    translate(820, 599); // centre de la pupille gauche
-    rotate(radians(147));
-    scale(1.2); // ajuste la taille (1.2 = un peu plus grand que la pupille)
-    beginShape();
-    curveVertex(-10, 3);   // coin bas gauche
-    curveVertex(19, -39);    // sommet haut
-    curveVertex(59, 9);    // coin bas droit
-    curveVertex(-2, 10);   // referme la courbe
-    endShape(CLOSE);
-    pop();
-
-    push();
-    stroke("#f39f9fff");
-    strokeWeight(4);
-    noFill();
-    translate(845, 629); // position au-dessus de l'œil gauche
-    scale(1, -1); // miroir vertical
-    rotate(radians(8)); // légère inclinaison
-    arc(0, 0, 80, 50, PI + QUARTER_PI, TWO_PI - QUARTER_PI);
-    pop();
 
     //RIGHT EYE
 
-    // draws a shadow behind, at the bottom of right eye
+    // draw skin that overlaps the bottom of right eye
     push();
     noStroke();
-    translate(489, -3);
+    translate(489, -9);
     rotate(radians(1));
-    fill("#f39f9fff");
+    fill("#f0b3a6ff");
     ellipse(349, 620, 140, 90)
     pop();
 
@@ -655,7 +622,7 @@ function DrawEyes() { // it's funny because the auto completions helped me a lot
     fill("#bb2424ff");
     ellipse(530, 570, 120, 70)
     pop();
-
+    // wine red shadow behind right eye
     push();
     noStroke();
     translate(401, -41); // completes the drawing of RIGHT eye
@@ -663,10 +630,10 @@ function DrawEyes() { // it's funny because the auto completions helped me a lot
     fill("#5b121269");
     ellipse(490, 610, 140, 70)
     pop();
-
+    //skin prat that underlaps right eye
     push();
     noStroke();
-    translate(401, -37); // completes the drawing of  RIGHT eye
+    translate(401, -30); // completes the drawing of  RIGHT eye
     rotate(radians(5));
     fill("#f39f9fff");
     ellipse(490, 610, 140, 70)
@@ -674,7 +641,7 @@ function DrawEyes() { // it's funny because the auto completions helped me a lot
 
 
 
-
+    // eyebowl right eye
     push();
     fill("white");
     noStroke();
@@ -702,47 +669,18 @@ function DrawEyes() { // it's funny because the auto completions helped me a lot
 
 
 
+    // Details and layers of left eye
     push();
-    noFill();
-    stroke("#F0B3A6FF");
-    strokeWeight("4");
-    translate(520, 659);
-    rotate(radians(177));
-    scale(1.2); // ajuste la taille (1.2 = un peu plus grand que la pupille)
-    beginShape();
-    curveVertex(3, -10);   // coin bas gauche
-    curveVertex(-39, 19);    // sommet haut
-    curveVertex(9, 59);    // coin bas droit
-    curveVertex(10, -2);   // referme la courbe
-    endShape(CLOSE);
-    pop();
-
-    push();
-    noFill();
     stroke("#f39f9fff");
-    strokeWeight("4");
-    translate(850, 653);
-    rotate(radians(177));
-    scale(1.2); // ajuste la taille (1.2 = un peu plus grand que la pupille)
-    beginShape();
-    curveVertex(3, -10);   // coin bas gauche
-    curveVertex(-39, 19);    // sommet haut
-    curveVertex(9, 59);    // coin bas droit
-    curveVertex(10, -2);   // referme la courbe
-    endShape(CLOSE);
-    pop();
-
-    // Details and layers of right eye
-    push();
+    strokeWeight(11);
     fill("#f39f9fff");
-    noStroke();
-    translate(304, -191);
-    rotate(radians(26));
-    arc(550, 630, 120, 60, PI + QUARTER_PI, 0 + TWO_PI, OPEN);
+    translate(540, -226);
+    rotate(radians(41));
+    arc(550, 630, 70, 20, PI + QUARTER_PI, 0 + TWO_PI, OPEN);
     pop();
 
     push();
-    fill("#f39f9fff");
+    fill("#dea295ff");
     noStroke();
     translate(-381, 636);
     rotate(radians(-49));
@@ -750,12 +688,14 @@ function DrawEyes() { // it's funny because the auto completions helped me a lot
     pop();
 
 
+
+    // Details and layers of right eye
     push();
     fill("#f39f9fff");
     noStroke();
-    translate(636, -204);
-    rotate(radians(26));
-    arc(550, 630, 100, 40, PI + QUARTER_PI, 0 + TWO_PI, OPEN);
+    translate(590, -179);
+    rotate(radians(22));
+    arc(550, 630, 90, 40, PI + QUARTER_PI, 0 + TWO_PI, OPEN);
     pop();
 
     push();
@@ -766,14 +706,6 @@ function DrawEyes() { // it's funny because the auto completions helped me a lot
     arc(550, 630, 60, 20, PI + QUARTER_PI, 0 + TWO_PI, OPEN);
     pop();
 
-
-    push();
-    fill("#f39f9fff");
-    noStroke();
-    translate(-35, 495);
-    rotate(radians(-40));
-    arc(550, 630, 120, 60, PI + QUARTER_PI, 0 + TWO_PI, OPEN);
-    pop();
 
     // DETAILS OF BOTH EYES (retina, eyebowl, eye corners)
 
@@ -856,7 +788,7 @@ function DrawEyes() { // it's funny because the auto completions helped me a lot
     rotate(radians(-129));
     arc(100, 100, 90, 56, PI + QUARTER_PI, TWO_PI - QUARTER_PI);
     pop();
-
+    // layer of skin that overlaps right eye at the top
     push();
     stroke("#f0b3a6ff");
     strokeWeight(9);
@@ -886,11 +818,11 @@ function DrawEyes() { // it's funny because the auto completions helped me a lot
     // covers a part of the triangle that needs to be covered ,LEFT EYE
     push();
     stroke("#F0B3A6FF");
-    strokeWeight(11);
+    strokeWeight(9);
     noFill();
-    translate(500, 782);
+    translate(488, 773);
     scale(1, -1);
-    rotate(radians(28));
+    rotate(radians(22));
     arc(100, 100, 70, 20, PI + QUARTER_PI, TWO_PI - QUARTER_PI);
     pop();
 
@@ -901,7 +833,7 @@ function DrawEyes() { // it's funny because the auto completions helped me a lot
     stroke("#f0b3a6ff");
     strokeWeight(14);
     noFill();
-    translate(495, 444); // position au-dessus de l'œil gauche
+    translate(499, 444); // position au-dessus de l'œil gauche
     scale(1, -1); // miroir vertical
     rotate(radians(181)); // légère inclinaison
     arc(0, 200, 160, 100, PI + QUARTER_PI, TWO_PI - QUARTER_PI);
@@ -911,13 +843,14 @@ function DrawEyes() { // it's funny because the auto completions helped me a lot
     //skin that has to be seen prior to the eye at the BOTTOM, LEFT EYE
     push();
     stroke("#f39f9fff")
-    strokeWeight(14);
-    noFill();
-    translate(491, 493); // position au-dessus de l'œil gauche
+    strokeWeight(0);
+    fill("#f39f9fff");
+    translate(551, 473); // position au-dessus de l'œil gauche
     scale(1, -1); // miroir vertical
-    rotate(radians(181)); // légère inclinaison
-    arc(0, 200, 120, 60, PI + QUARTER_PI, TWO_PI - QUARTER_PI);
+    rotate(radians(167)); // légère inclinaison
+    arc(0, 200, 50, 20, PI + QUARTER_PI, 0 + TWO_PI, OPEN);
     pop();
+
 
     // LAYERS OF THE RIGHT EYE FOR MORE DETAILS , RIGHT EYE
 

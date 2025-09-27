@@ -570,7 +570,7 @@ function DrawEyes() { // it's funny because the auto completions helped me a lot
 
     push();
     noStroke();
-    translate(-51, 53); // completes the drawing of left eye
+    translate(-51, 54); // completes the drawing of left eye
     rotate(radians(-5));
     fill("#f0b6a3ff");
     ellipse(490, 610, 140, 70)
@@ -590,11 +590,11 @@ function DrawEyes() { // it's funny because the auto completions helped me a lot
     stroke("#f39f9fff");
     strokeWeight("4");
     // Place le triangle au centre de la pupille gauche
-    translate(485, 605); // centre de la pupille gauche
+    translate(485, 607); // centre de la pupille gauche
     rotate(radians(140));
     scale(1.2); // ajuste la taille (1.2 = un peu plus grand que la pupille)
     beginShape();
-    curveVertex(-30, 3);   // coin bas gauche
+    curveVertex(-10, 3);   // coin bas gauche
     curveVertex(19, -39);    // sommet haut
     curveVertex(59, 9);    // coin bas droit
     curveVertex(-2, 10);   // referme la courbe
@@ -610,7 +610,7 @@ function DrawEyes() { // it's funny because the auto completions helped me a lot
     translate(489, -9);
     rotate(radians(1));
     fill("#f0b3a6ff");
-    ellipse(349, 620, 140, 90)
+    ellipse(349, 633, 120, 60)
     pop();
 
 
@@ -669,12 +669,13 @@ function DrawEyes() { // it's funny because the auto completions helped me a lot
 
 
 
+
     // Details and layers of left eye
     push();
     stroke("#f39f9fff");
-    strokeWeight(11);
+    strokeWeight(9);
     fill("#f39f9fff");
-    translate(540, -226);
+    translate(542, -226);
     rotate(radians(41));
     arc(550, 630, 70, 20, PI + QUARTER_PI, 0 + TWO_PI, OPEN);
     pop();
@@ -781,9 +782,9 @@ function DrawEyes() { // it's funny because the auto completions helped me a lot
     // creates another layer behind the next element : 'triangle with rounded corners' , right eye
     push();
     stroke("#f39f9fff");
-    strokeWeight(15);
+    strokeWeight(10);
     noFill();
-    translate(774, 488);
+    translate(775, 485);
     scale(1, -1);
     rotate(radians(-129));
     arc(100, 100, 90, 56, PI + QUARTER_PI, TWO_PI - QUARTER_PI);
@@ -793,7 +794,7 @@ function DrawEyes() { // it's funny because the auto completions helped me a lot
     stroke("#f0b3a6ff");
     strokeWeight(9);
     noFill();
-    translate(844, 484);
+    translate(844, 482);
     scale(1, -1);
     rotate(radians(-155));
     arc(100, 100, 90, 36, PI + QUARTER_PI, TWO_PI - QUARTER_PI);
@@ -815,16 +816,6 @@ function DrawEyes() { // it's funny because the auto completions helped me a lot
     endShape(CLOSE);
     pop();
 
-    // covers a part of the triangle that needs to be covered ,LEFT EYE
-    push();
-    stroke("#F0B3A6FF");
-    strokeWeight(9);
-    noFill();
-    translate(488, 773);
-    scale(1, -1);
-    rotate(radians(22));
-    arc(100, 100, 70, 20, PI + QUARTER_PI, TWO_PI - QUARTER_PI);
-    pop();
 
     // LAYERS OF THE LEFT EYE FOR MORE DETAILS
 
@@ -857,23 +848,23 @@ function DrawEyes() { // it's funny because the auto completions helped me a lot
     //skin that has to be seen prior to the eye at the top, RIGHT EYE
     push();
     stroke("#f0b3a6ff");
-    strokeWeight(18);
+    strokeWeight(17);
     noFill();
     translate(855, 440); // position au-dessus de l'œil gauche
     scale(1, -1); // miroir vertical
-    rotate(radians(174)); // légère inclinaison
-    arc(0, 200, 160, 100, PI + QUARTER_PI, TWO_PI - QUARTER_PI);
+    rotate(radians(171)); // légère inclinaison
+    arc(-14, 210, 190, 120, PI + QUARTER_PI, TWO_PI - QUARTER_PI);
     pop();
 
     //skin that has to be seen prior to the eye at the BOTTOM, RIGHT EYE
     push();
-    stroke("#f39f9fff");
-    strokeWeight(14);
-    noFill();
-    translate(838, 477); // position au-dessus de l'œil gauche
+    stroke("#f0B3A6FF")
+    strokeWeight(0);
+    fill("#f0B3A6FF");
+    translate(895, 477); // position au-dessus de l'œil gauche
     scale(1, -1); // miroir vertical
-    rotate(radians(175)); // légère inclinaison
-    arc(0, 200, 120, 40, PI + QUARTER_PI, TWO_PI - QUARTER_PI);
+    rotate(radians(-200)); // légère inclinaison
+    arc(0, 200, 50, 20, PI + QUARTER_PI, 0 + TWO_PI, OPEN);
     pop();
 
 
@@ -893,16 +884,6 @@ function DrawEyes() { // it's funny because the auto completions helped me a lot
     endShape(CLOSE);
     pop();
 
-    // covers a part of the triangle that needs to be covered , RIGHT EYE
-    push();
-    stroke("#F0B3A6FF");
-    strokeWeight(9);
-    noFill();
-    translate(650, 698);
-    scale(1, -1);
-    rotate(radians(-20));
-    arc(100, 100, 70, 20, PI + QUARTER_PI, TWO_PI - QUARTER_PI);
-    pop();
 
 
     // EYELASHES 
@@ -1068,7 +1049,7 @@ function DrawEyes() { // it's funny because the auto completions helped me a lot
     pop();
 
 
-    // 
+    // scar right eyebrow
 
 
     push();
@@ -1080,13 +1061,12 @@ function DrawEyes() { // it's funny because the auto completions helped me a lot
     arc(0, 0, 340, 72, PI + QUARTER_PI, TWO_PI - QUARTER_PI);
     pop();
 
-    // draws corners of eyes for more accurate details THIS IS FOR LEFT
+    // draws corners of eyes for more accurate details THIS IS FOR RIGHT
     push();
     fill("#f39f9fff");
     noStroke();
-    // Place le triangle au centre de la pupille gauche
-    translate(895, 630); // centre de la pupille gauche
-    scale(1.2); // ajuste la taille (1.2 = un peu plus grand que la pupille)
+    translate(897, 630);
+    scale(1.2);
     beginShape();
     curveVertex(-10, 10);   // coin bas gauche
     curveVertex(0, -12);    // sommet haut
@@ -1095,12 +1075,13 @@ function DrawEyes() { // it's funny because the auto completions helped me a lot
     endShape(CLOSE);
     pop();
 
+
+    // draws corners of eyes for more accurate details THIS IS FOR LEFT
     push();
-    fill("#f39f9fff");
+    fill("#f0b3a6ff");
     noStroke();
-    // Place le triangle au centre de la pupille gauche
-    translate(423, 637); // centre de la pupille gauche
-    scale(1.2); // ajuste la taille (1.2 = un peu plus grand que la pupille)
+    translate(423, 637);
+    scale(1.2);
     beginShape();
     curveVertex(-10, 10);   // coin bas gauche
     curveVertex(0, -12);    // sommet haut

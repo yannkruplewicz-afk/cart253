@@ -46,13 +46,14 @@ function draw() {
     pop();
     //end of head of frame
 
-
     DrawJacket();   // draws the jacket step by step with different layers to create a 3D effect
     DrawHead(); // draws the head step by step with different layers to create a 3D effect
     DrawFace(); // draws the top of the head
+    DrawShadowFace();// draws the shadows in the face
     DrawDetailsNeck(); // draws the details of the neck
     DrawHair(); // draws the hair
     DrawEyes(); // draws the eyes 
+    DrawMouth();
     // divided into different parts :
     // 1= shadows behind eyes
     // 2= eyes themselves
@@ -501,63 +502,8 @@ function DrawFace() {
 function DrawEyes() { // it's funny because the auto completions helped me a lot until this point but now i have reached the max quotas for the free version so i really have to know the codes format, and not write 'pull' rather than 'pop' cause we are not at the gym here !
 
 
-    // draws a shadow between both eyes 
-    push();
-    noStroke();
-    translate(142, 15); // completes the drawing of left eye
-    rotate(radians(-1));
-    fill("#d47a7a77");
-    ellipse(530, 570, 190, 90)
-    pop();
 
-    // draws shadows above and around eyes this is FOR LEFT EYE
-    push();
-    noStroke();
-    fill("#bb2424cb");
-    ellipse(530, 570, 120, 70)
-    pop();
 
-    push();
-    noStroke();
-    fill("#bb2424cb");
-    translate(459, -59); // completes the drawing of right eye, red shadow in the right corner
-    rotate(radians(9));
-    ellipse(530, 570, 150, 90)
-    pop();
-
-    // DRAWS SHADOWS IN BETWEEN THE EYES, right side
-    push();
-    noStroke();
-    fill("#bb2424fd");
-    translate(129, 189);
-    rotate(radians(-9));
-    ellipse(530, 570, 70, 190)
-    pop();
-
-    push();
-    noStroke();
-    fill("#bb2424fd");
-    translate(146, 109);
-    rotate(radians(-9));
-    ellipse(530, 570, 90, 70)
-    pop();
-
-    // DRAWS SHADOWS IN BETWEEN THE EYES, left side
-    push();
-    noStroke();
-    fill("#d37575fd");
-    translate(-21, 169);
-    rotate(radians(-9));
-    ellipse(530, 570, 70, 190)
-    pop();
-
-    push();
-    noStroke();
-    fill("#bb2424fd");
-    translate(146, 109);
-    rotate(radians(-9));
-    ellipse(530, 570, 90, 70)
-    pop();
 
 
     push();
@@ -619,7 +565,7 @@ function DrawEyes() { // it's funny because the auto completions helped me a lot
     noStroke();
     translate(333, -45);
     rotate(radians(5));
-    fill("#bb2424ff");
+    fill("#d36e6ef1");
     ellipse(530, 570, 120, 70)
     pop();
     // wine red shadow behind right eye
@@ -1095,7 +1041,7 @@ function DrawEyes() { // it's funny because the auto completions helped me a lot
     stroke("#140404f1");
     strokeWeight(2);
     noFill();
-    translate(480, 628); // position au-dessus de l'œil droit
+    translate(480, 628);
     rotate(radians(-12)); // légère inclinaison
     arc(0, 0, 140, 47, PI + QUARTER_PI, TWO_PI - QUARTER_PI);
     pop();
@@ -1186,6 +1132,210 @@ function DrawDetailshead() {
     pop();
     // right EAR FINISHED
 
+
+    // draws shadows of the noose
+    push();
+    noStroke();
+    strokeWeight(2);
+    fill("#e2909099");
+    translate(293, 17);
+    rotate(radians(-3)); // légère inclinaison
+    ellipse(352, 809, 83, 40);
+    pop();
+
+    // draws shadows of the noose
+    push();
+    noStroke("#f4a1a1f1");
+    strokeWeight(2);
+    fill("#f4a1a150");
+    translate(168, 87);
+    rotate(radians(-13)); // légère inclinaison
+    ellipse(300, 809, 53, 30);
+    pop();
+
+
+    // draws shadows of the noose
+    push();
+    noStroke("#e29090f1");
+    strokeWeight(2);
+    fill("#f4a1a150");
+    translate(540, -289);
+    rotate(radians(34)); // légère inclinaison
+    ellipse(756, 806, 63, 40);
+    pop();
+
+
+    push();
+    noStroke("#e29090f1");
+    strokeWeight(2);
+    fill("#f4a1a150");
+    translate(686, -609);
+    rotate(radians(54)); // légère inclinaison
+    ellipse(1156, 796, 73, 50);
+    pop();
+
+    // Trou de nez gauche
+    push();
+    push();
+    stroke("#140404b9");
+    strokeWeight(2);
+    fill("#140404e4");
+    translate(530, 908);
+    rotate(radians(-33)); // légère inclinaison
+    arc(160, 0, 28, 44, PI + QUARTER_PI, 0 + TWO_PI, OPEN);
+    pop();
+
+    push();
+    stroke("#140404af");
+    strokeWeight(2);
+    fill("#140404dd");
+    translate(186, 93);
+    rotate(radians(-13)); // légère inclinaison
+    ellipse(300, 809, 26, 10);
+    pop();
+
+
+    // Trou de nez droit
+    push();
+    push();
+    stroke("#1404049d");
+    strokeWeight(2);
+    fill("#140404dd");
+    translate(568, 747);
+    rotate(radians(25)); // légère inclinaison
+    arc(160, 0, 21, 35, PI + QUARTER_PI, 0 + TWO_PI, OPEN);
+    pop();
+
+
+
+}
+
+function DrawShadowFace() {
+
+
+
+
+
+
+
+
+
+
+    push();
+    fill("#fcc6bb");
+    noStroke();;
+    translate(920, 212);
+    rotate(radians(90));
+    ellipse(190, 280, 300, 680);
+    pop();
+
+
+
+
+
+    push();
+    fill("#f7a9a97b");
+    noStroke();;
+    translate(383, 782);
+    rotate(radians(-92));
+    ellipse(190, 280, 80, 220);
+    pop();
+
+
+
+    push();
+    fill("#f7a9a9ff");
+    noStroke();;
+    translate(779, 362);
+    rotate(radians(82));
+    ellipse(190, 280, 100, 180);
+    pop();
+
+
+    push();
+    fill("#e6888856");
+    noStroke();;
+    translate(657, 288);
+    rotate(radians(22));
+    ellipse(190, 280, 60, 170);
+    pop();
+
+
+
+
+
+
+    push();
+    fill("#e688887e");
+    noStroke();;
+    translate(665, 480);
+    rotate(radians(-7));
+    ellipse(-5, 235, 5, 100);
+    pop();
+
+
+    push();
+    fill("#e6888829");
+    noStroke();;
+    translate(665, 480);
+    rotate(radians(-7));
+    rect(0, 166, 18, 150);
+    pop();
+
+
+    push();
+    fill("#e6888882");
+    noStroke();;
+    translate(915, 150);
+    rotate(radians(25));
+    ellipse(-5, 235, 300, 100);
+    pop();
+
+    push();
+    fill("#c4585872");
+    noStroke();;
+    translate(705, 295);
+    rotate(radians(15));
+    ellipse(210, 235, 200, 90);
+    pop();
+
+}
+
+function DrawMouth() {
+    // Lower lip (curve)
+    push();
+    noFill();
+    stroke("#c97a6b");
+    strokeWeight(8);
+    beginShape();
+    curveVertex(640, 960);
+    curveVertex(660, 970);
+    curveVertex(700, 975);
+    curveVertex(740, 970);
+    curveVertex(760, 960);
+    endShape();
+    pop();
+
+    // Upper lip (curve)
+    push();
+    noFill();
+    stroke("#a34d3a");
+    strokeWeight(7);
+    beginShape();
+    curveVertex(640, 960);
+    curveVertex(670, 940);
+    curveVertex(700, 935);
+    curveVertex(730, 940);
+    curveVertex(760, 960);
+    endShape();
+    pop();
+
+    // Mouth opening (ellipse)
+    push();
+    fill("#3a1a1a");
+    noStroke();
+    ellipse(700, 960, 70, 18);
+    pop();
 }
 
 

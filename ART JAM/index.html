@@ -19,10 +19,63 @@
 
   <!-- My script(s) -->
   <script src="js/script.js"></script>
+  <style>
+    /* Faire que la vidéo couvre tout l'écran */
+    body,
+    html {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    #background-video {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      /* remplit l'écran en gardant les proportions */
+      z-index: -1;
+      /* met la vidéo derrière le contenu */
+    }
+
+    /* Contenu par-dessus la vidéo */
+    .content {
+      position: relative;
+      color: white;
+      text-align: center;
+      padding-top: 50px;
+      font-size: 2em;
+    }
+  </style>
+  <style>
+    .big-white-bold {
+      color: white;
+      font-weight: bold;
+      font-size: 120px;
+      /* adjust size as desired */
+    }
+  </style>
 </head>
 
 <body>
+  <!-- Vidéo de fond -->
+  <video id="background-video" autoplay muted loop>
+    <source src="assets/images/vid2.mp4" type="video/mp4">
+    Votre navigateur ne supporte pas la vidéo HTML5.
+  </video>
 
-  </script>
+  <!-- Contenu par-dessus -->
+
+  <h1 class="big-white-bold">
+    Yann KRUPLEWICZ <p>Concordia University,</p>
+    <p>29/09/2025</p>
+  </h1>
+
+
+
+</body>
 
 </html>

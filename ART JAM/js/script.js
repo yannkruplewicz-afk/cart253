@@ -17,18 +17,35 @@ function setup() {
 
 
 }
+const clickSound = new Audio('assets/sounds/song10.mp3');
+clickSound.preload = 'auto';
+
+// Example condition variable
+let soundEnabled = true;
+
+// Listen for clicks on the page
+document.addEventListener('click', () => {
+    if (soundEnabled) {       // <-- condition
+        clickSound.currentTime = 0;
+        clickSound.play();
+    } else {
+        console.log("Sound is disabled"); // optional
+    }
+});
 
 
 /**
  * sets the background 
 */
+
+let framecolour = 245;
 function draw() {
 
 
     background("#2D302E");
 
 
-    DrawFrame();
+    DrawFrameHead();
 
 
     DrawFace(); // draws the top of the head
@@ -36,16 +53,25 @@ function draw() {
 
     clip(frameMask, { invert: false });
 
+    let frame = {
+        x: 700,
+        y: 660,
+        size: 1650
+
+    };
+    framecolour = framecolour - 0.05
+
+
 
     //head of frame
     push();
-    fill("#22451D");
+    fill(framecolour);
     noStroke();
     strokeWeight(2);
-    rect(50, 50, 1100, 1400);
+    ellipse(frame.x, frame.y, frame.size);
     pop();
-    //end of head of frame
 
+    //end of head of frame
     DrawJacket();   // draws the jacket step by step with different layers to create a 3D effect
     DrawHead(); // draws the head step by step with different layers to create a 3D effect
     DrawFace(); // draws the top of the head
@@ -60,6 +86,20 @@ function draw() {
     // 3= details (eyebrows, eyelashes, retina, eyebowl)
     // 4= details regarding the skin around the eyes
     DrawDetailshead();// draws the noose (nez)
+    DrawWrinkles();
+    let hairColour = "#2C1B0B"
+    let hairShadow = "#24100B"
+
+    // calculate distance between mouse and frame center
+    const distance = dist(mouseX, mouseY, frame.x, frame.y);
+    const mouseIsOverlapping = (distance < frame.size / 2);
+
+    // while holding mouse down
+    if (mouseIsOverlapping && mouseIsPressed) {
+        wrinles.fills.normal = wrinles.fills.old;
+    } else {
+        wrinles.fills.normal = color("#fcc6bb"); // reset to default
+    }
 
 }
 
@@ -68,7 +108,7 @@ function frameMask() {
 }
 
 
-function DrawFrame() {
+function DrawFrameHead() {
     //creates light gray borders of frame
     push();
     noFill();
@@ -282,10 +322,29 @@ function DrawDetailsNeck() {
 
 
 }
+
+let hair = {
+    fills: {
+        hairColour: 30,
+        hairShadow: 10,
+    }
+
+}
+
+
+
 function DrawHair() {
     // draws the hair
+
+
+
+    hair.fills.hairColour = hair.fills.hairColour + 0.05
+    hair.fills.hairShadow = hair.fills.hairShadow + 0.05
+
+
+
     push();
-    fill("#2C1B0B");
+    fill(hair.fills.hairColour);
     noStroke();
     ellipse(600, 265, 500, 100);
     ellipse(640, 165, 300, 200);
@@ -295,7 +354,7 @@ function DrawHair() {
     pop();
 
     push();
-    fill("#24100B");
+    fill(hair.fills.hairShadow);
     noStroke();
     ellipse(600, 265, 170, 40);
     ellipse(640, 165, 190, 20);
@@ -305,7 +364,7 @@ function DrawHair() {
     pop();
 
     push();
-    fill("#2C1B0B");
+    fill(hair.fills.hairColour);
     noStroke();
     translate(530, -270); // right side of hair
     rotate(radians(66));
@@ -313,7 +372,7 @@ function DrawHair() {
     pop();
 
     push();
-    fill("#24100B");
+    fill(hair.fills.hairShadow);
     noStroke();
     translate(530, -270); // right side of hair
     rotate(radians(66));
@@ -321,14 +380,14 @@ function DrawHair() {
     pop();
 
     push();
-    fill("#2C1B0B");
+    fill(hair.fills.hairColour);
     noStroke();
     translate(0, 0); // right side of hair
     rotate(radians(0));
     arc(790, 400, 300, 450, PI + QUARTER_PI, 0 + TWO_PI, OPEN);
 
     push();// shadow of previous arc
-    fill("#24100B");
+    fill(hair.fills.hairShadow);
     noStroke();
     translate(0, 0); // right side of hair
     rotate(radians(0));
@@ -336,14 +395,14 @@ function DrawHair() {
     pop();
 
     push();
-    fill("#2C1B0B");
+    fill(hair.fills.hairColour);
     noStroke();
     translate(35, -25); // right side of hair
     rotate(radians(0));
     arc(790, 400, 300, 450, PI + QUARTER_PI, 0 + TWO_PI, OPEN);
 
     push();// shadow of previous arc
-    fill("#24100B");
+    fill(hair.fills.hairShadow);
     noStroke();
     translate(10, 10); // right side of hair
     rotate(radians(0));
@@ -352,7 +411,7 @@ function DrawHair() {
 
     pop();
     push();
-    fill("#2c1b0b");
+    fill(hair.fills.hairColour);
     noStroke();
     translate(530, -270); // right side of hair
     rotate(radians(66));
@@ -360,7 +419,7 @@ function DrawHair() {
     pop();
 
     push();
-    fill("#24100B");
+    fill(hair.fills.hairShadow);
     noStroke();
     translate(530, -270); // right side of hair
     rotate(radians(66));
@@ -371,7 +430,7 @@ function DrawHair() {
 
     pop();
     push();
-    fill("#2C1B0B");
+    fill(hair.fills.hairColour);
     noStroke();
     translate(-520, 380); // left side of hair
     rotate(radians(-80));
@@ -380,7 +439,7 @@ function DrawHair() {
     pop();
 
     push();
-    fill("#24100B");
+    fill(hair.fills.hairShadow);
     noStroke();
     translate(-520, 380); // left side of hair
     rotate(radians(-80));
@@ -388,7 +447,7 @@ function DrawHair() {
     pop();
 
     push();
-    fill("#2C1B0B");
+    fill(hair.fills.hairColour);
     noStroke();
     translate(-20, -380); // left side of hair
     rotate(radians(-30));
@@ -396,12 +455,11 @@ function DrawHair() {
     ellipse(-40, 795, 300, 150);
     ellipse(-80, 825, 300, 100);
     ellipse(60, 745, 300, 100);
-
     pop();
 
     // shadows of the hair
     push();
-    fill("#24100B");
+    fill(hair.fills.hairShadow);
     noStroke();
     translate(-20, -380); // left side of hair
     rotate(radians(-30));
@@ -425,7 +483,7 @@ function DrawFace() {
     //right ear
     push();
     translate(0, 400); // Move it down because i changed the height of the canvas
-    fill("#e08773f6");
+    fill("#f7a493ff");
     noStroke();
     translate(100, -214); // Move the origin to the ellipse center
     rotate(radians(12));
@@ -490,7 +548,7 @@ function DrawFace() {
     //left ear
     push();
     translate(0, 400); // Move it down because i changed the height of the canvas
-    fill("#EB9383");
+    fill("#f4bdb2ff");
     noStroke();
     translate(200, 400); // Move the origin to the ellipse center
     rotate(radians(-9)); // Rotate the left hair to have a good perspective
@@ -1076,7 +1134,7 @@ function DrawDetailshead() {
 
     push();
     translate(0, 420); // MMY MISTAKE I HAVE PUT TWO TRANSLATE' BUT IT WORKS RIGHT 
-    fill("#eb9383");
+    fill("#f4bdb2ff");
     noStroke();
     translate(-210, -347); // Move the origin to the ellipse center
     rotate(radians(-9)); // Rotate 
@@ -1095,7 +1153,7 @@ function DrawDetailshead() {
 
     push();
     translate(0, 400); // MY MISTAKE I HAVE PUT TWO TRANSLATE' BUT IT WORKS RIGHT 
-    fill("#eb9383");
+    fill("#f4bdb2ff");
     noStroke();
     translate(142, -431); // Move the origin to the ellipse center
     rotate(radians(15)); // Rotate 
@@ -1115,7 +1173,7 @@ function DrawDetailshead() {
     pop();
 
     push();
-    fill("#e08773ff");
+    fill("#f7a493ff");
     noStroke();
     translate(805, -77); // Move the origin to the ellipse center
     rotate(radians(9)); // Rotate 
@@ -1302,49 +1360,59 @@ function DrawShadowFace() {
 }
 
 function DrawMouth() {
+    //center lips
+
+
+
+    push();
+    fill("#ff6f6f9a");
+    noStroke();;
+    translate(435, 729);
+    rotate(radians(-4));
+    ellipse(210, 235, 230, 45);
+    pop();
+
+
+    push();
+    fill("#ff6f6f9a");
+    noStroke();;
+    translate(429, 727);
+    rotate(radians(-4));
+    ellipse(210, 235, 280, 15);
+    pop();
+
+    push();
+    fill("#ff6f6f5d");
+    noStroke();;
+    translate(349, 720);
+    rotate(radians(2));
+    ellipse(210, 235, 60, 15);
+    pop();
+
+
+    push();
+    fill("#ff6f6f5d");
+    noStroke();;
+    translate(372, 732);
+    rotate(radians(-9));
+    ellipse(210, 235, 60, 15);
+    pop();
+
+    push();
+    fill("#ff6f6f5d");
+    noStroke();;
+    translate(512, 672);
+    rotate(radians(5));
+    ellipse(210, 235, 60, 15);
+    pop();
+
     // Lower lip (curve)
 
     push();
     noFill();
-    stroke("#fcf7f6ff");
-    strokeWeight(28);
-    translate(1520, 1913);
-    rotate(radians(180));
-    beginShape();
-    curveVertex(335, 962);   // extrémité gauche
-    curveVertex(795, 967);   // intermédiaire gauche
-    curveVertex(790, 969);   // centre bas
-    curveVertex(905, 967);   // intermédiaire droit
-    curveVertex(960, 982);   // extrémité droite
-    endShape();
-    pop();
-
-    push();
-    noFill();
-    stroke("#f79885ff");
-    strokeWeight(12);
-    translate(-20, -25);
-    rotate(radians(0));
-    beginShape();
-    curveVertex(540, 980);   // encore plus à gauche
-    curveVertex(600, 975);   // point intermédiaire gauche
-    curveVertex(700, 985);   // centre bas
-    curveVertex(800, 975);   // point intermédiaire droit
-    curveVertex(880, 960);   // encore plus à droite
-    endShape();
-    pop();
-
-
-
-
-
-
-    // Upper lip (curve) left
-    push();
-    noFill();
-    stroke("#f69d89ff");
-    strokeWeight(14);
-    translate(-250, 133);
+    stroke("#ff8686ff");
+    strokeWeight(4);
+    translate(-269, 150);
     rotate(radians(-10));
     beginShape();
     curveVertex(600, 960);   // plus à gauche
@@ -1355,13 +1423,51 @@ function DrawMouth() {
     endShape();
     pop();
 
+    push();
+    noFill();
+    stroke("#ff8686ff");
+    strokeWeight(4);
+    translate(109, -50);
+    rotate(radians(5));
+    beginShape();
+    curveVertex(600, 960);   // plus à gauche
+    curveVertex(660, 940);   // intermédiaire gauche
+    curveVertex(700, 935);   // centre haut
+    curveVertex(740, 940);   // intermédiaire droit
+    curveVertex(800, 960);   // plus à droite
+    endShape();
+    pop();
+
+
+
+
+
+    // Upper lip (curve) left
+    push();
+    noFill();
+    stroke("#ff8686ff");
+    strokeWeight(4);
+    translate(-390, 293);
+    rotate(radians(-20));
+    beginShape();
+    curveVertex(600, 960);   // plus à gauche
+    curveVertex(660, 940);   // intermédiaire gauche
+    curveVertex(700, 935);   // centre haut
+    curveVertex(740, 940);   // intermédiaire droit
+    curveVertex(800, 960);   // plus à droite
+    endShape();
+    pop();
+
+
+
+
 
     // Upper lip (curve) right
     push();
     noFill();
-    stroke("#f69d89ff");
-    strokeWeight(14);
-    translate(200, -110);
+    stroke("#ff8686ff");
+    strokeWeight(4);
+    translate(195, -120);
     rotate(radians(10));
     beginShape();
     curveVertex(600, 960);   // plus à gauche
@@ -1375,28 +1481,368 @@ function DrawMouth() {
     // Upper lip (curve) mini curves at the center to join the two previous ones
     push();
     push();
-    stroke("#f69d89ff");
-    strokeWeight(14);
+    stroke("#ff8686ff");
+    strokeWeight(4);
     noFill();
-    translate(489, 929);
+    translate(480, 919);
     rotate(radians(3)); // légère inclinaison
     arc(160, 0, 29, 10, PI + QUARTER_PI, 0 + TWO_PI, OPEN);
     pop();
 
     push();
     push();
-    stroke("#f69d89ff");
-    strokeWeight(14);
+    stroke("#ff8686ff");
+    strokeWeight(4);
     noFill();
-    translate(542, 1028);
+    translate(537, 1017);
     rotate(radians(327)); // légère inclinaison
     arc(160, 0, 29, 10, PI + QUARTER_PI, 0 + TWO_PI, OPEN);
+    pop();
+
+    push();
+    push();
+    stroke("#ff8686ff");
+    strokeWeight(4);
+    noFill();
+    translate(677, 860);
+    rotate(radians(147)); // légère inclinaison
+    arc(160, 0, 29, 10, PI + QUARTER_PI, 0 + TWO_PI, OPEN);
+    pop();
+
+    push();
+    push();
+    stroke("#ff8686ff");
+    strokeWeight(4);
+    noFill();
+    translate(923, 892);
+    rotate(radians(160)); // légère inclinaison
+    arc(160, 0, 79, 10, PI + QUARTER_PI, 0 + TWO_PI, OPEN);
+    pop();
+
+    push();
+    push();
+    stroke("#ff8686ff");
+    strokeWeight(4);
+    noFill();
+    translate(582, 922);
+    rotate(radians(6)); // légère inclinaison
+    arc(160, 0, 79, 10, PI + QUARTER_PI, 0 + TWO_PI, OPEN);
+    pop();
+
+
+    push();
+    push();
+    stroke("#ff8686ff");
+    strokeWeight(4);
+    noFill();
+    translate(703, 992);
+    rotate(radians(190)); // légère inclinaison
+    arc(160, 0, 49, 10, PI + QUARTER_PI, 0 + TWO_PI, OPEN);
     pop();
 
 
 
 
+    push();
+    push();
+    stroke("#ff8686ff");
+    strokeWeight(4);
+    noFill();
+    translate(487, 963);
+    rotate(radians(-6)); // légère inclinaison
+    arc(160, 0, 39, 1, PI + QUARTER_PI, 0 + TWO_PI, OPEN);
+    pop();
+
+
 }
+
+let wrinles = {
+    fills: {
+        normal: "#fcc6bb",
+        old: "#281c1c51"
+    }
+
+
+
+}
+
+
+function DrawWrinkles() {
+
+    push();
+    push();
+    stroke(wrinles.fills.normal);
+    strokeWeight(4);
+    noFill();
+    translate(487, 793);
+    rotate(radians(90)); // légère inclinaison
+    arc(160, 0, 99, 41, PI + QUARTER_PI, 0 + TWO_PI, OPEN);
+    pop();
+
+    push();
+    push();
+    stroke(wrinles.fills.normal);
+    strokeWeight(4);
+    noFill();
+    translate(787, 793);
+    rotate(radians(90)); // légère inclinaison
+    arc(160, 0, 99, 41, PI + QUARTER_PI, 0 + TWO_PI, OPEN);
+    pop();
+
+    push();
+    push();
+    stroke(wrinles.fills.normal);
+    strokeWeight(2);
+    noFill();
+    translate(707, 553);
+    rotate(radians(140)); // légère inclinaison
+    arc(160, 0, 99, 41, PI + QUARTER_PI, 0 + TWO_PI, OPEN);
+    pop();
+
+    push();
+    push();
+    stroke(wrinles.fills.normal);
+    strokeWeight(1);
+    noFill();
+    translate(687, 693);
+    rotate(radians(60)); // légère inclinaison
+    arc(160, 0, 99, 41, PI + QUARTER_PI, 0 + TWO_PI, OPEN);
+    pop();
+
+    push();
+    push();
+    stroke(wrinles.fills.normal);
+    strokeWeight(1);
+    noFill();
+    translate(687, 293);
+    rotate(radians(60)); // légère inclinaison
+    arc(160, 0, 99, 41, PI + QUARTER_PI, 0 + TWO_PI, OPEN);
+    pop();
+
+    push();
+    push();
+    stroke(wrinles.fills.normal);
+    strokeWeight(1);
+    noFill();
+    translate(487, 293);
+    rotate(radians(60)); // légère inclinaison
+    arc(160, 0, 99, 41, PI + QUARTER_PI, 0 + TWO_PI, OPEN);
+    pop();
+
+    push();
+    push();
+    stroke(wrinles.fills.normal);
+    strokeWeight(1);
+    noFill();
+    translate(587, 293);
+    rotate(radians(60)); // légère inclinaison
+    arc(160, 0, 99, 41, PI + QUARTER_PI, 0 + TWO_PI, OPEN);
+    pop();
+
+    push();
+    push();
+    stroke(wrinles.fills.normal);
+    strokeWeight(1);
+    noFill();
+    translate(467, 293);
+    rotate(radians(60)); // légère inclinaison
+    arc(160, 0, 99, 41, PI + QUARTER_PI, 0 + TWO_PI, OPEN);
+    pop();
+    push();
+    push();
+    stroke(wrinles.fills.normal);
+    strokeWeight(1);
+    noFill();
+    translate(447, 293);
+    rotate(radians(60)); // légère inclinaison
+    arc(160, 0, 99, 41, PI + QUARTER_PI, 0 + TWO_PI, OPEN);
+    pop();
+
+    push();
+    push();
+    stroke(wrinles.fills.normal);
+    strokeWeight(1);
+    noFill();
+    translate(507, 293);
+    rotate(radians(60)); // légère inclinaison
+    arc(160, 0, 99, 41, PI + QUARTER_PI, 0 + TWO_PI, OPEN);
+    pop();
+    push();
+    push();
+    stroke(wrinles.fills.normal);
+    strokeWeight(1);
+    noFill();
+    translate(527, 293);
+    rotate(radians(60)); // légère inclinaison
+    arc(160, 0, 99, 41, PI + QUARTER_PI, 0 + TWO_PI, OPEN);
+    pop();
+
+    push();
+    push();
+    stroke(wrinles.fills.normal);
+    strokeWeight(1);
+    noFill();
+    translate(547, 293);
+    rotate(radians(60)); // légère inclinaison
+    arc(160, 0, 99, 41, PI + QUARTER_PI, 0 + TWO_PI, OPEN);
+    pop();
+
+    push();
+    push();
+    stroke(wrinles.fills.normal);
+    strokeWeight(1);
+    noFill();
+    translate(567, 293);
+    rotate(radians(60)); // légère inclinaison
+    arc(160, 0, 99, 41, PI + QUARTER_PI, 0 + TWO_PI, OPEN);
+    pop();
+
+    push();
+    push();
+    stroke(wrinles.fills.normal);
+    strokeWeight(1);
+    noFill();
+    translate(587, 293);
+    rotate(radians(60)); // légère inclinaison
+    arc(160, 0, 99, 41, PI + QUARTER_PI, 0 + TWO_PI, OPEN);
+    pop();
+
+    push();
+    push();
+    stroke(wrinles.fills.normal);
+    strokeWeight(1);
+    noFill();
+    translate(607, 293);
+    rotate(radians(60)); // légère inclinaison
+    arc(160, 0, 99, 41, PI + QUARTER_PI, 0 + TWO_PI, OPEN);
+    pop();
+
+    push();
+    push();
+    stroke(wrinles.fills.normal);
+    strokeWeight(1);
+    noFill();
+    translate(627, 293);
+    rotate(radians(60)); // légère inclinaison
+    arc(160, 0, 99, 41, PI + QUARTER_PI, 0 + TWO_PI, OPEN);
+    pop();
+
+    push();
+    push();
+    stroke(wrinles.fills.normal);
+    strokeWeight(1);
+    noFill();
+    translate(647, 293);
+    rotate(radians(60)); // légère inclinaison
+    arc(160, 0, 99, 41, PI + QUARTER_PI, 0 + TWO_PI, OPEN);
+    pop();
+
+    push();
+    push();
+    stroke(wrinles.fills.normal);
+    strokeWeight(1);
+    noFill();
+    translate(667, 293);
+    rotate(radians(60)); // légère inclinaison
+    arc(160, 0, 99, 41, PI + QUARTER_PI, 0 + TWO_PI, OPEN);
+    pop();
+
+    push();
+    push();
+    stroke(wrinles.fills.normal);
+    strokeWeight(1);
+    noFill();
+    translate(487, 293);
+    rotate(radians(120)); // légère inclinaison
+    arc(160, 0, 99, 41, PI + QUARTER_PI, 0 + TWO_PI, OPEN);
+    pop();
+
+    push();
+    push();
+    stroke(wrinles.fills.normal);
+    strokeWeight(1);
+    noFill();
+    translate(487, 293);
+    rotate(radians(30)); // légère inclinaison
+    arc(160, 0, 99, 41, PI + QUARTER_PI, 0 + TWO_PI, OPEN);
+    pop();
+
+    push();
+    push();
+    stroke(wrinles.fills.normal);
+    strokeWeight(1);
+    noFill();
+    translate(487, 293);
+    rotate(radians(140)); // légère inclinaison
+    arc(160, 0, 99, 41, PI + QUARTER_PI, 0 + TWO_PI, OPEN);
+    pop();
+
+
+
+    push();
+    stroke(wrinles.fills.normal);
+    strokeWeight(1);
+    noFill();
+    translate(357, 493);
+    rotate(radians(90)); // légère inclinaison
+    arc(160, 0, 399, 21, PI + QUARTER_PI, 0 + TWO_PI, OPEN);
+    pop();
+
+    push();
+    push();
+    stroke(wrinles.fills.normal);
+    strokeWeight(1);
+    noFill();
+    translate(377, 513);
+    rotate(radians(90)); // légère inclinaison
+    arc(160, 0, 399, 21, PI + QUARTER_PI, 0 + TWO_PI, OPEN);
+    pop();
+
+    push();
+    push();
+    stroke(wrinles.fills.normal);
+    strokeWeight(1);
+    noFill();
+    translate(397, 533);
+    rotate(radians(90)); // légère inclinaison
+    arc(160, 0, 399, 21, PI + QUARTER_PI, 0 + TWO_PI, OPEN);
+    pop();
+
+    push();
+    stroke(wrinles.fills.normal);
+    strokeWeight(1);
+    noFill();
+    translate(357, 493);
+    rotate(radians(0)); // légère inclinaison
+    arc(160, 0, 399, 21, PI + QUARTER_PI, 0 + TWO_PI, OPEN);
+    pop();
+
+    push();
+    push();
+    stroke(wrinles.fills.normal);
+    strokeWeight(1);
+    noFill();
+    translate(447, 863);
+    rotate(radians(-3)); // légère inclinaison
+    arc(160, 0, 299, 21, PI + QUARTER_PI, 0 + TWO_PI, OPEN);
+    pop();
+
+    push();
+    push();
+    stroke(wrinles.fills.normal);
+    strokeWeight(1);
+    noFill();
+    translate(397, 1033);
+    rotate(radians(0)); // légère inclinaison
+    arc(160, 0, 399, 21, PI + QUARTER_PI, 0 + TWO_PI, OPEN);
+    pop();
+
+
+
+
+
+}
+
 
 
 

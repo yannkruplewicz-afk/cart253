@@ -1303,39 +1303,99 @@ function DrawShadowFace() {
 
 function DrawMouth() {
     // Lower lip (curve)
+
     push();
     noFill();
-    stroke("#c97a6b");
-    strokeWeight(8);
+    stroke("#fcf7f6ff");
+    strokeWeight(28);
+    translate(1520, 1913);
+    rotate(radians(180));
     beginShape();
-    curveVertex(640, 960);
-    curveVertex(660, 970);
-    curveVertex(700, 975);
-    curveVertex(740, 970);
-    curveVertex(760, 960);
+    curveVertex(335, 962);   // extrémité gauche
+    curveVertex(795, 967);   // intermédiaire gauche
+    curveVertex(790, 969);   // centre bas
+    curveVertex(905, 967);   // intermédiaire droit
+    curveVertex(960, 982);   // extrémité droite
     endShape();
     pop();
 
-    // Upper lip (curve)
     push();
     noFill();
-    stroke("#a34d3a");
-    strokeWeight(7);
+    stroke("#f79885ff");
+    strokeWeight(12);
+    translate(-20, -25);
+    rotate(radians(0));
     beginShape();
-    curveVertex(640, 960);
-    curveVertex(670, 940);
-    curveVertex(700, 935);
-    curveVertex(730, 940);
-    curveVertex(760, 960);
+    curveVertex(540, 980);   // encore plus à gauche
+    curveVertex(600, 975);   // point intermédiaire gauche
+    curveVertex(700, 985);   // centre bas
+    curveVertex(800, 975);   // point intermédiaire droit
+    curveVertex(880, 960);   // encore plus à droite
     endShape();
     pop();
 
-    // Mouth opening (ellipse)
+
+
+
+
+
+    // Upper lip (curve) left
     push();
-    fill("#3a1a1a");
-    noStroke();
-    ellipse(700, 960, 70, 18);
+    noFill();
+    stroke("#f69d89ff");
+    strokeWeight(14);
+    translate(-250, 133);
+    rotate(radians(-10));
+    beginShape();
+    curveVertex(600, 960);   // plus à gauche
+    curveVertex(660, 940);   // intermédiaire gauche
+    curveVertex(700, 935);   // centre haut
+    curveVertex(740, 940);   // intermédiaire droit
+    curveVertex(800, 960);   // plus à droite
+    endShape();
     pop();
+
+
+    // Upper lip (curve) right
+    push();
+    noFill();
+    stroke("#f69d89ff");
+    strokeWeight(14);
+    translate(200, -110);
+    rotate(radians(10));
+    beginShape();
+    curveVertex(600, 960);   // plus à gauche
+    curveVertex(660, 940);   // intermédiaire gauche
+    curveVertex(700, 935);   // centre haut
+    curveVertex(740, 940);   // intermédiaire droit
+    curveVertex(800, 960);   // plus à droite
+    endShape();
+    pop();
+
+    // Upper lip (curve) mini curves at the center to join the two previous ones
+    push();
+    push();
+    stroke("#f69d89ff");
+    strokeWeight(14);
+    noFill();
+    translate(489, 929);
+    rotate(radians(3)); // légère inclinaison
+    arc(160, 0, 29, 10, PI + QUARTER_PI, 0 + TWO_PI, OPEN);
+    pop();
+
+    push();
+    push();
+    stroke("#f69d89ff");
+    strokeWeight(14);
+    noFill();
+    translate(542, 1028);
+    rotate(radians(327)); // légère inclinaison
+    arc(160, 0, 29, 10, PI + QUARTER_PI, 0 + TWO_PI, OPEN);
+    pop();
+
+
+
+
 }
 
 

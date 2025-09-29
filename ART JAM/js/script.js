@@ -20,16 +20,15 @@ function setup() {
 const clickSound = new Audio('assets/sounds/song10.mp3');
 clickSound.preload = 'auto';
 
-// Example condition variable
+// condition variable to play music if user clicks on the screen the music is OLDIES STATION by Twenty one pilots, its main theme is nostalgia
 let soundEnabled = true;
 
-// Listen for clicks on the page
 document.addEventListener('click', () => {
     if (soundEnabled) {       // <-- condition
         clickSound.currentTime = 0;
         clickSound.play();
     } else {
-        console.log("Sound is disabled"); // optional
+        console.log("Sound is disabled");
     }
 });
 
@@ -51,7 +50,7 @@ function draw() {
     DrawFace(); // draws the top of the head
     DrawHair(); // draws the hair
 
-    clip(frameMask, { invert: false });
+    clip(frameMask, { invert: false }); // creates a mask to put all the shapes that will follow into the frameHead
 
     let frame = {
         x: 700,
@@ -94,7 +93,7 @@ function draw() {
     const distance = dist(mouseX, mouseY, frame.x, frame.y);
     const mouseIsOverlapping = (distance < frame.size / 2);
 
-    // while holding mouse down
+    // condition that makes wrinkles appear if the user clicks on the screen
     if (mouseIsOverlapping && mouseIsPressed) {
         wrinles.fills.normal = wrinles.fills.old;
     } else {
@@ -132,33 +131,33 @@ function DrawFrameHead() {
 function DrawJacket() {
     //draws left bottom part of jacket
     push();
-    translate(0, 400); // Move it down because i changed the height of the canvas
+    translate(0, 400);
     fill("#060809ff");
     noStroke();
     strokeWeight(2);
-    translate(3, 187); // Move the origin to the ellipse center
+    translate(3, 187);
     rotate(radians(-5)); // Rotate 
     ellipse(300, 800, 1200, 400);
     pop();
 
     //draws right bottom part of jacket
     push();
-    translate(0, 400); // Move it down because i changed the height of the canvas
+    translate(0, 400);
     fill("#060809ff");
     noStroke();
     strokeWeight(2);
-    translate(1100, 157); // Move the origin to the ellipse center
+    translate(1100, 157);
     rotate(radians(21)); // Rotate 
     ellipse(300, 800, 1200, 400);
     pop();
 
     //draws higher part of capuche of jacket
     push();
-    translate(0, 400); // Move it down because i changed the height of the canvas
+    translate(0, 400);
     fill("#010206ff");
     noStroke();
     strokeWeight(2);
-    translate(550, -257); // Move the origin to the ellipse center
+    translate(550, -257);
     rotate(radians(10)); // Rotate 
     ellipse(300, 800, 800, 500);
     pop();
@@ -166,36 +165,36 @@ function DrawJacket() {
 
     //draws left part of capuche of jacket
     push();
-    translate(0, 400); // Move it down because i changed the height of the canvas
+    translate(0, 400);
     fill("#010206ff");
     noStroke();
     strokeWeight(2);
-    translate(-150, 157); // Move the origin to the ellipse center
+    translate(-150, 157);
     rotate(radians(-10)); // Rotate 
     ellipse(300, 800, 200, 500);
     pop();
 
     //draws right part of capuche of jacket
     push();
-    translate(0, 400); // Move it down because i changed the height of the canvas
+    translate(0, 400);
     fill("#010206ff");
     noStroke();
     strokeWeight(2);
-    translate(500, -27); // Move the origin to the ellipse center
+    translate(500, -27);
     rotate(radians(-5)); // Rotate 
     ellipse(300, 800, 500, 200);
     pop();
 }
 function DrawHead() {
-    // draws the head step by step with different layers to create a 3D effect
+    // draws the head and its relatie parts step by step with different layers to create a 3D effect
     // draws the neck
 
     //layer of neck
     push();
-    translate(0, 400); // Move it down because i changed the height of the canvas
+    translate(0, 400);
     fill("#FCC6BB");
     noStroke();
-    translate(-435, 0); // Move the origin to the ellipse center
+    translate(-435, 0);
     rotate(radians(-6));
     strokeWeight(2);
     rect(600, 400, 30, 600);
@@ -293,23 +292,23 @@ function DrawDetailsNeck() {
 
     // creates circles of skin color in the neck, behind the jaw to improve the shadows
     push();
-    translate(0, 400); // Move it down because i changed the height of the canvas
+    translate(0, 400);
     fill("#FFC6B8");
-    translate(-66, -90); // develops center of jaw
-    rotate(radians(4)); // Rotate 
+    translate(-66, -90);
+    rotate(radians(4));
     noStroke();
     ellipse(630, 900, 260, 130);
     fill("#ffc6b8");
-    translate(-50, -77); // develops center of jaw
-    rotate(radians(4)); // Rotate 
+    translate(-50, -77);
+    rotate(radians(4));
     noStroke();
     ellipse(630, 900, 260, 130);
     pop();
 
 
-    // develops center of jaw, the stroke creates the round thing the men have on the neck
+    // develops center of jaw, the stroke creates the circular thing the men have on the neck (Adam's Apple ?)
     push();
-    translate(0, 400); // Move it down because i changed the height of the canvas
+    translate(0, 400);
     fill("#eb9383");
     stroke("#d76d56");
     translate(-90, 17); // develops center of jaw, the stroke creates the round thing the men have on the neck
@@ -322,7 +321,7 @@ function DrawDetailsNeck() {
 
 
 }
-
+//creates a new variable, the hair is going to turn grey then white over time
 let hair = {
     fills: {
         hairColour: 30,
@@ -336,12 +335,12 @@ let hair = {
 function DrawHair() {
     // draws the hair
 
-
+    // variable that changes to make the hair's color change
 
     hair.fills.hairColour = hair.fills.hairColour + 0.05
     hair.fills.hairShadow = hair.fills.hairShadow + 0.05
 
-
+    // hair 
 
     push();
     fill(hair.fills.hairColour);
@@ -480,19 +479,19 @@ function DrawFace() {
     // BEGGINNING OF EARS AND DRAWING OF THE FACE
 
     // draws right ear
-    //right ear
+    //right ear which is put here because it has to be seen behind the head itself which has to be seen behind left ear
     push();
-    translate(0, 400); // Move it down because i changed the height of the canvas
+    translate(0, 400);
     fill("#f7a493ff");
     noStroke();
-    translate(100, -214); // Move the origin to the ellipse center
+    translate(100, -214);
     rotate(radians(12));
     ellipse(990, 380, 90, 200);
     pop();
 
 
     push(); // head itself
-    translate(0, 400); // Move it down because i changed the height of the canvas
+    translate(0, 400);
     fill("#FCC6BB");
     noStroke();
     ellipse(600, 300, 800, 850);
@@ -525,7 +524,7 @@ function DrawFace() {
     ellipse(800, 100, 100, 290);
     pop();
 
-    push(); // head shadow right
+    push(); // head shadow2 right
     translate(300, 920);
     rotate("-1")
     fill("#c77463ff");
@@ -535,8 +534,8 @@ function DrawFace() {
     pop();
 
 
-    push(); // head itself
-    translate(-230, 155); // Move it down because i changed the height of the canvas
+    push(); // head shadow3 right
+    translate(-230, 155);
     rotate("0")
     fill("#c85c46ff")
     stroke("#c85c46ff")
@@ -547,10 +546,10 @@ function DrawFace() {
 
     //left ear
     push();
-    translate(0, 400); // Move it down because i changed the height of the canvas
+    translate(0, 400);
     fill("#f4bdb2ff");
     noStroke();
-    translate(200, 400); // Move the origin to the ellipse center
+    translate(200, 400);
     rotate(radians(-9)); // Rotate the left hair to have a good perspective
     ellipse(0, 0, 140, 240); // Draw ellipse at the new origin
     pop();
@@ -559,14 +558,9 @@ function DrawFace() {
 
 function DrawEyes() { // it's funny because the auto completions helped me a lot until this point but now i have reached the max quotas for the free version so i really have to know the codes format, and not write 'pull' rather than 'pop' cause we are not at the gym here !
 
-
-
-
-
-
     push();
     noStroke();
-    translate(-51, 45); // completes the drawing of left eye
+    translate(-51, 45); // completes the drawing of left eye, shadow
     rotate(radians(-5));
     fill("#5b121269");
     ellipse(490, 610, 140, 70)
@@ -574,7 +568,7 @@ function DrawEyes() { // it's funny because the auto completions helped me a lot
 
     push();
     noStroke();
-    translate(-51, 54); // completes the drawing of left eye
+    translate(-51, 54); // completes the drawing of left eye, shadow 
     rotate(radians(-5));
     fill("#f0b6a3ff");
     ellipse(490, 610, 140, 70)
@@ -588,15 +582,14 @@ function DrawEyes() { // it's funny because the auto completions helped me a lot
     pop();
 
 
-    // creates bottom border of left eye
+    // creates bottom border of left eye which has to be seen prior to the eyebowl
     push();
     noFill();
     stroke("#f39f9fff");
     strokeWeight("4");
-    // Place le triangle au centre de la pupille gauche
-    translate(485, 607); // centre de la pupille gauche
+    translate(485, 607);
     rotate(radians(140));
-    scale(1.2); // ajuste la taille (1.2 = un peu plus grand que la pupille)
+    scale(1.2);
     beginShape();
     curveVertex(-10, 3);   // coin bas gauche
     curveVertex(19, -39);    // sommet haut
@@ -608,7 +601,7 @@ function DrawEyes() { // it's funny because the auto completions helped me a lot
 
     //RIGHT EYE
 
-    // draw skin that overlaps the bottom of right eye
+    // draw skin that overlaps the bottom of right eye and give the impression that the character is looking at the sky
     push();
     noStroke();
     translate(489, -9);
@@ -626,18 +619,22 @@ function DrawEyes() { // it's funny because the auto completions helped me a lot
     fill("#d36e6ef1");
     ellipse(530, 570, 120, 70)
     pop();
+
+
     // wine red shadow behind right eye
     push();
     noStroke();
-    translate(401, -41); // completes the drawing of RIGHT eye
+    translate(401, -41);
     rotate(radians(5));
     fill("#5b121269");
     ellipse(490, 610, 140, 70)
     pop();
-    //skin prat that underlaps right eye
+
+
+    //skin part that underlaps right eye
     push();
     noStroke();
-    translate(401, -30); // completes the drawing of  RIGHT eye
+    translate(401, -30);
     rotate(radians(5));
     fill("#f39f9fff");
     ellipse(490, 610, 140, 70)
@@ -649,7 +646,7 @@ function DrawEyes() { // it's funny because the auto completions helped me a lot
     push();
     fill("white");
     noStroke();
-    translate(-10, 569); // completes the drawing of RIGHT eye
+    translate(-10, 569);
     rotate(radians(-5));
     ellipse(500, 100, 140, 70)
     pop();
@@ -663,7 +660,7 @@ function DrawEyes() { // it's funny because the auto completions helped me a lot
     pop();
 
 
-
+    // arc that completes the ellipse that was used to make the eyebowl to sharpen it at the bottom
     push();
     fill("white");
     translate(105, 635); // Draws right eye
@@ -679,7 +676,7 @@ function DrawEyes() { // it's funny because the auto completions helped me a lot
     stroke("#f39f9fff");
     strokeWeight(9);
     fill("#f39f9fff");
-    translate(542, -226);
+    translate(542, -226);// part of skin that overlaps at the bottom
     rotate(radians(41));
     arc(550, 630, 70, 20, PI + QUARTER_PI, 0 + TWO_PI, OPEN);
     pop();
@@ -687,7 +684,7 @@ function DrawEyes() { // it's funny because the auto completions helped me a lot
     push();
     fill("#dea295ff");
     noStroke();
-    translate(-381, 636);
+    translate(-381, 636);// part of skin that overlaps at the top
     rotate(radians(-49));
     arc(550, 630, 120, 60, PI + QUARTER_PI, 0 + TWO_PI, OPEN);
     pop();
@@ -698,7 +695,7 @@ function DrawEyes() { // it's funny because the auto completions helped me a lot
     push();
     fill("#f39f9fff");
     noStroke();
-    translate(590, -179);
+    translate(590, -179);// part of skin that overlaps at the bottom
     rotate(radians(22));
     arc(550, 630, 90, 40, PI + QUARTER_PI, 0 + TWO_PI, OPEN);
     pop();
@@ -706,7 +703,7 @@ function DrawEyes() { // it's funny because the auto completions helped me a lot
     push();
     fill("#f39f9fff");
     noStroke();
-    translate(43, 530);
+    translate(43, 530);// part of skin that overlaps at the top
     rotate(radians(-40));
     arc(550, 630, 60, 20, PI + QUARTER_PI, 0 + TWO_PI, OPEN);
     pop();
@@ -714,7 +711,7 @@ function DrawEyes() { // it's funny because the auto completions helped me a lot
 
     // DETAILS OF BOTH EYES (retina, eyebowl, eye corners)
 
-    push();// THIS IF FOR RIGHT EYE, IT DRAWS THE EYEBOWL
+    push();// THIS IF FOR RIGHT EYE, IT DRAWS THE eyebowl , the one with the color, not the white one
     fill("#3d4a04ff")
     stroke("#747474ff")
     strokeWeight(5);
@@ -723,7 +720,7 @@ function DrawEyes() { // it's funny because the auto completions helped me a lot
     ellipse(764, 655, 66, 68)
     pop();
 
-    // creates a shadow in the right eye
+    // creates a shadow in the right eye with a darker green
     push();
     fill("#2a3014ff")
     noStroke();
@@ -734,7 +731,7 @@ function DrawEyes() { // it's funny because the auto completions helped me a lot
     pop();
 
 
-    // NOW IT'S LEFT EYE
+    // NOW IT'S LEFT EYE, eyebowl green
     push();
     fill("#3d4a04ff")
     stroke("#747474ff")
@@ -742,7 +739,7 @@ function DrawEyes() { // it's funny because the auto completions helped me a lot
     ellipse(495, 625, 66, 68)
     pop();
 
-    // creates a shadow in the left eye
+    // creates a shadow in the left eye with a darker green
     push();
     fill("#2a3014ff")
     noStroke();
@@ -752,6 +749,8 @@ function DrawEyes() { // it's funny because the auto completions helped me a lot
     ellipse(434, 645, 28, 46)
     pop();
 
+
+    // draws the retinas
     push();
     fill("black")
     noStroke();
@@ -764,14 +763,14 @@ function DrawEyes() { // it's funny because the auto completions helped me a lot
     pop();
 
 
-
+    // reflection of light in both eyes for more details and to give the impression the character looks at the sky
     fill("#693737ff")
     noStroke();
     ellipse(493, 630, 13, 10)  // reflection light inside of retina of left eye
     ellipse(823, 625, 13, 10) // reflection light inside of retina of right eye
     pop();
 
-    // creates another layer behind the next element : 'triangle with rounded corners' , left eye
+    // creates another layer behind the next element : 'triangle with rounded corners' , left eye to complete it 
     push();
     stroke("#f0b3a6ff");
     strokeWeight(11);
@@ -783,7 +782,7 @@ function DrawEyes() { // it's funny because the auto completions helped me a lot
     pop();
 
 
-    // creates another layer behind the next element : 'triangle with rounded corners' , right eye
+    // creates another layer behind the next element : 'triangle with rounded corners' , right eye to complete it
     push();
     stroke("#f39f9fff");
     strokeWeight(10);
@@ -991,7 +990,7 @@ function DrawEyes() { // it's funny because the auto completions helped me a lot
     stroke("#3b2a1af8");
     strokeWeight(15);
     noFill();
-    translate(498, 608); // position au-dessus de l'œil droit
+    translate(498, 608); // position au-dessus de l'œil gauche
     rotate(radians(1)); // légère inclinaison
     arc(0, 0, 440, 140, PI + QUARTER_PI, TWO_PI - QUARTER_PI);
     pop();
@@ -1000,7 +999,7 @@ function DrawEyes() { // it's funny because the auto completions helped me a lot
     stroke("#3b2a1af8");
     strokeWeight(22);
     noFill();
-    translate(542, 568); // position au-dessus de l'œil droit
+    translate(542, 568); // position au-dessus de l'œil gauche
     rotate(radians(7)); // légère inclinaison
     arc(0, 0, 340, 40, PI + QUARTER_PI, TWO_PI - QUARTER_PI);
     pop();
@@ -1053,7 +1052,7 @@ function DrawEyes() { // it's funny because the auto completions helped me a lot
     pop();
 
 
-    // scar right eyebrow
+    // scar right eyebrow that i really have in my right eyebrow
 
 
     push();
@@ -1123,6 +1122,7 @@ function DrawEyes() { // it's funny because the auto completions helped me a lot
 function DrawDetailshead() {
 
     //draws shadows of left ear
+    // big one
     push();
     translate(0, 400); // MY MISTAKE I HAVE PUT TWO TRANSLATE' BUT IT WORKS RIGHT 
     fill("#D76D56");
@@ -1131,39 +1131,39 @@ function DrawDetailshead() {
     rotate(radians(-9)); // Rotate 
     ellipse(300, 800, 100, 180);
     pop();
-
+    // skin that overlaps
     push();
     translate(0, 420); // MMY MISTAKE I HAVE PUT TWO TRANSLATE' BUT IT WORKS RIGHT 
     fill("#f4bdb2ff");
     noStroke();
-    translate(-210, -347); // Move the origin to the ellipse center
-    rotate(radians(-9)); // Rotate 
+    translate(-210, -347);
+    rotate(radians(-9));
     ellipse(300, 800, 100, 180);
     pop();
 
-
+    // small one
     push();
     translate(0, 400); // MY MISTAKE I HAVE PUT TWO TRANSLATE' BUT IT WORKS RIGHT 
     noStroke();
     fill("#d26951bb");
-    translate(-212, -331); // Move the origin to the ellipse center
-    rotate(radians(-9)); // Rotate 
+    translate(-212, -331);
+    rotate(radians(-9));
     ellipse(300, 800, 60, 90);
     pop();
-
+    //skin that overlaps
     push();
     translate(0, 400); // MY MISTAKE I HAVE PUT TWO TRANSLATE' BUT IT WORKS RIGHT 
     fill("#f4bdb2ff");
     noStroke();
-    translate(142, -431); // Move the origin to the ellipse center
-    rotate(radians(15)); // Rotate 
+    translate(142, -431);
+    rotate(radians(15));
     ellipse(300, 800, 70, 100);
     pop();
 
     // END OF SHADWOS OF LEFT EAR
 
     //draws shadows of right ear
-
+    // big one
     push();
     fill("#d76d56");
     noStroke();
@@ -1171,7 +1171,7 @@ function DrawDetailshead() {
     rotate(radians(9)); // Rotate 
     ellipse(300, 800, 30, 140);
     pop();
-
+    // skin that overlaps
     push();
     fill("#f7a493ff");
     noStroke();
@@ -1180,7 +1180,7 @@ function DrawDetailshead() {
     ellipse(330, 800, 20, 126);
     pop();
 
-
+    // small one
     push();
     fill("#d26951ff");
     noStroke();
@@ -1191,7 +1191,7 @@ function DrawDetailshead() {
     // right EAR FINISHED
 
 
-    // draws shadows of the noose
+    // draws SHADOWS of the noose
     push();
     noStroke();
     strokeWeight(2);
@@ -1269,16 +1269,7 @@ function DrawDetailshead() {
 }
 
 function DrawShadowFace() {
-
-
-
-
-
-
-
-
-
-
+    // add shadows that overlap each other in the face, they are finally useless and may be hidden by other elements but i prefer to keep them in case they actually still create important details
     push();
     fill("#fcc6bb");
     noStroke();;
@@ -1286,9 +1277,6 @@ function DrawShadowFace() {
     rotate(radians(90));
     ellipse(190, 280, 300, 680);
     pop();
-
-
-
 
 
     push();
@@ -1556,6 +1544,7 @@ function DrawMouth() {
 
 }
 
+// create the variable wrinles for wrinkles that will make wrinkles appear on the face of the character once the user clicks on the screen
 let wrinles = {
     fills: {
         normal: "#fcc6bb",
@@ -1566,7 +1555,7 @@ let wrinles = {
 
 }
 
-
+// function that draws these wrinkles that i just placed next to each other, copying the code and changing the angle and the position
 function DrawWrinkles() {
 
     push();

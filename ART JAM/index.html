@@ -19,6 +19,14 @@
 
   <!-- My script(s) -->
   <script src="js/script.js"></script>
+
+  <!-- make the program open at the right size ( it was opening zoomed due to the chrome default size at 90%)-->
+  <script>
+    window.onload = function () {
+      document.body.style.zoom = "25%"; // Works in Chrome
+    };
+  </script>
+
   <style>
     /* Faire que la vidéo couvre tout l'écran */
     body,

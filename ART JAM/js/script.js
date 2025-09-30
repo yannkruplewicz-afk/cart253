@@ -58,7 +58,7 @@ function draw() {
         size: 1650
 
     };
-    framecolour = framecolour - 0.05
+    framecolour = framecolour - 0.08
 
 
 
@@ -89,18 +89,25 @@ function draw() {
     let hairColour = "#2C1B0B"
     let hairShadow = "#24100B"
 
-    // calculate distance between mouse and frame center
+    let wrinklesActive = false;
+    // calcule la distance
     const distance = dist(mouseX, mouseY, frame.x, frame.y);
     const mouseIsOverlapping = (distance < frame.size / 2);
 
-    // condition that makes wrinkles appear if the user clicks on the screen
+    // si l’utilisateur clique sur la zone → active les rides
     if (mouseIsOverlapping && mouseIsPressed) {
-        wrinles.fills.normal = wrinles.fills.old;
-    } else {
-        wrinles.fills.normal = color("#fcc6bb"); // reset to default
+        wrinklesActive = true;
     }
 
+    // applique l’état
+    if (wrinklesActive) {
+        wrinles.fills.normal = wrinles.fills.old;
+    } else {
+        wrinles.fills.normal = color("#fcc6bb");
+    }
 }
+
+
 
 function frameMask() {
     rect(100, 100, width - 200, height - 200); // creates a mask for the frame
@@ -337,8 +344,8 @@ function DrawHair() {
 
     // variable that changes to make the hair's color change
 
-    hair.fills.hairColour = hair.fills.hairColour + 0.05
-    hair.fills.hairShadow = hair.fills.hairShadow + 0.05
+    hair.fills.hairColour = hair.fills.hairColour + 0.08
+    hair.fills.hairShadow = hair.fills.hairShadow + 0.08
 
     // hair 
 

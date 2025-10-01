@@ -12,7 +12,9 @@ The background and the music whose main theme is nostalgia make the artwork a de
 It took me around 2000 lines of codes (including HTML) to realize this autoportrait.
 Today, September 29, it is officially finished.
 
+I have tried to fix the problem of the program not being fully read by chrome during many hours, trying to compress the js file , using node.js or electron to read it, creating separate script.js files and linking all of them in my index.html but none of this actually worked so i just added a video of the program fully working, except the wripples that only appears during the first 10 - 15 secs one the portrait itself, not the video.
 
+It was nice working on this project though.
 
 
 

@@ -16,7 +16,13 @@ function setup() {
     createCanvas(1200, 1400);
 
 
+
 }
+
+
+
+
+
 const clickSound = new Audio('assets/sounds/song10.mp3');
 clickSound.preload = 'auto';
 
@@ -58,7 +64,7 @@ function draw() {
         size: 1650
 
     };
-    framecolour = framecolour - 0.08
+    framecolour = framecolour - 0.2
 
 
 
@@ -344,8 +350,8 @@ function DrawHair() {
 
     // variable that changes to make the hair's color change
 
-    hair.fills.hairColour = hair.fills.hairColour + 0.08
-    hair.fills.hairShadow = hair.fills.hairShadow + 0.08
+    hair.fills.hairColour = hair.fills.hairColour + 0.04
+    hair.fills.hairShadow = hair.fills.hairShadow + 0.04
 
     // hair 
 

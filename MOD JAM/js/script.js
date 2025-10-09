@@ -15,6 +15,11 @@
 
 "use strict";
 
+let score = 0;
+
+let flyscoreamount = 1;
+
+
 // Our frog
 const frog = {
     // The frog's body has a position and size
@@ -61,6 +66,7 @@ function draw() {
     moveTongue();
     drawFrog();
     checkTongueFlyOverlap();
+    drawScore();
 }
 
 /**
@@ -169,7 +175,17 @@ function checkTongueFlyOverlap() {
         resetFly();
         // Bring back the tongue
         frog.tongue.state = "inbound";
+        // increase the score
+        score = score + flyscoreamount;
+        flyscoreamount = flyscoreamount + 1;
     }
+}
+
+function drawScore() {
+    push();
+    textSize(36);
+    fill("#333")
+    text(score, 50, 50)
 }
 
 /**

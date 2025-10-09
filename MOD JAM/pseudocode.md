@@ -114,7 +114,7 @@ the frog now has focused eyebrows and sweets, we can see it in her face
 
 18  // flies arrive faster during the strike
 
-19  // the strike's duration is 30 secs. if the player catches 25 flies in this set of time, a new strike even harder happens, it's the level max
+19  // the strike's duration is 30 secs. if the player catches 25 flies in this set of time, a new strike even harder happens, it's the hardest level
 there, the frog's eyebrows are really focused , she also sweets a lot, this last strike takes place during 30 secs
 
 

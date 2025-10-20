@@ -33,6 +33,8 @@ let endVideo; // video for game over screen
 
 let bgMusic2;// song for end of game
 
+let tongueSound;// tongue soundtrack
+
 
 
 /**
@@ -63,6 +65,7 @@ function preload() {
     endVideo = createVideo(['assets/images/video2.mp4']);
     endVideo.hide();
 
+    tongueSound = loadSound('assets/sounds/song3.mp3');
 }
 
 let bgMusic; // background music variable
@@ -91,22 +94,23 @@ function draw() {
     background("#10b8fbff");
 
 
-
+    // before game
     if (!gameStarted) {
-        drawInstructionScreen(); // NEW - show instructions
+        drawInstructionScreen(); // show instructions screen
         return; // stop here until player clicks
     }
-
+    // after game, when the player looses, this if conditional makes the end screen appears thanks to the variable 'game over'
     if (gameOver) {
         background(0); // full black
 
+        //plays a end of game song, as in retro games
         userStartAudio();     // ensure browser allows audio
-        bgMusic2.play();      // play once
+        bgMusic2.play();      // play only once
         bgMusic2.setVolume(0.1);
         musicStarted = true;
 
 
-
+        // play a loop for end of game video
         endVideo.loop();
         image(endVideo, 0, 0, width, height);
 
@@ -130,18 +134,13 @@ function draw() {
     }
 
 
-
-
-
-
-
-    // --- Lose condition ---
+    // This is the conditional that makes the game over variable change its value
     if (score <= 0) {
         gameOver = true;
         return;
     }
 
-    // existing game logic below this line...
+    // existing basic elements of FROGFROGFROG game's design below
     moveFly();
     drawFly();
     drawFrog();
@@ -304,6 +303,7 @@ function mousePressed() {
         }
 
 
+
         // Stop intro music when game starts
         if (bgMusic && bgMusic.isPlaying()) {
             bgMusic.stop();
@@ -315,6 +315,8 @@ function mousePressed() {
     // Frog tongue launching once the user clicks at the screen
     if (frog.tongue.state === "idle") {
         frog.tongue.state = "outbound";
+        tongueSound.play(); // sound effect of frog tongue
+        tongueSound.setVolume(3);
     }
 
     if (scoreDecreaseInterval === null) {

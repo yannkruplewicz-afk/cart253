@@ -29,13 +29,18 @@ let scoreDecreaseInterval = null; // variable that will make the score decrease 
 
 let gameOver = false; // make a possibility for the player to loose
 
-let endVideo; // video for game over screen
+let endVideo;// song when game ends, when the player lost
+
 
 let bgMusic2;// song for end of game
 
 let tongueSound;// tongue soundtrack
 
+let flySound;// sound of flies flying
 
+let backgroundSound1;// ambience song in the background for level 1
+
+let mouseIsPressed = false; // variable to check if mouse is pressed
 
 /**
  * Creates the canvas and initializes the fly
@@ -58,12 +63,17 @@ function preload() {
     retroFont = loadFont('assets/font1/PressStart2P-Regular.ttf');// load the retro font file
     introVideo = createVideo(['assets/images/intro.mp4']);// load the video file
     introVideo.hide();
+    endVideo = createVideo(['assets/images/video2.mp4']);// load the video file
+    endVideo.hide();
     bgMusic = loadSound('assets/sounds/music1.mp3');// load the music file
-    bgMusic2 = loadSound('assets/sounds/song2.mp3')
+    bgMusic2 = loadSound('assets/sounds/song2.mp3');
+
+    flySound = loadSound('assets/sounds/sound3.mp3');
+
+    backgroundSound1 = loadSound('assets/sounds/sound4.mp3')
+
 
     // load the end video as a background when the player looses, if he looses
-    endVideo = createVideo(['assets/images/video2.mp4']);
-    endVideo.hide();
 
     tongueSound = loadSound('assets/sounds/song3.mp3');
 }
@@ -75,7 +85,7 @@ let musicStarted = false; // to ensure music starts only once, in the instructio
  * Our frog and fly objects
  */
 
-const frog = {
+const frog = {  // const variable to help me draw the frog
     body: { x: 320, y: 520, size: 150 },
     tongue: { x: 320, y: 470, size: 20, speed: 20, state: "idle" }
 };
@@ -84,10 +94,18 @@ const frog = {
 // Has a position, size, and speed of horizontal movement
 const fly = {
     x: 0,
-    y: 200, // Will be random
+    y: 200,
     size: 10,
-    speed: 3
+    speed: 3,
+    scoreValue: 1,
+    escaping: false, // the flies will be able to escape in 30 per cents of the cases
+    escapeTime: 0,
+    escapeDuration: 40 // during about 0.66 secs, if a fly escapes, it goes backwards before to go back in its original direction.  
 };
+
+
+
+
 
 
 function draw() {
@@ -99,9 +117,11 @@ function draw() {
         drawInstructionScreen(); // show instructions screen
         return; // stop here until player clicks
     }
+
     // after game, when the player looses, this if conditional makes the end screen appears thanks to the variable 'game over'
     if (gameOver) {
         background(0); // full black
+        backgroundSound1.stop();// stop the ambience sound when game is over 
 
         //plays a end of game song, as in retro games
         userStartAudio();     // ensure browser allows audio
@@ -110,14 +130,10 @@ function draw() {
         musicStarted = true;
 
 
-        // play a loop for end of game video
-        endVideo.loop();
-        image(endVideo, 0, 0, width, height);
-
-
         // Dark overlay for text
         fill(0, 0, 0, 120);
         rect(0, 0, width, height);
+
 
         // Game Over text
         textAlign(CENTER, CENTER);
@@ -129,6 +145,9 @@ function draw() {
         textSize(16);
         fill(255);
         text("Click anywhere to restart", width / 2, height / 2 + 20);
+
+        endVideo.play();
+
 
         return;
     }
@@ -155,18 +174,39 @@ function draw() {
  * Resets the fly if it gets all the way to the right
  */
 function moveFly() {
-    // Move the fly
-    fly.x += fly.speed;
-    // Handle the fly going off the canvas
-    if (fly.x > width) {
+    if (fly.escaping) {
+        // Move backward for a short time
+        fly.x -= fly.speed * 2; // backward, faster than normal
+        fly.escapeTime++;
+
+        // After enough frames, stop escaping
+        if (fly.escapeTime > fly.escapeDuration) {
+            fly.escaping = false;
+            fly.escapeTime = 0;
+        }
+    } else {
+        // Normal movement forward
+        fly.x += fly.speed;
+    }
+
+    // If fly goes off-screen, reset it
+    if (fly.x > width || fly.x < -50) {
         resetFly();
     }
+
+    // Play fly sound
+    flySound.loop();
+    flySound.setVolume(0.2);
 }
+
+
 
 /**
  * Draws the fly as a black circle
  */
-function drawFly() {
+
+
+function drawFly() { // draws the flies 
     push();
     noStroke();
     fill("#000000");
@@ -174,7 +214,7 @@ function drawFly() {
     pop();
 }
 
-function drawFrog() {
+function drawFrog() { // draws the frog
     // Tongue
     fill("#f9a1a1ff");
     ellipse(frog.tongue.x, frog.tongue.y, frog.tongue.size);
@@ -216,7 +256,7 @@ function drawFrogEyes() {
 }
 
 /**
- * Handles moving the tongue based on its state
+ * makes the frog'ttongue able to move
  */
 function moveTongue() {
     // Tongue matches the frog's x
@@ -243,32 +283,50 @@ function moveTongue() {
     }
 }
 
-/**
- * Handles the tongue overlapping the fly
- */
+
+// Handles the tongue overlapping the fly
+
 function checkTongueFlyOverlap() {
-    // Get distance from tongue to fly
     const d = dist(frog.tongue.x, frog.tongue.y, fly.x, fly.y);
-    // Check if it's an overlap
-    const eaten = (d < frog.tongue.size / 2 + fly.size / 2);
-    if (eaten) {
-        // Reset the fly
+    if (d < frog.tongue.size / 2 + fly.size / 2) {
+        // Add points first
+        score += fly.scoreValue;
+
+        // Then reset fly
         resetFly();
-        // Bring back the tongue
         frog.tongue.state = "inbound";
-        // increase the score
-        score = score + flyscoreamount;
-        flyscoreamount = flyscoreamount + 1;
     }
 }
+
+
 
 /**
  * Resets the fly to the left with a random y
  */
 function resetFly() {
     fly.x = 0;
-    fly.y = random(0, 300);
+    fly.y = random(0, 300); // makes the position random
+    fly.escaping = false; // reset the probability of the fly to escape
+    fly.escapeTime = 0;
+    // attributes different score to the flies depending on their sizes
+    const sizeChoice = random(['small', 'medium', 'big']);
+    if (sizeChoice === 'small') {
+        fly.size = 9;
+        fly.speed = 5;
+        fly.scoreValue = 3; // small = worth most
+    } else if (sizeChoice === 'medium') {
+        fly.size = 16;
+        fly.speed = 3;
+        fly.scoreValue = 2; // medium = middle
+    } else { // big
+        fly.size = 23;
+        fly.speed = 2;
+        fly.scoreValue = 1; // big = least
+    }
 }
+
+
+
 
 /**
  * Moves the frog to the mouse position on x
@@ -278,47 +336,47 @@ function moveFrog() {
 }
 
 
-function drawScore() {
+function drawScore() { // takes care of the score 
     push();
     textSize(30);
     fill("#111010ff")
     text(score, 80, 50)
+
 }
 
 /**
  * Launch the tongue on click (if it's not launched yet)
  */
 function mousePressed() {
-    // makes the game begins
-    if (!gameStarted) {
-        gameStarted = true;
-        if (bgMusic && bgMusic.isPlaying()) bgMusic.stop();
-        if (introVideo && introVideo.isPlaying()) introVideo.stop();
 
-
-        // If player lost, restart the game
-        if (gameOver) {
-            restartGame();
-            return;
-        }
-
-
-
-        // Stop intro music when game starts
-        if (bgMusic && bgMusic.isPlaying()) {
-            bgMusic.stop();
-        }
-
+    // Restart the game if it was over
+    if (gameOver) {
+        restartGame();
         return;
     }
 
+    // Start the game if it hasn't started yet
+    if (!gameStarted) {
+        gameStarted = true;
+
+        if (bgMusic && bgMusic.isPlaying()) bgMusic.stop(); // stops music and video to keep a good framerate
+        if (introVideo && introVideo.isPlaying()) introVideo.stop();
+
+        return;
+    }
     // Frog tongue launching once the user clicks at the screen
     if (frog.tongue.state === "idle") {
         frog.tongue.state = "outbound";
-        tongueSound.play(); // sound effect of frog tongue
-        tongueSound.setVolume(3);
-    }
+        tongueSound.play();
+        tongueSound.setVolume(5);
 
+        // 30% chance to trigger escape
+        if (random(1) < 0.3) {
+            fly.escaping = true;
+            fly.escapeTime = 0;
+        }
+    }
+    // makes the player loose a point per second = he can loose
     if (scoreDecreaseInterval === null) {
         scoreDecreaseInterval = setInterval(() => {
             if (gameStarted) {
@@ -334,6 +392,18 @@ function mousePressed() {
     return;
 }
 
+function restartGame() {
+    // Reset all necessary variables
+    score = 5;
+    flyscoreamount = 1;
+    gameOver = false;
+    frog.tongue.state = "idle";
+    resetFly();
+
+    backgroundSound1.play();
+}
+
+
 
 function drawInstructionScreen() { // draws the instruction screen, adds a video background and a music as well as the instructions text
     // Draw the intro video as the background
@@ -348,7 +418,11 @@ function drawInstructionScreen() { // draws the instruction screen, adds a video
         musicStarted = true;
 
         // Start video at the same time
-        introVideo.loop();
+        introVideo.play();
+
+        backgroundSound1.play();
+        backgroundSound1.setVolume(0.5);
+
     }
 
     // Overlay semi-transparent rectangle to make bacjkground darker

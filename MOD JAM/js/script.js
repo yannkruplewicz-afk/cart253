@@ -15,7 +15,7 @@
 
 "use strict";
 
-let score = 0; // beggin the score at 0
+let score = 5; // beggin the score at 0
 
 let flyscoreamount = 1; // how much each fly is worth, increases with each fly caught
 
@@ -24,6 +24,14 @@ let gameStarted = false; // NEW - controls whether the game has begun
 let retroFont; // adds a variable for the retro font
 
 let introVideo; // asdds a variable for the intro video
+
+let scoreDecreaseInterval = null; // variable that will make the score decrease over time
+
+let gameOver = false; // make a possibility for the player to loose
+
+let endVideo; // video for game over screen
+
+let bgMusic2;// song for end of game
 
 
 
@@ -35,9 +43,8 @@ function setup() {
     textFont('Press Start 2P'); // set font here
     // Create the video
 
-    // Play the video
-    introVideo.loop();   // can also use introVideo.play() for single play
-    // Give the fly its first random position
+
+
     resetFly();
 }
 
@@ -49,7 +56,12 @@ function preload() {
     retroFont = loadFont('assets/font1/PressStart2P-Regular.ttf');// load the retro font file
     introVideo = createVideo(['assets/images/intro.mp4']);// load the video file
     introVideo.hide();
-    bgMusic = loadSound('assets/sounds/music1.mp3'); // load the music file
+    bgMusic = loadSound('assets/sounds/music1.mp3');// load the music file
+    bgMusic2 = loadSound('assets/sounds/song2.mp3')
+
+    // load the end video as a background when the player looses, if he looses
+    endVideo = createVideo(['assets/images/video2.mp4']);
+    endVideo.hide();
 
 }
 
@@ -78,14 +90,55 @@ const fly = {
 function draw() {
     background("#10b8fbff");
 
-    if (millis() - lastScoreDecreaseTime > 1000) {
-        score = max(0, score - 1); // prevent negative score
-        lastScoreDecreaseTime = millis();
-    }
+
 
     if (!gameStarted) {
         drawInstructionScreen(); // NEW - show instructions
         return; // stop here until player clicks
+    }
+
+    if (gameOver) {
+        background(0); // full black
+
+        userStartAudio();     // ensure browser allows audio
+        bgMusic2.play();      // play once
+        bgMusic2.setVolume(0.1);
+        musicStarted = true;
+
+
+
+        endVideo.loop();
+        image(endVideo, 0, 0, width, height);
+
+
+        // Dark overlay for text
+        fill(0, 0, 0, 120);
+        rect(0, 0, width, height);
+
+        // Game Over text
+        textAlign(CENTER, CENTER);
+        textFont(retroFont);
+        fill(255, 0, 0);
+        textSize(32);
+        text("GAME OVER!", width / 2, height / 2 - 30);
+
+        textSize(16);
+        fill(255);
+        text("Click anywhere to restart", width / 2, height / 2 + 20);
+
+        return;
+    }
+
+
+
+
+
+
+
+    // --- Lose condition ---
+    if (score <= 0) {
+        gameOver = true;
+        return;
     }
 
     // existing game logic below this line...
@@ -240,6 +293,16 @@ function mousePressed() {
     // makes the game begins
     if (!gameStarted) {
         gameStarted = true;
+        if (bgMusic && bgMusic.isPlaying()) bgMusic.stop();
+        if (introVideo && introVideo.isPlaying()) introVideo.stop();
+
+
+        // If player lost, restart the game
+        if (gameOver) {
+            restartGame();
+            return;
+        }
+
 
         // Stop intro music when game starts
         if (bgMusic && bgMusic.isPlaying()) {
@@ -253,6 +316,20 @@ function mousePressed() {
     if (frog.tongue.state === "idle") {
         frog.tongue.state = "outbound";
     }
+
+    if (scoreDecreaseInterval === null) {
+        scoreDecreaseInterval = setInterval(() => {
+            if (gameStarted) {
+                score = Math.max(0, score - 1); // don't go below 0
+            } else {
+                // safety: if gameEnded, stop the interval
+                clearInterval(scoreDecreaseInterval);
+                scoreDecreaseInterval = null;
+            }
+        }, 1000);
+    }
+
+    return;
 }
 
 
@@ -265,7 +342,7 @@ function drawInstructionScreen() { // draws the instruction screen, adds a video
     // Start music once
     if (!musicStarted && userStartAudio()) {
         bgMusic.loop();
-        bgMusic.setVolume(0.5);
+        bgMusic.setVolume(3);
         musicStarted = true;
 
         // Start video at the same time

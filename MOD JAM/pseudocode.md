@@ -74,6 +74,15 @@ mousePressed()
         
 20 ideas for MOD JAM
 
+
+instructions screen ( animated )       DONE
+leaves when you click at the screen    DONE
+
+frog's eyes follow flies       , finally they just look more real.
+
+best score saved.
+
+
     DrawScore()
 1    //draws the score, different flies flies have different size and gives different numbers of points if eaten, so the player prefers to eat small ones which are also the harder ones
 big ones = 0.5, medium ones = 1 and small ones = 3

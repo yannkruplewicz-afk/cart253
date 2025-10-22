@@ -58,6 +58,8 @@ function setup() {
         bestScore = parseInt(localStorage.getItem("bestScore"));
     }
 
+    frameRate(30); // sets the framerate to avoid bugs
+
 
 
     resetFly();

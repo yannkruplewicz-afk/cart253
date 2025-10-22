@@ -42,6 +42,9 @@ let backgroundSound1;// ambience song in the background for level 1
 
 let mouseIsPressed = false; // variable to check if mouse is pressed
 
+let bestScore = 0; // variable that stores the best score 
+
+
 /**
  * Creates the canvas and initializes the fly
  */
@@ -49,6 +52,11 @@ function setup() {
     createCanvas(640, 480);
     textFont('Press Start 2P'); // set font here
     // Create the video
+
+    // Load saved best score from localStorage
+    if (localStorage.getItem("bestScore")) {
+        bestScore = parseInt(localStorage.getItem("bestScore"));
+    }
 
 
 
@@ -98,11 +106,14 @@ const fly = {
     size: 10,
     speed: 3,
     scoreValue: 1,
-    escaping: false, // the flies will be able to escape in 30 per cents of the cases
-    escapeTime: 0,
-    escapeDuration: 40 // during about 0.66 secs, if a fly escapes, it goes backwards before to go back in its original direction.  
+    escaping: false,
+    escapeTime: 0,// the flies should be able to escape 30 % of the time
+    escapeDuration: 40, // duration of escape
+    escapeStartY: 200,  // starting y for curved motion
+    escapeAmplitude: 50, // max vertical displacement while escaping
 };
 
+let flyColor = 0; // starting with a dark green color for the flies 
 
 
 
@@ -175,21 +186,25 @@ function draw() {
  */
 function moveFly() {
     if (fly.escaping) {
-        // Move backward for a short time
-        fly.x -= fly.speed * 2; // backward, faster than normal
+        // Move backward horizontally
+        fly.x -= fly.speed * 2;
+
+        // Move vertically in a sine wave for a curve
+        let t = fly.escapeTime / fly.escapeDuration; // 0 → 1
+        fly.y = fly.escapeStartY + fly.escapeAmplitude * sin(t * PI); // curved arc
+
         fly.escapeTime++;
 
-        // After enough frames, stop escaping
         if (fly.escapeTime > fly.escapeDuration) {
             fly.escaping = false;
             fly.escapeTime = 0;
         }
     } else {
-        // Normal movement forward
+        // Normal forward movement
         fly.x += fly.speed;
     }
 
-    // If fly goes off-screen, reset it
+    // Reset fly if it goes off screen
     if (fly.x > width || fly.x < -50) {
         resetFly();
     }
@@ -206,13 +221,27 @@ function moveFly() {
  */
 
 
-function drawFly() { // draws the flies 
+function drawFly() {
     push();
     noStroke();
-    fill("#000000");
+
+    // Draw the fly body
+    fill(flyColor); // dark green, can be adjusted
     ellipse(fly.x, fly.y, fly.size);
+
+    // Draw wings
+    fill(255, 255, 255, 150); // semi-transparent white wings
+    let wingSize = fly.size * 0.6; // wings slightly smaller than body
+    ellipse(fly.x - fly.size / 3, fly.y - fly.size / 2, wingSize, wingSize / 2); // left wing
+
+
     pop();
+
+    // Increment color for this fly
+    flyColor = flyColor + 0.4;
 }
+
+
 
 function drawFrog() { // draws the frog
     // Tongue
@@ -232,28 +261,55 @@ function drawFrog() { // draws the frog
     drawFrogEyes();
 }
 
-
 function drawFrogEyes() {
-    // draws the eyes of the frog
     push();
+
+    // add glasses for the frog
+    const lensHeight = 40;
+    const lensOffsetX = 25;
+    const lensOffsetY = 70;
+
+    // Left lens
+    fill(255, 255, 255, 100); // semi-transparent white
+    stroke("#000000");
+    strokeWeight(2); // thinner black outline
+    beginShape();
+    vertex(frog.body.x - 65, frog.body.y - lensOffsetY); // top-left
+    vertex(frog.body.x - 25, frog.body.y - lensOffsetY); // top-right
+    vertex(frog.body.x - 35, frog.body.y - lensOffsetY + lensHeight); // bottom-right
+    vertex(frog.body.x - 60, frog.body.y - lensOffsetY + lensHeight); // bottom-left
+    endShape(CLOSE);
+
+    // Right lens
+    beginShape();
+    vertex(frog.body.x + 25, frog.body.y - lensOffsetY); // top-left
+    vertex(frog.body.x + 65, frog.body.y - lensOffsetY); // top-right
+    vertex(frog.body.x + 60, frog.body.y - lensOffsetY + lensHeight); // bottom-right
+    vertex(frog.body.x + 35, frog.body.y - lensOffsetY + lensHeight); // bottom-left
+    endShape(CLOSE);
+
+    // Bridge in grey
+    stroke("#1f1c1cff");
+    strokeWeight(4);
+    line(frog.body.x - 25, frog.body.y - 60, frog.body.x + 25, frog.body.y - 60);
+    // Eye whites
     fill("#000000ff");
     stroke("#2f9e2fff");
     strokeWeight(0);
-    // Left eye white
     ellipse(frog.body.x - 50, frog.body.y - 50, 40, 40);
-    // Right eye white
     ellipse(frog.body.x + 50, frog.body.y - 50, 40, 40);
+
+    // Pupils
     fill("#2f9e2fff");
     stroke("#183f15ff");
     strokeWeight(0.5);
-    // Left eye pupil
     ellipse(frog.body.x - 42, frog.body.y - 42, 26, 52);
-    // Right eye pupil
     ellipse(frog.body.x + 42, frog.body.y - 42, 26, 52);
+
     pop();
-
-
 }
+
+
 
 /**
  * makes the frog'ttongue able to move
@@ -292,6 +348,12 @@ function checkTongueFlyOverlap() {
         // Add points first
         score += fly.scoreValue;
 
+        // Update best score
+        if (score > bestScore) {
+            bestScore = score;
+            localStorage.setItem("bestScore", bestScore); // save to browser
+        }
+
         // Then reset fly
         resetFly();
         frog.tongue.state = "inbound";
@@ -308,6 +370,9 @@ function resetFly() {
     fly.y = random(0, 300); // makes the position random
     fly.escaping = false; // reset the probability of the fly to escape
     fly.escapeTime = 0;
+
+    // Reset color for this new fly
+    flyColor = 0;
     // attributes different score to the flies depending on their sizes
     const sizeChoice = random(['small', 'medium', 'big']);
     if (sizeChoice === 'small') {
@@ -340,7 +405,12 @@ function drawScore() { // takes care of the score
     push();
     textSize(30);
     fill("#111010ff")
-    text(score, 80, 50)
+    text(score, 80, 35)// makes the score be left top corner
+
+    textSize(20);
+    fill("#000000ff");// makes the best score appear right top corner
+    text("Best:" + bestScore, 530, 35); // shows best score
+    pop();
 
 }
 
@@ -374,7 +444,9 @@ function mousePressed() {
         if (random(1) < 0.3) {
             fly.escaping = true;
             fly.escapeTime = 0;
+            fly.escapeStartY = fly.y; // remember starting y for sine curve
         }
+
     }
     // makes the player loose a point per second = he can loose
     if (scoreDecreaseInterval === null) {

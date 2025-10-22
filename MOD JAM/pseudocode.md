@@ -80,7 +80,7 @@ leaves when you click at the screen    DONE
 
 frog's eyes follow flies       , finally they just look more real.
 
-best score saved.
+best score saved.                                                                                                                                                                           DONE
 
 
     DrawScore()
@@ -89,14 +89,20 @@ big ones = 0.5, medium ones = 1 and small ones = 3
 
 2   // a streak as in duolingo should be added after having captured 3 small ones, or 15 flies in total which brings adrenaline and sticks the player to the screen, he doesn't want to stop playing
 
-3   // the flies should have a curved trajectory, not just flying straight and going from point 50,x to point 50,y on the screen so that it is harder for the player and less repetitive
+3   // the flies should have a curved trajectory, not just flying straight and going from point 50,x to point 50,y on the screen so that it is harder for the player and less repetitive 
+DONE
 
-4   // once attacked at first, the flies should be able to escape, to avoid the first attack in 50% of the cases, not 100%. so the player doesn't know how they are going to react at all but can anticipate if it happens.
+4   // once attacked at first, the flies should be able to escape, to avoid the first attack in 50% of the cases, not 100%. so the player doesn't know how they are going to react at all but can anticipate if it happens.DONE
 
 5   // the score could be placed in the frog itself so that is it visible ( black in light green ) as well as practical since it doesn't disturb the player from seeing the flies
 
 6   // both the frog and the flies should have a themed design. Maybe they can be the frog and the flies from the future, the frog could have glasses through which we see big eyes , as well as a turn on / off button on her back that the player has to turn on at the beggining of the game using the 'space' touch.
+DONE
+
 The flies could have a variable that make their color change from light green to dark green as well as wings.
+DOONE
+
+
 
 7   // the background should also have a design related to them, like clouds moving in the same sense as the flies, they would go faster as the flies go faster during the strikes
 

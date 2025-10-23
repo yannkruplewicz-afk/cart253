@@ -58,7 +58,7 @@ function setup() {
         bestScore = parseInt(localStorage.getItem("bestScore"));
     }
 
-    frameRate(30); // sets the framerate to avoid bugs
+    frameRate(60); // sets the framerate to avoid bugs
 
 
 
@@ -76,7 +76,7 @@ function preload() {
     endVideo = createVideo(['assets/images/video2.mp4']);// load the video file
     endVideo.hide();
     bgMusic = loadSound('assets/sounds/music1.mp3');// load the music file
-    bgMusic2 = loadSound('assets/sounds/song2.mp3');
+    bgMusic2 = loadSound('assets/sounds/song2.mp3'); // load a sound of frog
 
     flySound = loadSound('assets/sounds/sound3.mp3');
 
@@ -133,33 +133,36 @@ function draw() {
 
     // after game, when the player looses, this if conditional makes the end screen appears thanks to the variable 'game over'
     if (gameOver) {
-        background(0); // full black
+
+        if (endVideo) {
+            image(endVideo, 0, 0, width, height);
+        }
+
         backgroundSound1.stop();// stop the ambience sound when game is over 
-
-        //plays a end of game song, as in retro games
-        userStartAudio();     // ensure browser allows audio
-        bgMusic2.play();      // play only once
-        bgMusic2.setVolume(0.1);
-        musicStarted = true;
-
 
         // Dark overlay for text
         fill(0, 0, 0, 120);
         rect(0, 0, width, height);
 
 
+        endVideo.play();
+
+
+
         // Game Over text
         textAlign(CENTER, CENTER);
         textFont(retroFont);
-        fill(255, 0, 0);
+        fill(235, 0, 0);
+        stroke("black");
+        strokeWeight(7);
         textSize(32);
         text("GAME OVER!", width / 2, height / 2 - 30);
 
         textSize(16);
         fill(255);
+        strokeWeight(3);
         text("Click anywhere to restart", width / 2, height / 2 + 20);
 
-        endVideo.play();
 
 
         return;
@@ -169,10 +172,18 @@ function draw() {
     // This is the conditional that makes the game over variable change its value
     if (score <= 0) {
         gameOver = true;
+
+
+        //plays a end of game song, as in retro games
+        if (!bgMusic2.isPlaying()) {
+            bgMusic2.play();      // play only once
+            bgMusic2.setVolume(2.5);
+        }
         return;
     }
 
     // existing basic elements of FROGFROGFROG game's design below
+    drawClouds();
     moveFly();
     drawFly();
     drawFrog();
@@ -181,12 +192,82 @@ function draw() {
     checkTongueFlyOverlap();
     drawScore();
 }
+let clouds = {
+    x: 600,
+    y: 50,
+    velocity: 2
+}
+let clouds2 = {
+    x: 600,
+    y: 200,
+    velocity: 3
+}
+let clouds3 = {
+    x: 600,
+    y: 100,
+    velocity: 4
+}
 
+
+function drawClouds() {
+    push();
+    fill("white");
+    noStroke();
+    ellipse(clouds.x, clouds.y + 20, 100, 100);
+    ellipse(clouds.x + 50, clouds.y + 10, 100, 100);
+    ellipse(clouds.x + 45, clouds.y + 20, 100, 100);
+    ellipse(clouds.x + 100, clouds.y + 20, 100, 100);
+    pop();
+
+    push();
+    fill("white");
+    noStroke();
+    ellipse(clouds2.x, clouds2.y + 20, 100, 100);
+    ellipse(clouds2.x + 50, clouds2.y + 10, 100, 100);
+    ellipse(clouds2.x + 45, clouds2.y + 20, 100, 100);
+    ellipse(clouds2.x + 100, clouds2.y + 20, 100, 100);
+    pop();
+
+    push();
+    fill("white");
+    noStroke();
+    ellipse(clouds3.x, clouds3.y + 20, 100, 100);
+    ellipse(clouds3.x + 50, clouds3.y + 10, 100, 100);
+    ellipse(clouds3.x + 45, clouds3.y + 20, 100, 100);
+    ellipse(clouds3.x + 100, clouds3.y + 20, 100, 100);
+    pop();
+
+    clouds.x = clouds.x - clouds.velocity
+    clouds2.x = clouds2.x - clouds2.velocity
+    clouds3.x = clouds3.x - clouds3.velocity
+
+    if (clouds.x <= -155) {
+        clouds.x = width + 60
+        clouds.velocity += 0.3
+    }
+
+    if (clouds2.x <= -135) {
+        clouds2.x = width + 50
+        clouds2.velocity += 0.3
+    }
+
+    if (clouds3.x <= -135) {
+        clouds3.x = width + 50
+        clouds3.velocity += 0.3
+    }
+
+
+}
 /**
  * Moves the fly according to its speed
  * Resets the fly if it gets all the way to the right
  */
 function moveFly() {
+    if (!flySound.isPlaying()) {
+        flySound.play();      // play only once
+        flySound.setVolume(0.5);
+    }
+
     if (fly.escaping) {
         // Move backward horizontally
         fly.x -= fly.speed * 2;
@@ -211,9 +292,7 @@ function moveFly() {
         resetFly();
     }
 
-    // Play fly sound
-    flySound.loop();
-    flySound.setVolume(0.2);
+
 }
 
 
@@ -240,7 +319,7 @@ function drawFly() {
     pop();
 
     // Increment color for this fly
-    flyColor = flyColor + 0.4;
+    flyColor = flyColor + 0.2;
 }
 
 
@@ -293,7 +372,7 @@ function drawFrogEyes() {
     // Bridge in grey
     stroke("#1f1c1cff");
     strokeWeight(4);
-    line(frog.body.x - 25, frog.body.y - 60, frog.body.x + 25, frog.body.y - 60);
+    line(frog.body.x - 25, frog.body.y - 67, frog.body.x + 25, frog.body.y - 67);
     // Eye whites
     fill("#000000ff");
     stroke("#2f9e2fff");
@@ -390,6 +469,8 @@ function resetFly() {
         fly.speed = 2;
         fly.scoreValue = 1; // big = least
     }
+    // Stops fly sound
+    if (flySound && flySound.isPlaying()) flySound.stop(); // stops music and video to keep a good framerate
 }
 
 
@@ -421,6 +502,7 @@ function drawScore() { // takes care of the score
  */
 function mousePressed() {
 
+
     // Restart the game if it was over
     if (gameOver) {
         restartGame();
@@ -432,7 +514,12 @@ function mousePressed() {
         gameStarted = true;
 
         if (bgMusic && bgMusic.isPlaying()) bgMusic.stop(); // stops music and video to keep a good framerate
-        if (introVideo && introVideo.isPlaying()) introVideo.stop();
+        introVideo.stop();
+
+        bgMusic2.play(); // plays a song of frog when the game starts
+        bgMusic2.setVolume(15);
+        console.log("Background music 2 started");
+
 
         return;
     }
@@ -472,9 +559,20 @@ function restartGame() {
     flyscoreamount = 1;
     gameOver = false;
     frog.tongue.state = "idle";
+    frog.tongue.y = 470;
     resetFly();
+    clouds.velocity = 1;
+    clouds2.velocity = 2;
+    clouds3.velocity = 3;
+
+    clouds.x = width + 60;
+    clouds2.x = width + 60;
+    clouds3.x = width + 60;
+    endVideo.stop(); // stops playing end video
+
 
     backgroundSound1.play();
+    backgroundSound1.setVolume(1.5);
 }
 
 
@@ -487,7 +585,7 @@ function drawInstructionScreen() { // draws the instruction screen, adds a video
 
     // Start music once
     if (!musicStarted && userStartAudio()) {
-        bgMusic.loop();
+        bgMusic.play();
         bgMusic.setVolume(3);
         musicStarted = true;
 
@@ -495,7 +593,7 @@ function drawInstructionScreen() { // draws the instruction screen, adds a video
         introVideo.play();
 
         backgroundSound1.play();
-        backgroundSound1.setVolume(0.5);
+        backgroundSound1.setVolume(1.5);
 
     }
 

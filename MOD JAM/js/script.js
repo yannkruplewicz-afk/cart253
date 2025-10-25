@@ -38,11 +38,27 @@ let tongueSound;// tongue soundtrack
 
 let flySound;// sound of flies flying
 
+let StreakSound;// sound when streak is activated
+
+let StreakMusic;// music during streaks
+
+
 let backgroundSound1;// ambience song in the background for level 1
 
 let mouseIsPressed = false; // variable to check if mouse is pressed
 
 let bestScore = 0; // variable that stores the best score 
+
+let streakActive = false; // creates a streak system
+let streakStartScore = 10; // when streak starts, when the player reaches 10 points
+let streakMultiplier = 1.4; // how much faster flies and clouds move
+let baseFlySpeed = 4.5; // base speed of the fly
+let streakSpeedFactor = 0; // starts at 0, grows with score
+let maxStreakFactor = 15; // maximum speed multiplier
+let vibrationTimer = 0;      // counts frames for vibration
+let vibrationDuration = 120; // 2 seconds at 60fps
+
+
 
 
 /**
@@ -78,9 +94,11 @@ function preload() {
     bgMusic = loadSound('assets/sounds/music1.mp3');// load the music file
     bgMusic2 = loadSound('assets/sounds/song2.mp3'); // load a sound of frog
 
-    flySound = loadSound('assets/sounds/sound3.mp3');
+    flySound = loadSound('assets/sounds/sound3.mp3');// load the sound of flies
 
-    backgroundSound1 = loadSound('assets/sounds/sound4.mp3')
+    backgroundSound1 = loadSound('assets/sounds/sound4.mp3')// load an ambience sound for the background
+    StreakSound = loadSound('assets/sounds/Begstreaksound.mp3');// load a sound when streak is activated
+    StreakMusic = loadSound('assets/sounds/StreakSound.mp3');// load a music during streaks
 
 
     // load the end video as a background when the player looses, if he looses
@@ -181,6 +199,66 @@ function draw() {
         }
         return;
     }
+    // Activate streak if score reaches streakStartScore
+    if (score >= streakStartScore) {
+        streakActive = true;
+        console.log("STREAK ACTIVATED!");
+
+        // shake the canvas
+        let shakeAmount = 2;
+        translate(random(-shakeAmount, shakeAmount), random(-shakeAmount, shakeAmount));
+    } else {
+        streakActive = false;
+        streakSpeedFactor = 0;
+    }
+    if (streakActive) {
+        background("#ffb347"); // sunset orange
+    } else {
+        background("#10b8fbff"); // normal sky blue
+    }
+    if (streakActive) {
+        // Apply progressive speed (always applied while streakActive)
+
+        drawClouds2(); // draw extra clouds during streaks
+        fly.speed = baseFlySpeed + streakSpeedFactor;
+
+    }
+    if (streakActive) {
+        streakSpeedFactor += 0.004; // smaller increment per frame
+        backgroundSound1.stop();// stop the ambience sound during streaks
+
+        // if (!StreakSound.isPlaying()) {
+        StreakSound.play();      // play only once
+        StreakSound.setVolume(1.5);
+        // }
+
+        //  if (!StreakMusic.isPlaying()) {
+        StreakMusic.play();      // play only once
+        StreakMusic.setVolume(1.5);
+        // }
+
+
+        if (streakSpeedFactor > maxStreakFactor) streakSpeedFactor = maxStreakFactor;
+
+        fly.speed = baseFlySpeed + streakSpeedFactor; // now fly actually moves faster
+    } else {
+        streakSpeedFactor = 0;
+        fly.speed = baseFlySpeed;
+    }
+    // Handle streak effects
+    if (streakActive && vibrationTimer < vibrationDuration) {
+        let shakeAmount = 2;
+        translate(random(-shakeAmount, shakeAmount), random(-shakeAmount, shakeAmount));
+        vibrationTimer++; // increment timer each frame
+    }
+
+    if (!streakActive) {
+        backgroundSound1.play();
+        backgroundSound1.setVolume(1.5);
+        StreakMusic.stop(); // stop streak music when not in streak
+    }
+
+
 
     // existing basic elements of FROGFROGFROG game's design below
     drawClouds();
@@ -257,6 +335,72 @@ function drawClouds() {
     }
 
 
+
+}
+let clouds4 = {
+    x: 700,
+    y: 250,
+    velocity: 6
+}
+let clouds5 = {
+    x: 700,
+    y: 120,
+    velocity: 8
+}
+let clouds6 = {
+    x: 700,
+    y: 40,
+    velocity: 7
+}
+
+function drawClouds2() { // draws extra clouds during streak
+    push();
+    fill("white");
+    noStroke();
+    ellipse(clouds4.x, clouds4.y + 20, 100, 100);
+    ellipse(clouds4.x + 50, clouds4.y + 10, 100, 100);
+    ellipse(clouds4.x + 45, clouds4.y + 20, 100, 100);
+    ellipse(clouds4.x + 100, clouds4.y + 20, 100, 100);
+    pop();
+
+    push();
+    fill("white");
+    noStroke();
+    ellipse(clouds5.x, clouds5.y + 20, 100, 100);
+    ellipse(clouds5.x + 50, clouds5.y + 10, 100, 100);
+    ellipse(clouds5.x + 45, clouds5.y + 20, 100, 100);
+    ellipse(clouds5.x + 100, clouds5.y + 20, 100, 100);
+    pop();
+
+    push();
+    fill("white");
+    noStroke();
+    ellipse(clouds6.x, clouds6.y + 20, 100, 100);
+    ellipse(clouds6.x + 50, clouds6.y + 10, 100, 100);
+    ellipse(clouds6.x + 45, clouds6.y + 20, 100, 100);
+    ellipse(clouds6.x + 100, clouds6.y + 20, 100, 100);
+    pop();
+
+    clouds4.x = clouds4.x - clouds4.velocity
+    clouds5.x = clouds5.x - clouds5.velocity
+    clouds6.x = clouds6.x - clouds6.velocity
+
+    if (clouds4.x <= -155) {
+        clouds4.x = width + 60
+        clouds4.velocity += 0.4
+    }
+
+    if (clouds5.x <= -135) {
+        clouds5.x = width + 50
+        clouds5.velocity += 0.4
+    }
+
+    if (clouds6.x <= -135) {
+        clouds6.x = width + 50
+        clouds6.velocity += 0.4
+    }
+
+
 }
 /**
  * Moves the fly according to its speed
@@ -265,12 +409,18 @@ function drawClouds() {
 function moveFly() {
     if (!flySound.isPlaying()) {
         flySound.play();      // play only once
-        flySound.setVolume(0.5);
+        flySound.setVolume(0.7);
+    }
+
+    if (score >= streakStartScore) {
+        fly.speed = baseFlySpeed + streakSpeedFactor; // increase speed gradually during streak
+    } else {
+        fly.speed = baseFlySpeed;
     }
 
     if (fly.escaping) {
         // Move backward horizontally
-        fly.x -= fly.speed * 2;
+        fly.x -= fly.speed * 1.3; // faster retreat
 
         // Move vertically in a sine wave for a curve
         let t = fly.escapeTime / fly.escapeDuration; // 0 → 1
@@ -447,8 +597,10 @@ function checkTongueFlyOverlap() {
  * Resets the fly to the left with a random y
  */
 function resetFly() {
+
+    // Reset position
     fly.x = 0;
-    fly.y = random(0, 300); // makes the position random
+    fly.y = random(10, 300); // makes the position random
     fly.escaping = false; // reset the probability of the fly to escape
     fly.escapeTime = 0;
 
@@ -458,16 +610,16 @@ function resetFly() {
     const sizeChoice = random(['small', 'medium', 'big']);
     if (sizeChoice === 'small') {
         fly.size = 9;
-        fly.speed = 5;
-        fly.scoreValue = 3; // small = worth most
+
+        fly.scoreValue = 5; // small = worth most
     } else if (sizeChoice === 'medium') {
         fly.size = 16;
-        fly.speed = 3;
-        fly.scoreValue = 2; // medium = middle
+
+        fly.scoreValue = 4; // medium = middle
     } else { // big
         fly.size = 23;
-        fly.speed = 2;
-        fly.scoreValue = 1; // big = least
+
+        fly.scoreValue = 2; // big = least
     }
     // Stops fly sound
     if (flySound && flySound.isPlaying()) flySound.stop(); // stops music and video to keep a good framerate

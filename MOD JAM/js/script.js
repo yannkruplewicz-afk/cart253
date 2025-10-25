@@ -228,13 +228,13 @@ function draw() {
         backgroundSound1.stop();// stop the ambience sound during streaks
 
         // if (!StreakSound.isPlaying()) {
-        StreakSound.play();      // play only once
-        StreakSound.setVolume(1.5);
+        // StreakSound.play();      // play only once
+        //  StreakSound.setVolume(1.5);
         // }
 
         //  if (!StreakMusic.isPlaying()) {
-        StreakMusic.play();      // play only once
-        StreakMusic.setVolume(1.5);
+        // StreakMusic.play();      // play only once
+        // StreakMusic.setVolume(1.5);
         // }
 
 

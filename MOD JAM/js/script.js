@@ -57,9 +57,48 @@ let streakSpeedFactor = 0; // starts at 0, grows with score
 let maxStreakFactor = 15; // maximum speed multiplier
 let vibrationTimer = 0;      // counts frames for vibration
 let vibrationDuration = 120; // 2 seconds at 60fps
+class Drop {
+    constructor() {
+        this.x = random(width);
+        this.y = random(-150, -10); // start above the canvas
+        this.size = random(15, 25); // bigger drops
+        this.speed = random(4, 7);
+        this.splashed = false; // whether it has hit the frog
+    }
 
+    update() {
+        this.y += this.speed;
 
+        // Check for collision with frog
+        let d = dist(this.x, this.y, frog.body.x, frog.body.y);
+        if (!this.splashed && d < this.size / 2 + frog.body.size / 2) {
+            this.splashed = true;
+            score = max(0, score - 2); // deduct 2 points
+            this.speed = 0; // stop falling
+            this.size *= 1.5; // optional splash effect
+            // Optionally play a splash sound here
+        }
+    }
 
+    draw() {
+        if (!this.splashed) {
+            fill(0, 100, 255);
+            noStroke();
+            ellipse(this.x, this.y, this.size);
+        } else {
+            // Splash effect
+            fill(0, 100, 255, 150);
+            noStroke();
+            ellipse(this.x, this.y, this.size * 2, this.size / 2);
+        }
+    }
+
+    offScreen() {
+        return this.y > height + 50;
+    }
+}
+
+let drops = [];
 
 /**
  * Creates the canvas and initializes the fly
@@ -227,15 +266,15 @@ function draw() {
         streakSpeedFactor += 0.004; // smaller increment per frame
         backgroundSound1.stop();// stop the ambience sound during streaks
 
-        // if (!StreakSound.isPlaying()) {
-        // StreakSound.play();      // play only once
-        //  StreakSound.setVolume(1.5);
-        // }
+        if (!StreakSound.isPlaying()) {
+            StreakSound.play();      // play only once
+            StreakSound.setVolume(1.5);
+        }
 
-        //  if (!StreakMusic.isPlaying()) {
-        // StreakMusic.play();      // play only once
-        // StreakMusic.setVolume(1.5);
-        // }
+        if (!StreakMusic.isPlaying()) {
+            StreakMusic.play();      // play only once
+            StreakMusic.setVolume(1.5);
+        }
 
 
         if (streakSpeedFactor > maxStreakFactor) streakSpeedFactor = maxStreakFactor;
@@ -257,6 +296,22 @@ function draw() {
         backgroundSound1.setVolume(1.5);
         StreakMusic.stop(); // stop streak music when not in streak
     }
+    if (streakActive) {
+        // Add drops less frequently
+        if (random(1) < 0.05) { // ~5% chance per frame
+            drops.push(new Drop());
+        }
+
+        // Update and draw drops
+        for (let i = drops.length - 1; i >= 0; i--) {
+            drops[i].update();
+            drops[i].draw();
+            if (drops[i].offScreen()) {
+                drops.splice(i, 1);
+            }
+        }
+    }
+
 
 
 

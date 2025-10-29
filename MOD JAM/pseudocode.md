@@ -1,157 +1,164 @@
 # Pseudocode for Frogfrogfrog
 
-```
-frog
-    body
-        x: 320 // Halfway across a 640x480 canvas
-        y: 480 // Bottom of a 640x480 canvas
-        size: 100 // Diameter of the frog circle
-    tongue
-        x: undefined // Will always match the body
-        y: 480 // At the bottom (important to draw it BEHIND the frog)
-        size: 20 // The tip of the tongue
-        speed: 20 // Speed the tongue movies in pixels/second
-        state: idle // At the start the tongue hasn't been launched
-
-fly
-    x: 0 // The left
-    y: 200? // This will be a random position...
-    size: 10 // Small?
-    speed: 3 // How fast it moves across the screen
-
 setup()
-    Create a 640x480 canvas
+    Create a 640x480 game window
+    Initialize the frog, the fly, the score, and the timer
+    Set the score to 5 at the start
+    Load the best score if available
+    Play the background music of nature
+    Display the animated instruction screen with falling leaves
+    Wait for the player to press SPACE to start the game
 
 draw()
-    Draw the background // Probably just blue or something
-    moveFly()
-    drawFly()
-    moveFrog()
-    moveTongue()
-    drawFrog()
-    checkTongueFlyOverlap()
+    Draw the background with moving clouds
+    Move and draw all the flies
+    Move the frog according to the mouse position
+    Move and draw the frog’s tongue
+    Check if the tongue overlaps any fly
+    Draw the frog and its eyes
+    Draw the score inside the frog
+    Check for strike mode or game over conditions
 
 moveFly()
-    add fly speed to fly x
-    if (fly x is past the right side of the canvas)
-        move the fly back to the left
-        give the fly a random y position
+    Move each fly forward with a curved flight path
+    If a fly reaches the right edge of the screen
+        Move it back to the left at a random height
+        Randomize its size and color between light and dark green
+        Give it a 50% chance to escape when attacked
 
 drawFly()
-    Draw a black circle at the fly's position with its size
+    Draw a small circle for the fly’s body
+    Draw wings on both sides
+    Give it a buzzing sound that plays continuously
 
 moveFrog()
-    Set the frog's x to the mouse x
+    Set the frog’s horizontal position to the mouse position
+    Make the frog’s eyes follow the nearest fly
 
 moveTongue()
-    Set tongue x to frog x
-    if (tongue state is idle)
+    If the tongue is idle
         Do nothing
-    else if (tongue state is outbound)
-        move the tongue up by its speed
-        if (tongue hit the top)
-            set the tongue state to inbound
-    else if (tongue state is inbound)
-        move the tongue down by its speed
-        if (tongue hit the bottom)
-            set the tongue state to idle
+    If the tongue is outbound
+        Move it upward
+        If it reaches the top of the screen
+            Set its state to inbound
+    If the tongue is inbound
+        Move it downward
+        If it reaches the frog’s body
+            Set its state to idle
 
 drawFrog()
-    Draw a red circle at the tongue position with its size
-    Draw a red line from the tongue position to the frog position
-    Draw a green circle at the frog position with its size
+    Draw a red circle at the tongue’s tip
+    Draw a red line between the tongue and the frog’s body
+    Draw the frog’s green circular body
+    Draw the frog’s eyes that follow the flies
 
 checkTongueFlyOverlap()
-    if (tongue circle overlaps the fly)
-        Move the fly back to the left at a random y
-        set the tongue state to inbound
+    If the tongue touches a fly
+        If the fly does not escape
+            Add points based on the fly’s size
+            Big flies give 0.5 points
+            Medium flies give 1 point
+            Small flies give 3 points
+            Move the fly back to the left at a random height
+            Set the tongue state to inbound
+        If the fly escapes
+            Let it continue flying normally
 
 mousePressed()
-    if (tongue state is idle)
-        set tongue state to outbound
-        
-        
-        
-20 ideas for MOD JAM
+    If the tongue is idle
+        Set the tongue state to outbound
+        Play the frog tongue sound
 
+DrawScore()
+    Display the score inside the frog’s body in black text
+    Keep updating it as flies are eaten
+    Save and display the best score at the end of each game
 
-instructions screen ( animated )       DONE
-leaves when you click at the screen    DONE
+updateTimer()
+    Every second, reduce the timer by one
+    Every five seconds, subtract one point from the score
+    If the timer reaches zero
+        End the game and go to the losing screen
 
-frog's eyes follow flies       , finally they just look more real.
+checkStrikeConditions()
+    If the player catches three small flies or fifteen total flies
+        Start a strike mode
 
-best score saved.                                                                                                                                                                           DONE
+startStrike()
+    Change the background to a more intense, faster-moving version
+    Replace the music with strike music
+    Give the frog focused eyebrows and sweat
+    Make the flies move faster
+    Make dangerous objects start falling from the sky
+    Keep the strike active for thirty seconds
 
+updateStrike()
+    While the strike is active
+        Decrease the strike timer
+        Continue spawning falling objects
+        If the player catches twenty-five flies during the strike
+            Start a harder strike
+    When the strike timer ends
+        End the strike and return to normal gameplay
 
-    DrawScore()
-1    //draws the score, different flies flies have different size and gives different numbers of points if eaten, so the player prefers to eat small ones which are also the harder ones
-big ones = 0.5, medium ones = 1 and small ones = 3
+startHarderStrike()
+    Play new intense music
+    Make the frog sweat more and look determined
+    Make the flies fly faster and less predictably
+    Make more obstacles fall from the sky
+    Keep the strike active for another thirty seconds
 
-2   // a streak as in duolingo should be added after having captured 3 small ones, or 15 flies in total which brings adrenaline and sticks the player to the screen, he doesn't want to stop playing
+checkGameOver()
+    If the timer reaches zero or the score reaches zero
+        Stop the game
+        Show the losing screen
+        Play the losing music
+        Save the score if it is higher than the best score
 
-3   // the flies should have a curved trajectory, not just flying straight and going from point 50,x to point 50,y on the screen so that it is harder for the player and less repetitive 
-DONE
+fallingObjects()
+    Occasionally fall from the top of the screen
+    If the frog is hit by one, subtract points
+    During strikes, make them fall more often
 
-4   // once attacked at first, the flies should be able to escape, to avoid the first attack in 50% of the cases, not 100%. so the player doesn't know how they are going to react at all but can anticipate if it happens.
-DONE
+background()
+    Draw clouds moving in the same direction as the flies
+    Make the clouds move faster as the flies move faster
+    Keep the background with a natural theme and calm colors
 
-5   // the score could be placed in the frog itself so that is it visible ( black in light green ) as well as practical since it doesn't disturb the player from seeing the flies
+soundEffects()
+    Play frog sound when the tongue is used
+    Play continuous buzzing for the flies
+    Play nature background music during normal gameplay
+    Play emote song at the start
+    Play strike music during strike mode
+    Play intense music during harder strikes
+    Play losing music on game over
 
-6   // both the frog and the flies should have a themed design. Maybe they can be the frog and the flies from the future, the frog could have glasses through which we see big eyes , as well as a turn on / off button on her back that the player has to turn on at the beggining of the game using the 'space' touch.
-DONE
+instructionsScreen()
+    Show the title and animated leaves falling
+    Display basic instructions on how to play
+    Wait for the player to press SPACE to begin
 
-The flies could have a variable that make their color change from light green to dark green as well as wings.
-DOONE
+menu()
+    Display the animated instruction screen
+    When SPACE is pressed
+        Play an emote intro song
+        Start the main game
 
+gameOverScreen()
+    Display “You Lose!” and the final score
+    Show the best score achieved
+    Play the losing music
+    Allow the player to restart by pressing SPACE
 
-
-7   // the background should also have a design related to them, like clouds moving in the same sense as the flies, they would go faster as the flies go faster during the strikes
-DONE
-
-8   // the score loses 1 every 5 seconds to add more spice, so that if the player does nothing, he can loose
-DONE
-
-9   // the score begins at 5 at the start because i don't want the player to loose immediately
-DONE
-
-10  // a sound of frog when the tong is used to captivate different senses of the player
-DONE
-
-11  // continous sounds of flies to really show that the black dots are flies 
-DONE
-
-12  // background music of nature to give a context of nature 
-DONE
-
-13  // emote song when the game begins, after the beggining screen to make it more attractive and interactive
-done
-
-17  // a new music is also added when the player looses, leading him to the loser screen
-done
-
-21  // there is a timer, if player didn't reach x number of points before the 1 min is called, they lose, and it goes on and on.
-done
-
-
-
-
-
-14  // emote song in case of strike to make the game more interactive and tell the player ' you're in fire man '
-
-15  // when there is a strike, the borders of the screen become different as well as the frog and the flies
-the frog now has focused eyebrows and sweets, we can see it in her face
-
-16  // a new music is added during the strike to replace the nature background music
-
-
-18  // flies arrive faster during the strike
-
-19  // the strike's duration is 30 secs. if the player catches 25 flies in this set of time, a new strike even harder happens, it's the hardest level
-there, the frog's eyebrows are really focused , she also sweets a lot, this last strike takes place during 30 secs
-
-
-22  // things fall from the sky and takes points away from the frog, during strikes they fall more often and are really dangerous.
-
-
-find EMOTE SONG
-NEW BACKGROUND SONG
+summary()
+    The frog moves with the mouse and uses its tongue to catch flies
+    Flies move in curved paths, vary in color and size, and sometimes escape
+    Points depend on the fly’s size
+    The score decreases over time to keep tension
+    After enough flies are caught, a strike begins with faster gameplay
+    Falling objects appear that can remove points
+    If the player catches enough flies during a strike, a harder strike begins
+    The game ends when time or score runs out
+    Music, visuals, and difficulty change dynamically throughout the game

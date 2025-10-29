@@ -1,13 +1,17 @@
 /**
- * MOD
- * Pippin Barr
+ * MOD JAM
+ * Yann KRUPLEWICZ
  * 
  * A game of catching flies with your frog-tongue
  * 
  * Instructions:
- * - Move the frog with your mouse
+ * - Move the frog with your mouse or pad
  * - Click to launch the tongue
  * - Catch flies
+ * - Avoid water drops during streaks
+ * - Score points!
+ * - Survive as long as you can!
+ * - Try to beat your best score!
  * 
  * Made with p5
  * https://p5js.org/
@@ -31,7 +35,6 @@ let gameOver = false; // make a possibility for the player to loose
 
 let endVideo;// song when game ends, when the player lost
 
-
 let bgMusic2;// song for end of game
 
 let tongueSound;// tongue soundtrack
@@ -42,13 +45,22 @@ let StreakSound;// sound when streak is activated
 
 let StreakMusic;// music during streaks
 
-
 let backgroundSound1;// ambience song in the background for level 1
 
 let mouseIsPressed = false; // variable to check if mouse is pressed
 
 let bestScore = 0; // variable that stores the best score 
 
+// Sound/video start guards
+let introVideoPlayed = false;
+let endVideoPlayed = false;
+let backgroundSound1Started = false;// ensures streak sound plays only once
+let StreakMusicStarted = false;// ensures streak sound plays only once
+let streakSoundPlayed = false; // ensures streak sound plays only once
+let backgroundSound1Playing = false;// ensures streak sound plays only once
+let streakMusicPlaying = false;// ensures streak sound plays only once
+
+// streak system variables
 let streakActive = false; // creates a streak system
 let streakStartScore = 10; // when streak starts, when the player reaches 10 points
 let streakMultiplier = 1.4; // how much faster flies and clouds move
@@ -57,47 +69,52 @@ let streakSpeedFactor = 0; // starts at 0, grows with score
 let maxStreakFactor = 15; // maximum speed multiplier
 let vibrationTimer = 0;      // counts frames for vibration
 let vibrationDuration = 120; // 2 seconds at 60fps
+
+// Water drop class for streak effect, drops fall and penalize player if hit
 class Drop {
     constructor() {
-        this.x = random(width);
-        this.y = random(-150, -10); // start above the canvas
-        this.size = random(15, 25); // bigger drops
-        this.speed = random(4, 7);
-        this.splashed = false; // whether it has hit the frog
+        this.x = random(width);// sets the position, which is random
+        this.y = random(-150, -10);
+        this.size = random(15, 85);// sets the size of the drops, which is random
+        this.speed = random(4, 7);// sets the speed of the drops, which is random
+        this.splashed = false;// whether the drop has hit the frog
+        this.alpha = 255; // fade-out control
+        this.lifetime = 0; // how long splash has existed
     }
-
+    // updates the position of the drops and checks for collision with frog
     update() {
-        this.y += this.speed;
-
-        // Check for collision with frog
-        let d = dist(this.x, this.y, frog.body.x, frog.body.y);
-        if (!this.splashed && d < this.size / 2 + frog.body.size / 2) {
-            this.splashed = true;
-            score = max(0, score - 2); // deduct 2 points
-            this.speed = 0; // stop falling
-            this.size *= 1.5; // optional splash effect
-            // Optionally play a splash sound here
+        if (!this.splashed) {
+            this.y += this.speed;// moves the drop downwards
+            let d = dist(this.x, this.y, frog.body.x, frog.body.y);    // checks distance between drop and frog
+            if (d < this.size / 2 + frog.body.size / 2) {// = if collision detected
+                this.splashed = true; // mark as splashed
+                score = max(0, score - 2);// penalize player
+                this.speed = 0; // stop moving
+                this.size *= 1.5; // increase size for splash effect
+            }
+        } else {// handle splash fade-out
+            this.lifetime++;// increment lifetime
+            this.alpha -= 10; // fade out quickly
         }
     }
-
+    // draws the drops
     draw() {
-        if (!this.splashed) {
+        noStroke();
+        if (!this.splashed) {// normal drop
             fill(0, 100, 255);
-            noStroke();
             ellipse(this.x, this.y, this.size);
-        } else {
-            // Splash effect
-            fill(0, 100, 255, 150);
-            noStroke();
+        } else {// splashed drop
+            fill(0, 100, 255, this.alpha);
             ellipse(this.x, this.y, this.size * 2, this.size / 2);
         }
     }
 
     offScreen() {
-        return this.y > height + 50;
+        // disappears either if below screen OR fully faded
+        return this.y > height + 50 || this.alpha <= 0;
     }
 }
-
+// array to hold active drops
 let drops = [];
 
 /**
@@ -105,8 +122,7 @@ let drops = [];
  */
 function setup() {
     createCanvas(640, 480);
-    textFont('Press Start 2P'); // set font here
-    // Create the video
+    textFont('Press Start 2P'); // sets the default font to the retro font
 
     // Load saved best score from localStorage
     if (localStorage.getItem("bestScore")) {
@@ -117,7 +133,7 @@ function setup() {
 
 
 
-    resetFly();
+    resetFly();// initializes the fly position and attributes
 }
 
 /**
@@ -127,7 +143,7 @@ function setup() {
 function preload() {
     retroFont = loadFont('assets/font1/PressStart2P-Regular.ttf');// load the retro font file
     introVideo = createVideo(['assets/images/intro.mp4']);// load the video file
-    introVideo.hide();
+    introVideo.hide();// hide the video element
     endVideo = createVideo(['assets/images/video2.mp4']);// load the video file
     endVideo.hide();
     bgMusic = loadSound('assets/sounds/music1.mp3');// load the music file
@@ -142,7 +158,7 @@ function preload() {
 
     // load the end video as a background when the player looses, if he looses
 
-    tongueSound = loadSound('assets/sounds/song3.mp3');
+    tongueSound = loadSound('assets/sounds/song3.mp3');// load the tongue sound
 }
 
 let bgMusic; // background music variable
@@ -192,7 +208,7 @@ function draw() {
     if (gameOver) {
 
         if (endVideo) {
-            image(endVideo, 0, 0, width, height);
+            image(endVideo, 0, 0, width, height);// draws the end video as background when the player looses
         }
 
         backgroundSound1.stop();// stop the ambience sound when game is over 
@@ -202,7 +218,7 @@ function draw() {
         rect(0, 0, width, height);
 
 
-        endVideo.play();
+        endVideo.play();// plays the end video when the player looses
 
 
 
@@ -239,21 +255,49 @@ function draw() {
         return;
     }
     // Activate streak if score reaches streakStartScore
+    // === Handle streak activation and transition sounds ===
     if (score >= streakStartScore) {
-        streakActive = true;
-        console.log("STREAK ACTIVATED!");
+        if (!streakActive) {
+            // streak just started
+            streakActive = true;
+            console.log("STREAK ACTIVATED!");
 
-        // shake the canvas
-        let shakeAmount = 2;
-        translate(random(-shakeAmount, shakeAmount), random(-shakeAmount, shakeAmount));
+        }
+
+        // shake the canvas a bit during streak
+        let shakeAmount = 2; // shake intensity
+        translate(random(-shakeAmount, shakeAmount), random(-shakeAmount, shakeAmount));// apply shake
     } else {
-        streakActive = false;
+        if (streakActive) {
+            // streak just ended
+            streakActive = false;
+            console.log("STREAK ENDED!");
+
+
+            // Reset water drops when streak ends
+            drops = [];
+            for (let i = 0; i < 2; i++) {// create initial drops
+                let d = new Drop();
+                d.y = random(-150, -10);
+                drops.push(d);// add to drops array
+            }
+
+            // play streak sound once
+            if (!streakSoundPlayed) {
+                streakSoundPlayed = true;
+                StreakSound.play();
+                StreakSound.setVolume(2);
+            }
+
+        }
+
+        streakSoundPlayed = false; // resets the argument so sound can play again next time
         streakSpeedFactor = 0;
     }
     if (streakActive) {
-        background("#ffb347"); // sunset orange
+        background("#ffb347"); // sunset orange during streaks
     } else {
-        background("#10b8fbff"); // normal sky blue
+        background("#10b8fbff"); // normal sky blue otherwise
     }
     if (streakActive) {
         // Apply progressive speed (always applied while streakActive)
@@ -264,41 +308,56 @@ function draw() {
     }
     if (streakActive) {
         streakSpeedFactor += 0.004; // smaller increment per frame
-        backgroundSound1.stop();// stop the ambience sound during streaks
+    }
+    if (streakActive) {
+        // Start streak music/sound once
+        if (!streakActive) {
+            // background sound not during streak
+            if (!backgroundSound1Playing) {
+                backgroundSound1.loop();
+                backgroundSound1.setVolume(1.5);
+                backgroundSound1Playing = true;
+            }
 
-        if (!StreakSound.isPlaying()) {
-            StreakSound.play();      // play only once
-            StreakSound.setVolume(1.5);
+            // stop streak music if needed
+            if (streakMusicPlaying) {
+                StreakMusic.stop();
+                streakMusicPlaying = false;
+            }
+        } else {
+            // when streak starts, stop background
+            if (backgroundSound1Playing) {
+                backgroundSound1.stop();
+                backgroundSound1Playing = false;
+            }
+            // and plays streak music
+            if (!streakMusicPlaying) {
+                StreakMusic.loop();
+                StreakMusic.setVolume(1.5);
+                streakMusicPlaying = true;
+                backgroundSound1.stop();
+            }
+
         }
-
-        if (!StreakMusic.isPlaying()) {
-            StreakMusic.play();      // play only once
-            StreakMusic.setVolume(1.5);
-        }
-
-
+        // Cap the speed factor, so it doesn't get too crazy
         if (streakSpeedFactor > maxStreakFactor) streakSpeedFactor = maxStreakFactor;
 
-        fly.speed = baseFlySpeed + streakSpeedFactor; // now fly actually moves faster
+        fly.speed = baseFlySpeed + streakSpeedFactor; // fly moves faster during streak due to speed factor
     } else {
-        streakSpeedFactor = 0;
+        streakSpeedFactor = 0; // if not in streak, normal speed
         fly.speed = baseFlySpeed;
     }
     // Handle streak effects
-    if (streakActive && vibrationTimer < vibrationDuration) {
+    if (streakActive && vibrationTimer < vibrationDuration) {// apply vibration effect for set duration
         let shakeAmount = 2;
         translate(random(-shakeAmount, shakeAmount), random(-shakeAmount, shakeAmount));
         vibrationTimer++; // increment timer each frame
     }
 
-    if (!streakActive) {
-        backgroundSound1.play();
-        backgroundSound1.setVolume(1.5);
-        StreakMusic.stop(); // stop streak music when not in streak
-    }
+
     if (streakActive) {
-        // Add drops less frequently
-        if (random(1) < 0.05) { // ~5% chance per frame
+        // Only allow up to 3 visible drops, so it doesn't get too crowded
+        if (drops.length < 3 && random(1) < 0.1) {
             drops.push(new Drop());
         }
 
@@ -310,39 +369,46 @@ function draw() {
                 drops.splice(i, 1);
             }
         }
+
+    }// stop streak music when streak ends
+    if (!streakActive) {
+        if (streakMusicPlaying) {
+            StreakMusic.stop();
+            streakMusicPlaying = false;
+            backgroundSound1.play();
+        }
     }
 
 
 
-
     // existing basic elements of FROGFROGFROG game's design below
-    drawClouds();
-    moveFly();
-    drawFly();
-    drawFrog();
-    moveFrog();
-    moveTongue();
-    checkTongueFlyOverlap();
-    drawScore();
+    drawClouds();// draws the clouds
+    moveFly();// makes the fly move
+    drawFly();// draws the fly
+    drawFrog();// draws the frog
+    moveFrog();// makes the frog move
+    moveTongue();// makes the tongue move
+    checkTongueFlyOverlap();// checks if tongue overlaps the fly
+    drawScore();// draws the score
 }
-let clouds = {
+let clouds = {// creates clouds object
     x: 600,
     y: 50,
     velocity: 2
 }
-let clouds2 = {
+let clouds2 = {// creates clouds2 object
     x: 600,
     y: 200,
     velocity: 3
 }
-let clouds3 = {
+let clouds3 = {// creates clouds3 object
     x: 600,
     y: 100,
     velocity: 4
 }
 
 
-function drawClouds() {
+function drawClouds() {// draws the clouds
     push();
     fill("white");
     noStroke();
@@ -369,11 +435,11 @@ function drawClouds() {
     ellipse(clouds3.x + 45, clouds3.y + 20, 100, 100);
     ellipse(clouds3.x + 100, clouds3.y + 20, 100, 100);
     pop();
-
+    // makes the clouds move
     clouds.x = clouds.x - clouds.velocity
     clouds2.x = clouds2.x - clouds2.velocity
     clouds3.x = clouds3.x - clouds3.velocity
-
+    // resets the clouds position and increases their speed over time
     if (clouds.x <= -155) {
         clouds.x = width + 60
         clouds.velocity += 0.3
@@ -435,11 +501,11 @@ function drawClouds2() { // draws extra clouds during streak
     ellipse(clouds6.x + 45, clouds6.y + 20, 100, 100);
     ellipse(clouds6.x + 100, clouds6.y + 20, 100, 100);
     pop();
-
+    // makes the clouds move
     clouds4.x = clouds4.x - clouds4.velocity
     clouds5.x = clouds5.x - clouds5.velocity
     clouds6.x = clouds6.x - clouds6.velocity
-
+    // resets the clouds position and increases their speed over time
     if (clouds4.x <= -155) {
         clouds4.x = width + 60
         clouds4.velocity += 0.4
@@ -461,19 +527,16 @@ function drawClouds2() { // draws extra clouds during streak
  * Moves the fly according to its speed
  * Resets the fly if it gets all the way to the right
  */
-function moveFly() {
-    if (!flySound.isPlaying()) {
-        flySound.play();      // play only once
-        flySound.setVolume(0.7);
-    }
+function moveFly() {// makes the fly move
 
+    // Adjust speed during streaks
     if (score >= streakStartScore) {
         fly.speed = baseFlySpeed + streakSpeedFactor; // increase speed gradually during streak
     } else {
         fly.speed = baseFlySpeed;
     }
-
-    if (fly.escaping) {
+    // Handle escape behavior
+    if (fly.escaping) {// if the fly is escaping, which happens 30 % of the time
         // Move backward horizontally
         fly.x -= fly.speed * 1.3; // faster retreat
 
@@ -481,10 +544,10 @@ function moveFly() {
         let t = fly.escapeTime / fly.escapeDuration; // 0 → 1
         fly.y = fly.escapeStartY + fly.escapeAmplitude * sin(t * PI); // curved arc
 
-        fly.escapeTime++;
+        fly.escapeTime++;// increment escape time
 
-        if (fly.escapeTime > fly.escapeDuration) {
-            fly.escaping = false;
+        if (fly.escapeTime > fly.escapeDuration) {// end of escape
+            fly.escaping = false;// reset escaping state
             fly.escapeTime = 0;
         }
     } else {
@@ -523,8 +586,8 @@ function drawFly() {
 
     pop();
 
-    // Increment color for this fly
-    flyColor = flyColor + 0.2;
+    // make color change over time for flies
+    flyColor = flyColor + 0.3;
 }
 
 
@@ -644,6 +707,10 @@ function checkTongueFlyOverlap() {
         resetFly();
         frog.tongue.state = "inbound";
     }
+    if (flySound && flySound.isPlaying()) {
+        flySound.stop();// stops the fly sound when the fly is caught
+    }
+
 }
 
 
@@ -676,8 +743,11 @@ function resetFly() {
 
         fly.scoreValue = 2; // big = least
     }
-    // Stops fly sound
-    if (flySound && flySound.isPlaying()) flySound.stop(); // stops music and video to keep a good framerate
+    //  Play fly buzzing sound only when a new fly appears
+    if (flySound && !flySound.isPlaying()) {
+        flySound.play();
+        flySound.setVolume(0.7);
+    }
 }
 
 
@@ -686,7 +756,7 @@ function resetFly() {
 /**
  * Moves the frog to the mouse position on x
  */
-function moveFrog() {
+function moveFrog() {// makes the frog move with mouse
     frog.body.x = mouseX;
 }
 
@@ -707,12 +777,12 @@ function drawScore() { // takes care of the score
 /**
  * Launch the tongue on click (if it's not launched yet)
  */
-function mousePressed() {
 
+function mousePressed() {// when the mouse is pressed
 
     // Restart the game if it was over
     if (gameOver) {
-        restartGame();
+        restartGame();// restarts the game when the player clicks after loosing
         return;
     }
 
@@ -725,39 +795,38 @@ function mousePressed() {
 
         bgMusic2.play(); // plays a song of frog when the game starts
         bgMusic2.setVolume(15);
-        console.log("Background music 2 started");
+        console.log("Background music 2 started");// debug log
 
 
         return;
     }
     // Frog tongue launching once the user clicks at the screen
-    if (frog.tongue.state === "idle") {
-        frog.tongue.state = "outbound";
-        tongueSound.play();
-        tongueSound.setVolume(5);
+    if (frog.tongue.state === "idle") {// if the tongue is idle
+        frog.tongue.state = "outbound";// makes the tongue go outbound
+        tongueSound.play();// plays tongue sound
+        tongueSound.setVolume(5);// sets volume of tongue sound
 
         // 30% chance to trigger escape
-        if (random(1) < 0.3) {
-            fly.escaping = true;
-            fly.escapeTime = 0;
+        if (random(1) < 0.3) {// 30 % chance
+            fly.escaping = true;// fly starts escaping
+            fly.escapeTime = 0;// reset escape time
             fly.escapeStartY = fly.y; // remember starting y for sine curve
         }
 
     }
     // makes the player loose a point per second = he can loose
-    if (scoreDecreaseInterval === null) {
-        scoreDecreaseInterval = setInterval(() => {
-            if (gameStarted) {
-                score = Math.max(0, score - 1); // don't go below 0
+    // ✅ Start the score decrease timer only once
+    if (gameStarted && scoreDecreaseInterval === null) {// if the game has started and the interval is not already set
+        scoreDecreaseInterval = setInterval(() => {// every second
+            if (!gameOver && gameStarted) {// if the game is not over
+                score = Math.max(0, score - 1);// decrease score by 1, but not below 0
             } else {
-                // safety: if gameEnded, stop the interval
-                clearInterval(scoreDecreaseInterval);
-                scoreDecreaseInterval = null;
+                // Stop the interval if game is over
+                clearInterval(scoreDecreaseInterval);// clears the interval
+                scoreDecreaseInterval = null;// reset interval variable
             }
         }, 1000);
     }
-
-    return;
 }
 
 function restartGame() {

@@ -18,7 +18,7 @@ let NewspapersData = undefined;
 let lang = "fr";
 
 // Starts with the instruction
-let carName = "Click to generate a car name.";
+let carName = "Click to generate a car name, a dinausor name and a newspapers name.";
 
 /**
  * Load the car and dinosaur data

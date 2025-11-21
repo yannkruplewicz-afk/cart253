@@ -18,8 +18,11 @@ let mapleTimer = 0;
 let hitCooldown = false;
 let lastScoreTick = 0;
 
-const GRAVITY = 0.8;
-const JUMP_FORCE = -15;
+// new (lower, more realistic)
+const JUMP_FORCE = -10;
+
+// Gravity can remain the same or slightly higher for quicker fall
+const GRAVITY = 0.5;
 
 let runPhase = 0; // running animation phase
 let bottomLaneX = []; // computed lane positions
@@ -57,10 +60,11 @@ function preload() {
     // Load music playlists for each region
     // Q = Quebec (3 songs)
     musicPlaylists.Q = [
-        createAudio('assets/sounds/lescolories.mp3'),
+        createAudio('assets/sounds/Q_song1.mp3'),
         createAudio('assets/sounds/Jaimetagrandmere.mp3'),
         createAudio('assets/sounds/faismoiunshow.mp3')
     ];
+
 
     // U = USA (3 songs)
     musicPlaylists.U = [
@@ -69,12 +73,14 @@ function preload() {
         createAudio('assets/sounds/U_song3.mp3')
     ];
 
+
     // E = España (3 songs)
     musicPlaylists.E = [
         createAudio('assets/sounds/E_song1.mp3'),
         createAudio('assets/sounds/E_song2.mp3'),
         createAudio('assets/sounds/E_song3.mp3')
     ];
+
 }
 function setup() {
     createCanvas(800, 600);
@@ -132,23 +138,25 @@ function startPlaylist(mode) {
     currentSongIndex = 0;
     playNextSong(mode);
 }
-
 function playNextSong(mode) {
     if (currentSongIndex < musicPlaylists[mode].length) {
         currentSong = musicPlaylists[mode][currentSongIndex];
+
         currentSong.volume(NORMAL_VOLUME);
         currentSong.play();
+
+        // When song ends → play next
+        currentSong.elt.onended = () => {
+            playNextSong(mode);
+        };
+
         currentSongIndex++;
     }
 }
 
-function updateMusicPlayback() {
-    // Check if current song finished
-    if (currentSong && !currentSong.isPlaying()) {
-        playNextSong(currentMode);
-    }
 
-    // Update volume damage effect
+function updateMusicPlayback() {
+    // Volume damage effect
     if (volumeDamageActive) {
         if (millis() - volumeDamageTimer > DAMAGE_DURATION) {
             volumeDamageActive = false;
@@ -156,6 +164,7 @@ function updateMusicPlayback() {
         }
     }
 }
+
 
 function applyVolumeDamage() {
     volumeDamageActive = true;
@@ -208,11 +217,14 @@ function drawMenuLetter(letter, x, y) {
 function laneCenterX(lane, y) {
     const bottomWidth = width * 2;
     const topWidth = width * 0.0002;
-    const roadBottomY = height;
+    const roadBottomY = height - 80;
     const roadTopY = 200;
     const centerX = width / 2;
 
-    const depth = map(y, roadTopY, roadBottomY, 0, 1);
+    // clamp Y so perspective doesn't push player off-screen
+    const clampedY = constrain(y, roadTopY, roadBottomY - 50); // leave a 50px margin
+
+    const depth = map(clampedY, roadTopY, roadBottomY, 0, 1);
     const w = lerp(topWidth, bottomWidth, depth);
 
     // lane 0 = left, 1 = middle, 2 = right
@@ -220,13 +232,11 @@ function laneCenterX(lane, y) {
 }
 
 
-
-
 function startGame(mode) {
     currentMode = mode;
-    currentScreen = mode === "Q" ? "quebec" : mode === "U" ? "usa" : mode === "E" ? "espana" : null;
-    startPlaylist(mode);
+    currentScreen = mode === "Q" ? "quebec" : mode === "U" ? "usa" : "espana";
     resetAll();
+    startPlaylist(mode);
 }
 
 // === GAMEPLAY ===
@@ -252,7 +262,10 @@ function drawGame() {
     if (mapleSlowActive && millis() - mapleTimer > 3000) mapleSlowActive = false;
 
     if (score >= 2500 && !victory) beginVictory();
-    if (victory) drawVictoryRun(scrollSpeed);
+    if (victory) drawVictoryRun();
+
+    // Update music playback
+    updateMusicPlayback();
 }
 
 // === BACKGROUND ===
@@ -275,6 +288,7 @@ function drawParallaxBackground(mode, scroll) {
 }
 
 function mousePressed() {
+    userStartAudio();
     if (showGameOver) {
         if (currentScreen === "gameover") {
             endVideo.stop();
@@ -357,13 +371,16 @@ function drawRoad(scrollSpeed) {
     }
 }
 
-
-
-// === PLAYER ===
+//      PLAYER JUMP LOGIC
+// ==========================
 function updatePlayerJump() {
+
+    // Apply vertical movement only if jumping
     if (player.isJumping) {
         player.jumpY += player.jumpSpeed;
         player.jumpSpeed += GRAVITY;
+
+        // When landing
         if (player.jumpY >= 0) {
             player.jumpY = 0;
             player.isJumping = false;
@@ -374,22 +391,40 @@ function updatePlayerJump() {
 
 function drawPlayer() {
 
+    const physY = player.y - player.jumpY; // account for jump height
 
-    // Smooth horizontal movement along dark lane lines
-    const y = player.y - player.jumpY; // vertical position
-    const targetX = laneCenterX(player.targetLane, y);
-    player.x = lerp(player.x, targetX, 0.2); // smooth horizontal movement
+    // 1. Render Y
+    let renderY = physY - 90;
+    renderY = constrain(renderY, 80, height - 50);
+    player.renderY = renderY;
+
+    // compute depth: 0 = top of road, 1 = bottom
+    const roadTopY = 200;
+    const roadBottomY = height;
+    const depth = map(physY, roadTopY, roadBottomY, 0, 1);
+
+    const rawX = laneCenterX(player.targetLane, physY);
+    const centerX = laneCenterX(1, physY); // middle lane
+    const laneOffsetFactor = 0.3 * (1 - depth);
+    const adjustedX = lerp(rawX, centerX, 0.3); player.x = lerp(player.x || adjustedX, adjustedX, 0.2);
 
 
-    const scaleFactor = map(y, 100, height, 0.6, 1.2);
+    const scaleFactor = map(renderY, 80, height, 0.6, 1.1) * (1 - player.jumpY * 0.002);
+
+    // Scale and jump height
+    const scaleFactorY = map(renderY, 1180, height, 0., 1.1);
+    // Horizontal angle based on distance from center
+    const horizontalOffset = (player.x - centerX) / (width * 0.5); // -1 left, 1 right
+    const angle = -horizontalOffset * PI / 20; // max ±12°, reversed direction
 
     push();
-    translate(player.x, y);
+    translate(player.x, renderY);
+    rotate(angle); // tilt player toward lane side
     scale(scaleFactor * 2);
     rectMode(CENTER);
     ellipseMode(CENTER);
 
-    // Body colors based on region
+    // --- Drawing code ---
     let shirtColor, pantsColor, skinColor;
     if (currentMode === "Q") {
         shirtColor = color(220, 60, 40);
@@ -408,40 +443,59 @@ function drawPlayer() {
     stroke(0);
     strokeWeight(3);
 
-    // Running offsets
-    const armOffset = 20 * sin(runPhase);
+
     const legOffset = 25 * sin(runPhase + PI);
-
-    // Legs
+    // --- Legs & Shoes ---
     fill(pantsColor);
-    rect(-10, 20 + legOffset / 2, 15, 40, 4);
-    rect(10, 20 - legOffset / 2, 15, 40, 4);
 
-    // Shoes
-    fill(50);
-    rect(-10, 40 + legOffset / 2, 15, 10, 2);
-    rect(10, 40 - legOffset / 2, 15, 10, 2);
+    if (player.isJumping) {
+        // Shortened and lifted legs
+        const jumpLegOffset = 15; // smaller than running offset
+        rect(-10, 20 + jumpLegOffset, 10, 20, 4); // left leg
+        rect(10, 20 - jumpLegOffset, 10, 20, 4); // right leg
+
+        // Small shoes
+        fill(50);
+        rect(-10, 35 + jumpLegOffset, 10, 6, 2); // left shoe
+        rect(10, 35 - jumpLegOffset, 10, 6, 2); // right shoe
+    } else {
+        // Normal running legs
+        const legOffset = 25 * sin(runPhase + PI);
+        rect(-10, 20 + legOffset / 2, 15, 40, 4); // left leg
+        rect(10, 20 - legOffset / 2, 15, 40, 4); // right leg
+
+        // Shoes
+        fill(50);
+        rect(-10, 40 + legOffset / 2, 15, 10, 2); // left shoe
+        rect(10, 40 - legOffset / 2, 15, 10, 2); // right shoe
+    }
 
     // Torso
     fill(shirtColor);
     rect(0, -10, 30, 60, 8);
+    // --- Arms ---
+    let armSwingSpeed = player.isJumping ? 0.05 : 0.1; // slower when jumping
+    runPhase += armSwingSpeed; // update run phase
 
-    // Arms
-    line(-25, -30, -25, -30 + armOffset);
-    line(25, -30, 25, -30 - armOffset);
+    let armOffset = 20 * sin(runPhase);
+    if (player.isJumping) armOffset *= 0.5; // smaller swing in air
 
+    line(-25, -30, -25, -30 + armOffset); // left arm
+    line(25, -30, 25, -30 - armOffset);   // right arm
     // Head
     fill(skinColor);
     ellipse(0, -60, 40, 40);
 
-    // Hair (cap)
+    // Hair / Cap
     fill(50, 30, 10);
     arc(0, -65, 42, 30, PI, 0, CHORD);
 
     pop();
 
+    // Update running animation
     runPhase += 0.2;
 }
+
 
 function keyPressed() {
     if (keyCode === LEFT_ARROW) player.targetLane = max(0, player.targetLane - 1);
@@ -507,22 +561,31 @@ function drawObstacles(scrollSpeed) {
 }
 
 
-// === COLLISIONS ===
 function checkCollisions() {
     const playerY = player.y - player.jumpY;
     const playerX = player.x;
     const size = 30;
-    for (let ob of obstacles) {
+
+    for (let i = obstacles.length - 1; i >= 0; i--) {
+        const ob = obstacles[i];
+
+        // If player is in the air, ignore damaging floor obstacles.
+        // Still allow collecting "maple" while airborne.
+        if (player.isJumping && ob.type !== "maple") {
+            continue;
+        }
+
         if (abs(ob.x - playerX) < size && abs(ob.y - playerY) < size) {
             if (ob.type === "maple") {
                 mapleSlowActive = true;
                 mapleTimer = millis();
-                obstacles.splice(obstacles.indexOf(ob), 1);
+                obstacles.splice(i, 1);
             } else {
                 player.life--;
                 hitCooldown = true;
                 applyVolumeDamage(); // Apply volume damage
                 setTimeout(() => hitCooldown = false, 1000);
+                obstacles.splice(i, 1); // remove the obstacle we hit
                 if (player.life <= 0) gameOver();
             }
         }

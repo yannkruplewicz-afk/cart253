@@ -1,4 +1,4 @@
-// === QUE Runner: Subway Surfer 3D-like Perspective with Jumping ===
+// === SUBWAY SURFER STYLE GAME BY YANN KRUPLEWICZ ===
 
 let currentScreen = "menu";
 let currentMode = null;
@@ -10,9 +10,9 @@ let victoryFade = 0;
 let player;
 let obstacles = [];
 let obstacleTimer = 0;
-let spawnIntervalBase = 1600;
-let worldScroll = 0;
+const spawnIntervalBase = 1500;
 
+let worldScroll = 0;
 let mapleSlowActive = false;
 let mapleTimer = 0;
 let hitCooldown = false;
@@ -21,25 +21,84 @@ let lastScoreTick = 0;
 const GRAVITY = 0.8;
 const JUMP_FORCE = -15;
 
+let runPhase = 0; // running animation phase
+let bottomLaneX = []; // computed lane positions
+
+
 let choiceMessage = "";
 let choiceMessageTimer = 0;
+let showGameOver = false;
 
+let retroFont; // adds a variable for the retro font
+let introvideo;
+let introVideoPlayed = false;
+let endvideo;
+let endVideoPlayed = false;
 
+// === MUSIC SYSTEM ===
+let musicPlaylists = {
+    Q: [],
+    U: [],
+    E: []
+};
+let currentSongIndex = 0;
+let currentSong = null;
+let volumeDamageActive = false;
+let volumeDamageTimer = 0;
+const NORMAL_VOLUME = 0.5;
+const DAMAGED_VOLUME = 0.2;
+const DAMAGE_DURATION = 3000;
+
+function preload() {
+    retroFont = loadFont('assets/font1/BungeeSpice-Regular.ttf');
+    endVideo = createVideo(['assets/images/Endvideo.mp4']);
+    endVideo.hide();
+
+    // Load music playlists for each region
+    // Q = Quebec (3 songs)
+    musicPlaylists.Q = [
+        createAudio('assets/sounds/lescolories.mp3'),
+        createAudio('assets/sounds/Jaimetagrandmere.mp3'),
+        createAudio('assets/sounds/faismoiunshow.mp3')
+    ];
+
+    // U = USA (3 songs)
+    musicPlaylists.U = [
+        createAudio('assets/sounds/U_song1.mp3'),
+        createAudio('assets/sounds/U_song2.mp3'),
+        createAudio('assets/sounds/U_song3.mp3')
+    ];
+
+    // E = España (3 songs)
+    musicPlaylists.E = [
+        createAudio('assets/sounds/E_song1.mp3'),
+        createAudio('assets/sounds/E_song2.mp3'),
+        createAudio('assets/sounds/E_song3.mp3')
+    ];
+}
 function setup() {
     createCanvas(800, 600);
-    textFont('Arial');
-    resetAll();
+    textFont('BungeeSpice-Regular');
+    resetAll(); // creates the player object
+
+    // Now that player exists, initialize horizontal position
+    player.x = laneCenterX(player.lane, player.y);
+    player.targetLane = player.lane;
 }
 
+// === RESET GAME ===
 function resetAll() {
     player = {
         lane: 1,
+        targetLane: 1,
+        x: 0,
         y: height - 100,
         life: 3,
         isJumping: false,
         jumpY: 0,
         jumpSpeed: 0
     };
+
     score = 0;
     obstacles = [];
     obstacleTimer = millis();
@@ -48,8 +107,62 @@ function resetAll() {
     mapleSlowActive = false;
     hitCooldown = false;
     worldScroll = 0;
+
+    bottomLaneX = [
+        width / 2 - width * 0.25,
+        width / 2,
+        width / 2 + width * 0.25
+    ];
+
+    player.x = laneCenterX(player.lane, player.y);
+    // Stop all music
+    stopAllMusic();
 }
 
+// === MUSIC FUNCTIONS ===
+function stopAllMusic() {
+    if (currentSong) {
+        currentSong.stop();
+        currentSong = null;
+    }
+}
+
+function startPlaylist(mode) {
+    stopAllMusic();
+    currentSongIndex = 0;
+    playNextSong(mode);
+}
+
+function playNextSong(mode) {
+    if (currentSongIndex < musicPlaylists[mode].length) {
+        currentSong = musicPlaylists[mode][currentSongIndex];
+        currentSong.volume(NORMAL_VOLUME);
+        currentSong.play();
+        currentSongIndex++;
+    }
+}
+
+function updateMusicPlayback() {
+    // Check if current song finished
+    if (currentSong && !currentSong.isPlaying()) {
+        playNextSong(currentMode);
+    }
+
+    // Update volume damage effect
+    if (volumeDamageActive) {
+        if (millis() - volumeDamageTimer > DAMAGE_DURATION) {
+            volumeDamageActive = false;
+            if (currentSong) currentSong.volume(NORMAL_VOLUME);
+        }
+    }
+}
+
+function applyVolumeDamage() {
+    volumeDamageActive = true;
+    volumeDamageTimer = millis();
+    if (currentSong) currentSong.volume(DAMAGED_VOLUME);
+}
+// === DRAW LOOP ===
 function draw() {
     if (currentScreen === "menu") drawMenu();
     else if (["quebec", "usa", "espana"].includes(currentScreen)) drawGame();
@@ -57,18 +170,21 @@ function draw() {
 }
 
 
+
 function drawMenu() {
-    background(20);
+
     fill(255);
     textAlign(CENTER, CENTER);
+
     textSize(40);
-    text("QUE ?", width / 2, height / 3);
     textSize(20);
-    text("Click on a letter to choose your region", width / 2, height / 3 + 50);
+    text("Click on a letter to choose your region", width / 2, height / 3 + 150);
 
     drawMenuLetter("Q", width / 2 - 120, height / 2);
     drawMenuLetter("U", width / 2, height / 2);
     drawMenuLetter("E", width / 2 + 120, height / 2);
+
+    drawMenuLetter("?", width / 2, height / 2 + 100);
 
     // Draw choice message if any
     if (choiceMessage && millis() - choiceMessageTimer < 1000) {
@@ -77,7 +193,6 @@ function drawMenu() {
         text(choiceMessage, width / 2, height / 2 + 100);
     }
 }
-
 
 function drawMenuLetter(letter, x, y) {
     push();
@@ -90,29 +205,28 @@ function drawMenuLetter(letter, x, y) {
     pop();
 }
 
-function mousePressed() {
-    if (currentScreen === "menu") {
-        if (dist(mouseX, mouseY, width / 2 - 120, height / 2) < 40) {
-            choiceMessage = "You chose Quebec!";
-            choiceMessageTimer = millis();
-            setTimeout(() => startGame("Q"), 1000);
-        } else if (dist(mouseX, mouseY, width / 2, height / 2) < 40) {
-            choiceMessage = "You chose USA!";
-            choiceMessageTimer = millis();
-            setTimeout(() => startGame("U"), 1000);
-        } else if (dist(mouseX, mouseY, width / 2 + 120, height / 2) < 40) {
-            choiceMessage = "You chose España!";
-            choiceMessageTimer = millis();
-            setTimeout(() => startGame("E"), 1000);
-        }
-    } else if (currentScreen === "gameover") {
-        currentScreen = "menu";
-    }
+function laneCenterX(lane, y) {
+    const bottomWidth = width * 2;
+    const topWidth = width * 0.0002;
+    const roadBottomY = height;
+    const roadTopY = 200;
+    const centerX = width / 2;
+
+    const depth = map(y, roadTopY, roadBottomY, 0, 1);
+    const w = lerp(topWidth, bottomWidth, depth);
+
+    // lane 0 = left, 1 = middle, 2 = right
+    return lerp(centerX - w / 2, centerX + w / 2, (lane + 0.5) / 3);
 }
+
+
+
+
 function startGame(mode) {
     currentMode = mode;
-    currentScreen = mode === "Q" ? "quebec" : mode === "U" ? "usa" : mode === "E" ? "espana" :
-        resetAll();
+    currentScreen = mode === "Q" ? "quebec" : mode === "U" ? "usa" : mode === "E" ? "espana" : null;
+    startPlaylist(mode);
+    resetAll();
 }
 
 // === GAMEPLAY ===
@@ -160,15 +274,47 @@ function drawParallaxBackground(mode, scroll) {
 
 }
 
-// === ROAD IN PERSPECTIVE ===
+function mousePressed() {
+    if (showGameOver) {
+        if (currentScreen === "gameover") {
+            endVideo.stop();
+            currentScreen = "menu";
+            resetAll();
+        }
+        endVideo.stop();
+        showGameOver = false;
+        // Go back to menu here
+    }
+    if (currentScreen === "menu") {
+        let radius = 50; // slightly bigger than 40 for easier clicking
+        if (dist(mouseX, mouseY, width / 2 - 120, height / 2) < radius) {
+            choiceMessage = "You chose Quebec!";
+            choiceMessageTimer = millis();
+            startGame("Q");
+        } else if (dist(mouseX, mouseY, width / 2, height / 2) < radius) {
+            choiceMessage = "You chose USA!";
+            choiceMessageTimer = millis();
+            startGame("U");
+        } else if (dist(mouseX, mouseY, width / 2 + 120, height / 2) < radius) {
+            choiceMessage = "You chose España!";
+            choiceMessageTimer = millis();
+            startGame("E");
+        }
+    }
+
+}
+
+
+// === ROAD ===
 function drawRoad(scrollSpeed) {
-    const bottomWidth = width;
-    const topWidth = width * 0.10;
+    const bottomWidth = width * 1.8;
+    const topWidth = width * 0.03;
     const roadBottomY = height;
-    const roadTopY = 0;
+    const roadTopY = 200; // start of road
     const centerX = width / 2;
 
-    fill(40);
+    const roadColor = color(40);
+    fill(roadColor);
     noStroke();
     quad(
         centerX - topWidth / 2, roadTopY,
@@ -177,54 +323,41 @@ function drawRoad(scrollSpeed) {
         centerX - bottomWidth / 2, roadBottomY
     );
 
-    // Lane divider lines (3 lanes)
-    stroke(255, 80);
-    strokeWeight(2);
-    for (let i = 1; i < 3; i++) {
-        const t = i / 3;
-        const x1 = lerp(centerX - topWidth / 2, centerX + topWidth / 2, t);
-        const x2 = lerp(centerX - bottomWidth / 2, centerX + bottomWidth / 2, t);
-        line(x1, roadTopY, x2, roadBottomY);
-    }
-
-    // Dashed road markings with perspective for 3 lanes
+    // === White dashed lane dividers ===
     stroke(255);
     strokeWeight(4);
-
     const dashSpacing = 100;
-
-    // Add worldScroll instead of subtracting
     for (let y = roadTopY + (worldScroll % dashSpacing); y < roadBottomY; y += dashSpacing) {
         const depth = map(y, roadTopY, roadBottomY, 0, 1);
         const w = lerp(topWidth, bottomWidth, depth);
 
-        // Left lane (angled slightly to left)
-        const leftXStart = lerp(centerX - w / 2, centerX - w / 2 + 20, depth);
-        const leftXEnd = leftXStart - 5;
-        line(leftXStart, y, leftXEnd, y + 20);
+        const leftLaneX = lerp(centerX - w / 2, centerX + w / 2, 1 / 3);
+        const midLaneX = lerp(centerX - w / 2, centerX + w / 2, 2 / 3);
 
-        // Center lane (straight)
-        const centerXStart = centerX;
-        line(centerXStart, y, centerXStart, y + 20);
+        const y2 = y + 25;
+        const depth2 = map(y2, roadTopY, roadBottomY, 0, 1);
+        const w2 = lerp(topWidth, bottomWidth, depth2);
+        const leftLaneX2 = lerp(centerX - w2 / 2, centerX + w2 / 2, 1 / 3);
+        const midLaneX2 = lerp(centerX - w2 / 2, centerX + w2 / 2, 2 / 3);
 
-        // Right lane (angled slightly to right)
-        const rightXStart = lerp(centerX + w / 2, centerX + w / 2 - 20, depth);
-        const rightXEnd = rightXStart + 5;
-        line(rightXStart, y, rightXEnd, y + 20);
+        line(leftLaneX, y, leftLaneX2, y2);
+        line(midLaneX, y, midLaneX2, y2);
     }
 
+    // === Dark lane center lines (for player & obstacle guidance) ===
+    stroke(roadColor);  // same as road
+    strokeWeight(2);
+    for (let lane = 0; lane < 3; lane++) {
+        beginShape();
+        for (let y = roadTopY; y <= roadBottomY; y += 5) { // start from roadTopY
+            const x = laneCenterX(lane, y);
+            vertex(x, y);
+        }
+        endShape();
+    }
 }
-// === PERSPECTIVE LANE X ===
-function laneXAtY(lane, y) {
-    const bottomWidth = width * 0.7;
-    const topWidth = width * 0.25;
-    const roadBottomY = height;
-    const roadTopY = 100;
-    const centerX = width / 2;
-    const depth = map(y, roadTopY, roadBottomY, 0, 1);
-    const w = lerp(topWidth, bottomWidth, depth);
-    return lerp(centerX - w / 2, centerX + w / 2, (lane + 0.5) / 3);
-}
+
+
 
 // === PLAYER ===
 function updatePlayerJump() {
@@ -239,161 +372,196 @@ function updatePlayerJump() {
     }
 }
 
-let runPhase = 0; // global variable for running animation
-
 function drawPlayer() {
-    const y = player.y - player.jumpY; // lift above road
+
+
+    // Smooth horizontal movement along dark lane lines
+    const y = player.y - player.jumpY; // vertical position
+    const targetX = laneCenterX(player.targetLane, y);
+    player.x = lerp(player.x, targetX, 0.2); // smooth horizontal movement
+
+
     const scaleFactor = map(y, 100, height, 0.6, 1.2);
-    const px = laneXAtY(player.lane, y);
 
     push();
-    translate(px, y);
-    scale(scaleFactor);
+    translate(player.x, y);
+    scale(scaleFactor * 2);
     rectMode(CENTER);
+    ellipseMode(CENTER);
 
-    // Set color based on mode
-    let colorFill;
-    if (currentMode === "Q") colorFill = color(220, 60, 40);
-    else if (currentMode === "U") colorFill = color(60, 100, 220);
-    else colorFill = color(255, 200, 60);
+    // Body colors based on region
+    let shirtColor, pantsColor, skinColor;
+    if (currentMode === "Q") {
+        shirtColor = color(220, 60, 40);
+        pantsColor = color(50, 50, 80);
+        skinColor = color(255, 220, 180);
+    } else if (currentMode === "U") {
+        shirtColor = color(60, 100, 220);
+        pantsColor = color(40, 40, 80);
+        skinColor = color(255, 220, 180);
+    } else {
+        shirtColor = color(255, 200, 60);
+        pantsColor = color(80, 50, 30);
+        skinColor = color(255, 200, 160);
+    }
 
-    fill(colorFill);
     stroke(0);
     strokeWeight(3);
 
-    // Running animation offsets (vertical)
-    const armOffset = 20 * sin(runPhase);       // arms swing vertically
-    const legOffset = 25 * sin(runPhase + PI);  // legs swing opposite to arms
+    // Running offsets
+    const armOffset = 20 * sin(runPhase);
+    const legOffset = 25 * sin(runPhase + PI);
 
-    // Body (torso)
-    rect(0, -30, 30, 60, 8);
+    // Legs
+    fill(pantsColor);
+    rect(-10, 20 + legOffset / 2, 15, 40, 4);
+    rect(10, 20 - legOffset / 2, 15, 40, 4);
+
+    // Shoes
+    fill(50);
+    rect(-10, 40 + legOffset / 2, 15, 10, 2);
+    rect(10, 40 - legOffset / 2, 15, 10, 2);
+
+    // Torso
+    fill(shirtColor);
+    rect(0, -10, 30, 60, 8);
+
+    // Arms
+    line(-25, -30, -25, -30 + armOffset);
+    line(25, -30, 25, -30 - armOffset);
 
     // Head
-    ellipse(0, -60, 30, 30);
+    fill(skinColor);
+    ellipse(0, -60, 40, 40);
 
-    // Arms (longer and visible)
-    line(-20, -45, -20, -45 + armOffset); // left arm
-    line(20, -45, 20, -45 - armOffset);   // right arm
-
-    // Legs (longer)
-    line(-10, 0, -10, 0 + legOffset); // left leg
-    line(10, 0, 10, 0 - legOffset);   // right leg
+    // Hair (cap)
+    fill(50, 30, 10);
+    arc(0, -65, 42, 30, PI, 0, CHORD);
 
     pop();
 
-    // Update run phase for next frame
-    runPhase += 0.2; // speed of running animation
+    runPhase += 0.2;
 }
 
-
 function keyPressed() {
-    if (keyCode === LEFT_ARROW) player.lane = max(0, player.lane - 1);
-    if (keyCode === RIGHT_ARROW) player.lane = min(2, player.lane + 1);
+    if (keyCode === LEFT_ARROW) player.targetLane = max(0, player.targetLane - 1);
+    if (keyCode === RIGHT_ARROW) player.targetLane = min(2, player.targetLane + 1);
     if ((keyCode === UP_ARROW || key === ' ') && !player.isJumping) {
         player.isJumping = true;
         player.jumpSpeed = JUMP_FORCE;
     }
 }
 
+
 // === OBSTACLES ===
 function spawnObstacle() {
     const lane = int(random(0, 3));
     const type = random(["car", "rock", "maple"]);
-    obstacles.push({ lane, z: -100, type });
+
+    const startY = 200;
+    const targetY = height;
+    const startX = laneCenterX(lane, startY);
+    const targetX = laneCenterX(lane, targetY);
+
+    obstacles.push({
+        lane,
+        x: startX,
+        y: startY,
+        startX,
+        startY,
+        targetX,
+        targetY,
+        type
+    });
 }
-
 function drawObstacles(scrollSpeed) {
-    const roadTopY = 100;
-    const roadBottomY = height;
-    const difficultyFactor = 1 + Math.floor(score / 500) * 0.25;
-    let spawnInterval = spawnIntervalBase / difficultyFactor;
-    if (mapleSlowActive) spawnInterval *= 1.8;
+    // Spawn a new obstacle when the current one reaches halfway down the road
+    const roadMidY = (200 + height) / 2;
 
-    if (millis() - obstacleTimer > spawnInterval && !victory) {
-        obstacleTimer = millis();
-        spawnObstacle();
+    if (obstacles.length === 0 || obstacles[obstacles.length - 1].y > roadMidY) {
+        if (!victory) {
+            spawnObstacle();
+        }
     }
 
     for (let i = obstacles.length - 1; i >= 0; i--) {
         const ob = obstacles[i];
-        ob.z += scrollSpeed * 4;
-        const y = roadTopY + ob.z;
-        const px = laneXAtY(ob.lane, y);
-        const scaleFactor = map(y, roadTopY, roadBottomY, 0.3, 1);
+
+        // Obstacles move faster as score increases
+        const speedMultiplier = 1 + (score / 1000) * 0.5;
+        ob.y += scrollSpeed * speedMultiplier;
+
+        const t = (ob.y - ob.startY) / (ob.targetY - ob.startY);
+        ob.x = lerp(ob.startX, ob.targetX, t);
 
         push();
-        translate(px, y);
-        scale(scaleFactor);
-        if (ob.type === "maple") fill(255, 200, 0);
-        else if (ob.type === "car") fill(180, 50, 50);
-        else fill(30);
+        translate(ob.x, ob.y);
         rectMode(CENTER);
+        fill(ob.type === "maple" ? color(255, 200, 0) :
+            ob.type === "car" ? color(180, 50, 50) : color(30));
         rect(0, -20, 40, 40, 8);
         pop();
 
-        if (y > height + 50) obstacles.splice(i, 1);
+        if (ob.y > height + 50) obstacles.splice(i, 1);
     }
 }
 
+
 // === COLLISIONS ===
 function checkCollisions() {
+    const playerY = player.y - player.jumpY;
+    const playerX = player.x;
+    const size = 30;
     for (let ob of obstacles) {
-        const y = 100 + ob.z;
-        const dy = abs((y - player.jumpY) - player.y);
-        if (dy < 40 && ob.lane === player.lane && player.jumpY < 20) {
+        if (abs(ob.x - playerX) < size && abs(ob.y - playerY) < size) {
             if (ob.type === "maple") {
                 mapleSlowActive = true;
                 mapleTimer = millis();
                 obstacles.splice(obstacles.indexOf(ob), 1);
-                return;
+            } else {
+                player.life--;
+                hitCooldown = true;
+                applyVolumeDamage(); // Apply volume damage
+                setTimeout(() => hitCooldown = false, 1000);
+                if (player.life <= 0) gameOver();
             }
-            player.life--;
-            hitCooldown = true;
-            setTimeout(() => (hitCooldown = false), 1000);
-            if (player.life <= 0) gameOver();
-            return;
         }
     }
 }
 
-// === GAME OVER ===
+// === GAMEOVER / VICTORY / HUD ===
 function gameOver() {
     currentScreen = "gameover";
+    showGameOver = true;
+    stopAllMusic(); // Stop music on game over
+    endVideo.play();
 }
 
 function drawGameOver() {
     background(20, 0, 0);
+    image(endVideo, 0, 0, width, height);
     fill(255);
     textAlign(CENTER, CENTER);
     textSize(40);
     text("Game Over", width / 2, height / 2);
-    textSize(20);
-    text("Click to return to menu", width / 2, height / 2 + 40);
 }
-
-// === VICTORY ===
 function beginVictory() {
     victory = true;
     if (score > bestScores[currentMode]) bestScores[currentMode] = score;
 }
-
-function drawVictoryRun(scrollSpeed) {
+function drawVictoryRun() {
+    victoryFade += 0.01;
     fill(255, 255 * victoryFade);
     rect(0, 0, width, height);
-    victoryFade += 0.01;
     if (victoryFade > 1.5) {
         currentScreen = "menu";
         resetAll();
     }
 }
-
-// === HUD ===
 function drawHUD() {
-    push();
     fill(255);
+    textSize(26);
     textAlign(LEFT, TOP);
-    textSize(16);
     text(`Score: ${score}`, 20, 20);
     text(`Life: ${player.life}`, 20, 40);
-    pop();
 }

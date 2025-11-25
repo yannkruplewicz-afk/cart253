@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=0.8">
+    <title>Humans of New York</title>
+    <meta name="description"
+        content="Explore the work of Ocean Vuong, award-winning poet and novelist, author of 'On Earth We're Briefly Gorgeous' and 'Time is a mother'.">
+    <meta property="og:title" content="Ocean Vuong">
+    <meta property="og:description"
+        content="Ocean Vuong is an award-winning poet and novelist whose lyrical works, including 'On Earth We're Briefly Gorgeous' and 'Time is a mother', explore love, loss, and identity with profound beauty.">
+    <meta name="author" content="Yann Kruplewicz">
+    <meta name="copyright" content="Yann Kruplewicz, student project, 2025">
+
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="index01.css">
+    <link rel="stylesheet" href="index02.css">
+</head>
+
+<body>
+
+    <div id="wrapper">
+
+        <!-- Header & Navigation -->
+        <header>
+            <nav>
+
+                <!-- Single hamburger -->
+                <div class="hamburger-menu">
+                    <button><span class="fa fa-bars"></span></button>
+                </div>
+
+                <!-- Main menu -->
+                <div class="menu1">
+                    <div class="item">
+                        <a href="index.html">What is Surveillance Capitalism ?</a>
+                        <div class="case">Go to the main index page</div>
+                    </div>
+
+                    <div class="item">
+                        <a href="index01.html">How does it affect us ?</a>
+                        <div class="case">Learn about its impacts</div>
+                    </div>
+
+                    <div class="item">
+                        <a href="index02.html">How to counter Surveillance Cap ?</a>
+                        <div class="case">What are the "solutions" ?</div>
+                    </div>
+
+                    <div class="item">
+                        <a href="index03.html">What are OUR solutions ?</a>
+                        <div class="case">How can we flee from Surveillance Capitalism ?</div>
+                    </div>
+
+                    <div class="item">
+                        <a href="Conclusion.html">Nutshell</a>
+                        <div class="case">A nutshell about Surveillance Capitalism</div>
+                    </div>
+
+                    <div class="close-menu">&times;</div>
+                </div>
+            </nav>
+
+
+        </header>
+        <nav class="sub-nav">
+            <div class="item"><a href="solution1.html" class="active">New Solution 1</a></div>
+            <div class="item"><a href="solution2.html">New Solution 2</a></div>
+
+        </nav>
+
+        <!-- Main Content -->
+        <br>
+        <article2>
+
+            <h1>What are the already existing solutions ?</h1><br><br>
+
+        </article2><br>
+        <section>
+            <div class="storie-left3">
+                <article><br><br>
+
+                    <p2>Even in this darkness, there is a small candle that still lights up.</p2><br><br>
+
+                    <p>'Solutions' have been found, such as the incognito mode on Chrome, which pretends not to use nor
+                        remember
+                        your data.</p>
+                    <p>Similarly, labels for websites and applications have been created to evaluate how respectful a
+                        website or app
+                        is regarding privacy, data ethics, and transparency. Among these are the following three:</p>
+
+                    <div class="highlight-block">
+                        <p><b>AFNOR — “Privacy Tech” Label</b><br><br>
+                            AFNOR Privacy Tech operates in France and Europe by conducting independent audits to verify
+                            that a website or app
+                            follows
+                            strong GDPR-aligned privacy-by-design practices.
+                        </p>
+                    </div>
+
+                    <br>
+
+                    <div class="highlight-block">
+                        <p><b>PrivacyTrust Certification</b><br><br>
+                            PrivacyTrust Certification is used internationally on websites to show that their published
+                            privacy
+                            policy accurately reflects how they actually collect, store, and use personal data.
+                        </p>
+                    </div>
+
+                    <br>
+
+                    <div class="highlight-block">
+                        <p><b>Digital Trust Label</b><br><br>
+                            Digital Trust Label is used primarily in Switzerland and Europe for digital services that
+                            want to prove
+                            transparent, safe, and fair user treatment across security, data protection, and interface
+                            design.
+                        </p>
+                    </div>
+                    <br>
+                    <p>The question being : <br>Can we really trust these websites / apps even if labelled ?
+                        <br>Because we
+                        don't know.
+                        Go to the 'New solution' sub-pages to learn more about potential future <u>solutions</u>.
+                    </p>
+                    </p>
+
+
+
+                </article>
+                <br><br>
+            </div>
+            <div class="storie-right3">
+                <figure class="im1">
+                    <a href="index.html">
+                        <figure class="im3">
+                            <a
+                                href="https://pressbooks.openeducationalberta.ca/digitalcitizenship/chapter/4-2-what-to-do-tactics-to-counter-surveillance-capitalism/">
+                                <img src="assets/ai-generated-9549012_1920.png" class="im3" alt="AI2">
+                                <div class="hover-text">The Age of Surveillance Capitalism</div>
+                            </a>
+
+            </div>
+        </section>
+        <footer>
+
+            <small><em>This Website was created as part of a school project. All content and design are copyright
+                    Yann Kruplewicz, student, 2025.</em></small>
+        </footer>
+
+
+    </div>
+
+    <!-- Audio -->
+
+    <audio id="background-audio" autoplay loop>
+        <source src="assets/song1.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- JavaScript: Hamburger Menu -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const hamburgerButton = document.querySelector('.hamburger-menu button');
+            const closeButton = document.querySelector('.close-menu');
+            const menu1 = document.querySelector('.menu1');
+            const audio = document.getElementById('background-audio');
+
+            // Ensure audio starts with a reasonable volume
+            if (audio) {
+                const savedTime = localStorage.getItem('audioTime');
+                if (savedTime) {
+                    audio.currentTime = parseFloat(savedTime);
+                }
+                audio.volume = 0.18; // initial volume
+            }
+
+            // Save playback time every 0.5s
+            setInterval(() => {
+                if (audio) {
+                    localStorage.setItem('audioTime', audio.currentTime);
+                }
+            }, 500);
+
+            // Toggle menu and hide/show images
+            hamburgerButton.addEventListener('click', () => {
+                const isOpen = menu1.classList.toggle('menu-deployed'); // toggle menu visibility
+
+                if (isOpen) {
+                    document.body.classList.add('menu-open'); // hide images
+                } else {
+                    document.body.classList.remove('menu-open'); // show images again
+                }
+            });
+
+            // Close menu explicitly with the × button
+            closeButton.addEventListener('click', () => {
+                menu1.classList.remove('menu-deployed');
+                document.body.classList.remove('menu-open'); // show images again
+
+                if (audio) {
+                    // Smoothly fade volume down
+                    let fadeAudio = setInterval(() => {
+                        if (audio.volume > 0.1) {
+                            audio.volume = Math.max(0.1, audio.volume - 0.05);
+                        } else {
+                            clearInterval(fadeAudio);
+                        }
+                    }, 100);
+                }
+            });
+        });
+
+    </script>
+    <a href="index03.html" class="next-page-arrow">
+        &#8595; <!-- down arrow; you can replace with ↑, →, or a Font Awesome icon -->
+    </a>
+</body>
+
+</html>

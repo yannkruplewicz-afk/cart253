@@ -1,0 +1,84 @@
+@media (max-width: 1850px) {
+
+    section,
+    .storie-container,
+    section2 {
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+        padding-left: 30px;
+        padding-right: 30px;
+        box-sizing: border-box;
+    }
+
+
+    /* ⬇ Restore storie-left3 to center */
+    .storie-left3 {
+        left: 0 !important;
+        margin-right: 0 !important;
+        margin-left: 0 !important;
+        padding: 20px;
+        width: 100%;
+        max-width: 900px;
+        /* optional, keeps nice readable width */
+        margin: 0 auto;
+        /* center horizontally */
+    }
+
+    /* ⬇ Restore storie-left3 to center */
+    .storie-right3 {
+        display: none;
+    }
+}
+
+/* Mobile / small screen menu */
+@media (max-width: 780px) {
+
+    /* Full-screen menu when deployed */
+    .menu1.menu-deployed {
+        display: flex !important;
+        flex-direction: column;
+        justify-content: center;
+        /* vertical centering */
+        align-items: center;
+        /* horizontal centering */
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgb(0, 0, 0);
+        z-index: 11000;
+        padding: 0;
+        /* remove extra padding */
+    }
+
+    /* Center menu items and add spacing between them */
+    .menu1.menu-deployed .item {
+        margin: 20px 0;
+        text-align: center;
+    }
+
+    /* Adjust the links themselves */
+    .menu1.menu-deployed .item a {
+        font-size: clamp(1.5rem, 5vw, 3rem);
+        /* scales on small screens */
+        color: white;
+        text-decoration: none;
+        display: inline-block;
+        padding: 10px 20px;
+    }
+
+    /* Close button stays in top-right */
+    .menu1.menu-deployed .close-menu {
+        top: 20px;
+        right: 20px;
+        font-size: 2.5rem;
+        color: white;
+    }
+}
+
+/* Hide next-page-arrow when menu is open */
+body.menu-open .next-page-arrow {
+    display: none !important;
+}

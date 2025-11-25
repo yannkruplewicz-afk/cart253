@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=0.8">
+    <title>Humans of New York</title>
+    <meta name="description"
+        content="Explore the work of Ocean Vuong, award-winning poet and novelist, author of 'On Earth We're Briefly Gorgeous' and 'Time is a mother'.">
+    <meta property="og:title" content="Ocean Vuong">
+    <meta property="og:description"
+        content="Ocean Vuong is an award-winning poet and novelist whose lyrical works, including 'On Earth We're Briefly Gorgeous' and 'Time is a mother', explore love, loss, and identity with profound beauty.">
+    <meta name="author" content="Yann Kruplewicz">
+    <meta name="copyright" content="Yann Kruplewicz, student project, 2025">
+
+    <link rel="stylesheet" href="solutions.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="index01.css">
+</head>
+
+<body>
+
+    <div id="wrapper">
+
+        <!-- Header & Navigation -->
+        <header>
+            <nav>
+
+                <!-- Single hamburger -->
+                <div class="hamburger-menu">
+                    <button><span class="fa fa-bars"></span></button>
+                </div>
+
+                <!-- Main menu -->
+                <div class="menu1">
+                    <div class="item">
+                        <a href="index.html">What is Surveillance Capitalism ?</a>
+                        <div class="case">Go to the main index page</div>
+                    </div>
+
+                    <div class="item">
+                        <a href="index01.html">How does it affect us ?</a>
+                        <div class="case">Learn about its impacts</div>
+                    </div>
+
+                    <div class="item">
+                        <a href="index02.html">How to counter Surveillance Cap ?</a>
+                        <div class="case">What are the "solutions" ?</div>
+                    </div>
+
+                    <div class="item">
+                        <a href="index03.html">What are OUR solutions ?</a>
+                        <div class="case">How can we flee from Surveillance Capitalism ?</div>
+                    </div>
+
+                    <div class="item">
+                        <a href="Conclusion.html">Nutshell</a>
+                        <div class="case">A nutshell about Surveillance Capitalism</div>
+                    </div>
+
+                    <div class="close-menu">&times;</div>
+                </div>
+            </nav>
+
+        </header>
+        <nav class="sub-nav">
+            <div class="item"><a href="solution1.html" class="active">New Solution 1</a></div>
+            <div class="item"><a href="solution2.html">New Solution 2</a></div>
+
+        </nav>
+
+        <!-- Main Content -->
+        <br>
+        <article2>
+
+            <h1>New jobs ?</h1><br><br>
+
+        </article2><br>
+        <section>
+            <div class="storie-left3">
+                <article><br><br>
+
+                    <p2>Today, november the 24th of 2025, we are seeing AI growing. AI will make Surveillance Capitalism
+                        even more efficient, is
+                        going to replace and
+                        make disappear lots of
+                        jobs, a solution could be to create new jobs.</p2><br><br>
+
+
+                    <div class="highlight-block">
+                        <p><b>Surveilling the Surveillance</b><br><br>
+                            These new jobs would aim at surveilling the apps / websites / companies to prevent
+                            surveillance Capitalism. Internet
+                            spyers in some way.
+                        </p>
+
+                        <P> Some would show up in companies and check if everything is alright, if there is no 'excess',
+                            defined at the precise
+                            moment when an individual's personnal liberty is repressed, like when stealing data or
+                            manipulating through
+                            algorithms.</P>
+
+                        <P> That solution would create a balance between the capitalists and the people, otherwise, the
+                            balance will be inexisting, even worse than what we know today.</P>
+                    </div>
+
+                    <br>
+
+
+
+            </div>
+        </section>
+        <footer>
+
+            <small><em>This Website was created as part of a school project. All content and design are copyright
+                    Yann Kruplewicz, student, 2025.</em></small>
+        </footer>
+
+
+    </div>
+
+    <!-- Audio -->
+
+    <audio id="background-audio" autoplay loop>
+        <source src="assets/song1.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- JavaScript: Hamburger Menu -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const hamburgerButton = document.querySelector('.hamburger-menu button');
+            const closeButton = document.querySelector('.close-menu');
+            const menu1 = document.querySelector('.menu1');
+            const audio = document.getElementById('background-audio');
+
+            // Ensure audio starts with a reasonable volume
+            if (audio) {
+                const savedTime = localStorage.getItem('audioTime');
+                if (savedTime) {
+                    audio.currentTime = parseFloat(savedTime);
+                }
+                audio.volume = 0.18; // initial volume
+            }
+
+            // Save playback time every 0.5s
+            setInterval(() => {
+                if (audio) {
+                    localStorage.setItem('audioTime', audio.currentTime);
+                }
+            }, 500);
+
+            // Toggle menu and hide/show images
+            hamburgerButton.addEventListener('click', () => {
+                const isOpen = menu1.classList.toggle('menu-deployed'); // toggle menu visibility
+
+                if (isOpen) {
+                    document.body.classList.add('menu-open'); // hide images
+                } else {
+                    document.body.classList.remove('menu-open'); // show images again
+                }
+            });
+
+            // Close menu explicitly with the × button
+            closeButton.addEventListener('click', () => {
+                menu1.classList.remove('menu-deployed');
+                document.body.classList.remove('menu-open'); // show images again
+
+                if (audio) {
+                    // Smoothly fade volume down
+                    let fadeAudio = setInterval(() => {
+                        if (audio.volume > 0.1) {
+                            audio.volume = Math.max(0.1, audio.volume - 0.05);
+                        } else {
+                            clearInterval(fadeAudio);
+                        }
+                    }, 100);
+                }
+            });
+        });
+
+    </script>
+
+</body>
+
+</html>

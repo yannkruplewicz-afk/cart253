@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=0.8">
+    <title>Humans of New York</title>
+    <meta name="description"
+        content="Explore the work of Ocean Vuong, award-winning poet and novelist, author of 'On Earth We're Briefly Gorgeous' and 'Time is a mother'.">
+    <meta property="og:title" content="Ocean Vuong">
+    <meta property="og:description"
+        content="Ocean Vuong is an award-winning poet and novelist whose lyrical works, including 'On Earth We're Briefly Gorgeous' and 'Time is a mother', explore love, loss, and identity with profound beauty.">
+    <meta name="author" content="Yann Kruplewicz">
+    <meta name="copyright" content="Yann Kruplewicz, student project, 2025">
+
+    <link rel="stylesheet" href="index03.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="index01.css">
+</head>
+
+<body>
+
+    <div id="wrapper">
+
+        <!-- Header & Navigation -->
+        <header>
+            <nav>
+
+                <!-- Single hamburger -->
+                <div class="hamburger-menu">
+                    <button><span class="fa fa-bars"></span></button>
+                </div>
+
+                <!-- Main menu -->
+                <div class="menu1">
+                    <div class="item">
+                        <a href="index.html">What is Surveillance Capitalism ?</a>
+                        <div class="case">Go to the main index page</div>
+                    </div>
+
+                    <div class="item">
+                        <a href="index01.html">How does it affect us ?</a>
+                        <div class="case">Learn about its impacts</div>
+                    </div>
+
+                    <div class="item">
+                        <a href="index02.html">How to counter Surveillance Cap ?</a>
+                        <div class="case">What are the "solutions" ?</div>
+                    </div>
+
+                    <div class="item">
+                        <a href="index03.html">What are OUR solutions ?</a>
+                        <div class="case">How can we flee from Surveillance Capitalism ?</div>
+                    </div>
+
+                    <div class="item">
+                        <a href="Conclusion.html">Nutshell</a>
+                        <div class="case">A nutshell about Surveillance Capitalism</div>
+                    </div>
+
+                    <div class="close-menu">&times;</div>
+                </div>
+            </nav>
+
+
+
+        </header>
+
+
+        <!-- Main Content -->
+        <article2>
+
+            <h1>What are OUR solutions ?</h1><br><br>
+            <p>2 solutions are possible for us if we want to get rid of this problem which is not ours
+                <br>(Because we can only be the victims there, remember), if we
+                want to solve it,
+                that's another story .
+            </p><br><br>
+        </article2><br>
+        <div class="im122">
+            <img src="assets/peace.png" alt="Description of Image" width="1200" height="170">
+        </div>
+        <section>
+            <div class="storie-left3">
+                <article><br><br>
+
+
+
+                    <div class="highlight-block">
+                        <p><b>Remember before internet ?</b><br><br>
+                            Honestly, people seem to be happier before internet, that's what my grandparents say, no
+                            need for study this time. A solution could simply be to leave for St
+                            Pierre et Miquelon, in the nature, no internet, no problem. That might seem frightening
+                            because we are so used to our comfortable lives, I don't even know if some human communities
+                            still live in the nature, but at least, they would not have to care about the problem of
+                            surveillance Capitalism. They would just breathe some fresh and pure air, laying on a palm
+                            leaves hammock.
+                        </p>
+                    </div>
+
+
+
+
+
+
+                </article>
+                <br><br>
+            </div>
+            <div class="storie-right30">
+                <article><br><br>
+
+
+
+                    <div class="highlight-block">
+                        <p><b>If..You want to keep your phone</b><br><br>
+                            If the first solution didn't appeal to you, you might then have to rely on your device only
+                            on purpose, which means only when you actually need it, so that you can limit distractions
+                            as well as stopping your dependence to screens. The idea is basically the same as in the
+                            previous idea, stopping the screens' dependance, being more 'natural', thinking twice before
+                            using it. That means, getting rid of the frivolous things like social media. Also you might
+                            need to be mentally stronger. In the digital Age, you can be influenced everywhere, by
+                            everyone. That's the point of Surveillance Capitalism.
+                        </p>
+                    </div>
+
+
+            </div>
+        </section>
+        <!-- Footer -->
+        <footer>
+
+            <small><em>This Website was created as part of a school project. All content and design are copyright
+                    Yann Kruplewicz, student, 2025.</em></small>
+        </footer>
+
+    </div>
+
+    <!-- Audio -->
+
+    <audio id="background-audio" autoplay loop>
+        <source src="assets/song1.mp3" type="audio/mpeg">
+    </audio>
+
+
+    <!-- JavaScript: Hamburger Menu -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const hamburgerButton = document.querySelector('.hamburger-menu button');
+            const closeButton = document.querySelector('.close-menu');
+            const menu1 = document.querySelector('.menu1');
+            const audio = document.getElementById('background-audio');
+
+            // Ensure audio starts with a reasonable volume
+            if (audio) {
+                const savedTime = localStorage.getItem('audioTime');
+                if (savedTime) {
+                    audio.currentTime = parseFloat(savedTime);
+                }
+                audio.volume = 0.18; // initial volume
+            }
+
+            // Save playback time every 0.5s
+            setInterval(() => {
+                if (audio) {
+                    localStorage.setItem('audioTime', audio.currentTime);
+                }
+            }, 500);
+
+            // Toggle menu and hide/show images
+            hamburgerButton.addEventListener('click', () => {
+                const isOpen = menu1.classList.toggle('menu-deployed'); // toggle menu visibility
+
+                if (isOpen) {
+                    document.body.classList.add('menu-open'); // hide images
+                } else {
+                    document.body.classList.remove('menu-open'); // show images again
+                }
+            });
+
+            // Close menu explicitly with the × button
+            closeButton.addEventListener('click', () => {
+                menu1.classList.remove('menu-deployed');
+                document.body.classList.remove('menu-open'); // show images again
+
+                if (audio) {
+                    // Smoothly fade volume down
+                    let fadeAudio = setInterval(() => {
+                        if (audio.volume > 0.1) {
+                            audio.volume = Math.max(0.1, audio.volume - 0.05);
+                        } else {
+                            clearInterval(fadeAudio);
+                        }
+                    }, 100);
+                }
+            });
+        });
+
+    </script>
+    <a href="Conclusion.html" class="next-page-arrow">
+        &#8595; <!-- down arrow; you can replace with ↑, →, or a Font Awesome icon -->
+    </a>
+</body>
+
+</html>

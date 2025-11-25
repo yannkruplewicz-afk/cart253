@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=0.8">
+
+    <title>Humans of New York</title>
+    <meta name="description"
+        content="Explore the work of Ocean Vuong, award-winning poet and novelist, author of 'On Earth We're Briefly Gorgeous' and 'Time is a mother'.">
+    <meta property="og:title" content="Ocean Vuong">
+    <meta property="og:description"
+        content="Ocean Vuong is an award-winning poet and novelist whose lyrical works, including 'On Earth We're Briefly Gorgeous' and 'Time is a mother', explore love, loss, and identity with profound beauty.">
+    <meta name="author" content="Yann Kruplewicz">
+    <meta name="copyright" content="Yann Kruplewicz, student project, 2025">
+
+    <link rel="stylesheet" href="conclusion.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+
+<body>
+
+    <div id="wrapper">
+
+        <!-- Header & Navigation -->
+        <header>
+            <nav>
+
+                <!-- Single hamburger -->
+                <div class="hamburger-menu">
+                    <button><span class="fa fa-bars"></span></button>
+                </div>
+
+                <!-- Main menu -->
+                <div class="menu1">
+                    <div class="item">
+                        <a href="index.html">What is Surveillance Capitalism</a>
+                        <div class="case">Go to the main index page</div>
+                    </div>
+
+                    <div class="item">
+                        <a href="index01.html">How does it affect us</a>
+                        <div class="case">Learn about its impacts</div>
+                    </div>
+
+                    <div class="item">
+                        <a href="index02.html">The already existing "solutions"</a>
+                        <div class="case">What are the "solutions" ?</div>
+                    </div>
+
+                    <div class="item">
+                        <a href="index03.html">What are OUR solutions ?</a>
+                        <div class="case">How can we flee from Surveillance Capitalism ?</div>
+                    </div>
+
+                    <div class="item">
+                        <a href="Conclusion.html">Nutshell</a>
+                        <div class="case">A nutshell about Surveillance Capitalism</div>
+                    </div>
+
+                    <div class="close-menu">&times;</div>
+                </div>
+            </nav>
+
+        </header>
+
+
+        <!-- Main Content -->
+        <article2>
+
+            <h1>Here we are, 2026</h1>
+
+            </p>
+        </article2><br>
+
+        <section>
+            <div class="storie-left3">
+                <article>
+
+
+
+                    <div class="highlight-block">
+                        <p><b>“If you’ve got nothing to hide, you are nothing.” <br> Shoshana Zuboff, <u>The age of
+                                    Surveillance
+                                    Capitalism</u></b><br><br>
+                            What does that mean ? According to Zuboff it means that a person who has “nothing to hide”
+                            is a person stripped of privacy, agency, and
+                            individuality. In a surveillance system,
+                            that person becomes “nothing” because their humanity has been reduced to data.
+
+
+                    </div>
+
+                    <div class="highlight-block">
+                        <p>
+                            There is a lot to be done about this issue which is growing faster and faster, no need to
+                            predict how big the problem will be in 2030, we all want to sleep tonight. But we all have
+                            to be aware of the existence of Surveillance Capitalism because as Zuboff also said :"It is
+                            no longer enough to automate information flows about us; the goal now is to automate us". In
+                            other words, be aware or be manipulated.
+                        </p>
+                        <br>
+                        <p><small>And who knows, maybe this website collected your data. What do you
+                                think <span id="visitor"></span>?</small></b><br><br>
+
+
+
+
+                    </div>
+                    <br><br><br><br>
+                    <p>What are your thoughts on Surveillance Capitalism ? Did it ring a bell ? Or an emergency alarm ?
+                        Don't hesitate to share your thoughts on the following Reddit forum by clicking on the following
+                        icon. Have a nice day.
+
+                    </p>
+            </div>
+
+
+
+
+
+
+
+            </article>
+
+
+
+        </section>
+        <div class="im122">
+            <a href="https://www.reddit.com/user/Background_Chance177/comments/1p5kao0/what_do_you_think_about_surveillance_capitalism/?utm_source=share&utm_medium=web3x&utm_name=web3xcss&utm_term=1&utm_content=share_button"
+                target="_blank" rel="noopener noreferrer">
+                <img src="assets/reddit.png" alt="Reddit Logo" width="100" height="100">
+            </a>
+
+        </div>
+        <!-- Footer -->
+        <footer>
+
+
+            <small><em>This Website was created as part of a school project. All content and design are copyright
+                    Yann Kruplewicz, student, 2025.</em></small>
+        </footer>
+
+
+    </div>
+
+    </div>
+
+    <!-- Audio -->
+
+    <audio id="background-audio" autoplay loop>
+        <source src="assets/song1.mp3" type="audio/mpeg">
+    </audio>
+
+
+    <!-- JavaScript: Hamburger Menu -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const hamburgerButton = document.querySelector('.hamburger-menu button');
+            const closeButton = document.querySelector('.close-menu');
+            const menu1 = document.querySelector('.menu1');
+            const audio = document.getElementById('background-audio');
+
+            // Ensure audio starts with a reasonable volume
+            if (audio) {
+                const savedTime = localStorage.getItem('audioTime');
+                if (savedTime) {
+                    audio.currentTime = parseFloat(savedTime);
+                }
+                audio.volume = 0.18; // initial volume
+            }
+
+            // Save playback time every 0.5s
+            setInterval(() => {
+                if (audio) {
+                    localStorage.setItem('audioTime', audio.currentTime);
+                }
+            }, 500);
+
+            // Toggle menu and hide/show images
+            hamburgerButton.addEventListener('click', () => {
+                const isOpen = menu1.classList.toggle('menu-deployed'); // toggle menu visibility
+
+                if (isOpen) {
+                    document.body.classList.add('menu-open'); // hide images
+                } else {
+                    document.body.classList.remove('menu-open'); // show images again
+                }
+            });
+
+            // Close menu explicitly with the × button
+            closeButton.addEventListener('click', () => {
+                menu1.classList.remove('menu-deployed');
+                document.body.classList.remove('menu-open'); // show images again
+
+                if (audio) {
+                    // Smoothly fade volume down
+                    let fadeAudio = setInterval(() => {
+                        if (audio.volume > 0.1) {
+                            audio.volume = Math.max(0.1, audio.volume - 0.05);
+                        } else {
+                            clearInterval(fadeAudio);
+                        }
+                    }, 100);
+                }
+            });
+        });
+
+
+    </script>
+    <script>
+        const name = localStorage.getItem("visitorName") || "";
+        document.getElementById("visitor").textContent = name;
+    </script>
+</body>
+
+</html>

@@ -615,10 +615,20 @@ section {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    gap: 40px;
+    gap: 20px;
+    /* smaller gap */
     width: 100%;
     max-width: 1200px;
     margin: 19px auto;
+}
+
+@media (max-width: 780px) {
+    section {
+        flex-direction: column;
+        /* stack left & right */
+        gap: 15px;
+        /* smaller vertical spacing */
+    }
 }
 
 /* Left side: text */

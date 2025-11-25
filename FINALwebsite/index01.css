@@ -53,79 +53,6 @@ body.menu-open .pillar1 {
     display: none !important;
 }
 
-/* Default: normal size */
-.pillar1 {
-    transition: transform 0.4s ease, opacity 0.4s ease;
-    transform: scale(1);
-    opacity: 1;
-    position: absolute;
-    left: 420;
-    /* Stick to left edge of wrapper */
-    top: 78%;
-    /* Vertically center */
-    transform: translateY(-50%);
-    width: 10%;
-    /* Desktop width */
-    height: auto;
-    /* Maintain aspect ratio */
-    z-index: 1;
-    /* Behind text */
-    transition: transform 0.8s ease, opacity 0.8s ease, visibility 0.8s ease;
-    transform-origin: center center;
-    /* 👈 keeps it shrinking around its own center */
-}
-
-/* Medium screens (gradually smaller) */
-@media screen and (max-width: 1624px) {
-    .pillar1 {
-        transform: scale(0.8);
-        opacity: 0.7;
-    }
-}
-
-@media screen and (max-width: 1424px) {
-    .pillar1 {
-        transform: scale(0.6);
-        opacity: 0.5;
-    }
-}
-
-/* Disappear on tablets and smaller */
-@media screen and (max-width: 1224px) {
-    .pillar1 {
-        transform: scale(0.4);
-        opacity: 0;
-        pointer-events: none;
-        visibility: hidden;
-    }
-}
-
-/* Shrink gradually on large screens */
-@media screen and (min-width: 3024px) {
-    .pillar1 {
-        transform: scale(0.6);
-        opacity: 0.5;
-        transform: translate(-15%, -80%) scale(0.6);
-        transition: transform 0.3s ease, opacity 0.3s ease;
-    }
-}
-
-@media screen and (min-width: 3824px) {
-    .pillar1 {
-        transform: translate(-25%, -100%) scale(0.4);
-        opacity: 0.5;
-        transition: transform 0.3s ease, opacity 0.3s ease;
-        /* faster for this breakpoint only */
-    }
-}
-
-/* Fully disappear on extreme ultra-wide screens */
-@media screen and (min-width: 5824px) {
-    .pillar1 {
-        display: none;
-
-    }
-}
 
 .storie-left2 {
     flex: 1;
@@ -206,12 +133,9 @@ article4 p2 {
 
 }
 
-@media screen and (max-width: 1524px) {
+@media screen and (max-width: 724px) {
     .pillar1 {
-        transform: scale(0.4);
-        opacity: 0;
-        pointer-events: none;
-        visibility: hidden;
+        display: none;
     }
 
     /* ⬇ Restore storie-left2 to center */
@@ -304,4 +228,60 @@ article4 p2 {
 /* Hide next-page-arrow when menu is open */
 body.menu-open .next-page-arrow {
     display: none !important;
+}
+
+/* Default desktop size: pillar visible */
+.pillar1 {
+    transition: transform 0.6s ease, opacity 0.6s ease;
+    transform: scale(1);
+    opacity: 1;
+    position: absolute;
+    left: 420px;
+    top: 78%;
+    width: 10%;
+    height: auto;
+    z-index: 1;
+    transform-origin: center center;
+    filter: brightness(1.2);
+}
+
+/* Gradually shrink as screen gets narrower */
+@media screen and (max-width: 1600px) {
+    .pillar1 {
+        transform: scale(0.8);
+        opacity: 0.7;
+    }
+}
+
+@media screen and (max-width: 1500px) {
+    .pillar1 {
+        transform: scale(0.6);
+        opacity: 0.5;
+    }
+}
+
+/* DISAPPEAR at 100% zoom (e.g., 1440px) */
+@media screen and (max-width: 1440px) {
+    .pillar1 {
+        display: none;
+    }
+
+    .storie-left2 {
+        flex: 1 1 100%;
+        padding: 0 20px;
+        margin: 0 auto;
+    }
+}
+
+/* Small screens / mobile */
+@media screen and (max-width: 724px) {
+    .pillar1 {
+        display: none;
+    }
+
+    .storie-left2 {
+        width: 100%;
+        padding: 10px;
+        margin: 0 auto;
+    }
 }

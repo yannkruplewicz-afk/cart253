@@ -1,3 +1,12 @@
+html {
+    transform: scale(0.8);
+    transform-origin: 0 0;
+    /* ensures scaling from top-left corner */
+    width: 125%;
+    /* counteracts the scale to fill viewport */
+    height: 125%;
+}
+
 body {
     font-family: Arial, Helvetica, sans-serif;
     padding: 0;
@@ -940,16 +949,6 @@ section2 {
     /* offset wrapper padding */
 }
 
-.storie-right3 {
-    flex: 1;
-    /* right takes less space */
-    margin-top: 10px;
-    margin-right: 110px;
-    /* offset wrapper padding, closer to right edge */
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
 
 /* Remove this block entirely:
 .storie-left3,
@@ -960,13 +959,43 @@ section2 {
 */
 
 
+section2 {
+    display: flex;
+    flex-direction: row;
+    /* left and right side by side */
+    gap: 0px;
+    /* optional spacing between left and right */
+    align-items: flex-start;
+    /* aligns top edges */
+}
 
+.storie-left3 {
+    flex: 2;
+    /* takes more space */
+}
+
+.storie-right3 {
+    flex: 1;
+    /* takes less space */
+    display: flex;
+    flex-direction: column;
+    /* stack images vertically */
+    gap: 10px;
+    /* space between images */
+    margin-right: 110px;
+    /* space to the right */
+    align-items: flex-start;
+    /* aligns images to left; allows width control */
+}
 
 /* Default images */
 .storie-right3 img {
-    width: 120%;
-    max-width: 500px;
-    height: 270px;
+    width: 100%;
+    /* fill container width */
+    max-width: 700px;
+    /* optional limit */
+    height: auto;
+    /* maintain aspect ratio */
     object-fit: cover;
     border-radius: 10px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
@@ -975,15 +1004,20 @@ section2 {
         opacity 0.6s ease;
 }
 
-/* Make only im3 taller */
+/* Make only im3 taller and slightly wider */
 .storie-right3 img.im3 {
-    height: 920px;
-    /* bigger height for im3 */
+    height: 820px;
+    width: 120%;
+    /* slightly wider than container */
+    object-fit: cover;
 }
 
+/* If you have a special im13 image */
 .storie-right3 img.im13 {
     height: 3920px;
-    /* bigger height for im13 */
+    width: 100%;
+    /* adjust as needed */
+    object-fit: cover;
 }
 
 .storie-right3 figure {

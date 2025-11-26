@@ -1,3 +1,12 @@
+html {
+    transform: scale(0.8);
+    transform-origin: 0 0;
+    /* ensures scaling from top-left corner */
+    width: 125%;
+    /* counteracts the scale to fill viewport */
+    height: 125%;
+}
+
 body {
     font-family: Arial, Helvetica, sans-serif;
     padding: 0;
@@ -1567,5 +1576,35 @@ article2 h1 {
 
     .storie-right30 .highlight-block b {
         font-size: clamp(16px, 3.5vw, 22px);
+    }
+}
+
+section {
+    display: flex;
+    /* place children side by side */
+    gap: 20px;
+    /* optional space between left and right */
+    flex-wrap: wrap;
+    /* allows stacking on small screens */
+}
+
+.storie-left3,
+.storie-right30 {
+    flex: 1;
+    /* equal width for both blocks */
+    min-width: 0;
+    /* prevents overflow in flex items */
+    box-sizing: border-box;
+    /* include padding in width */
+    padding: 10px;
+    /* optional inner spacing */
+}
+
+@media screen and (max-width: 800px) {
+
+    .storie-left3,
+    .storie-right30 {
+        flex: 1 1 100%;
+        /* stack vertically on small screens */
     }
 }

@@ -1599,3 +1599,22 @@ section {
         /* stack vertically on small screens */
     }
 }
+
+section {
+    display: flex;
+    /* side by side layout */
+    justify-content: center;
+    /* center the combined blocks */
+    gap: 40px;
+    /* spacing between left and right */
+    flex-wrap: wrap;
+    /* stack on small screens */
+}
+
+.storie-left3,
+.storie-right30 {
+    flex: 0 0 45%;
+    /* each takes ~45% of the wrapper width */
+    box-sizing: border-box;
+    /* include padding in width */
+}

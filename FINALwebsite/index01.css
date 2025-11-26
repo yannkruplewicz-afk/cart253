@@ -285,3 +285,14 @@ body.menu-open .next-page-arrow {
         margin: 0 auto;
     }
 }
+
+/* Right side: images stacked vertically */
+.storie-right {
+    flex: 1;
+    margin-top: 154px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 150px;
+    /* space between images */
+}

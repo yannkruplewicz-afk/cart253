@@ -58,7 +58,7 @@ body.menu-open .next-page-arrow {
 
 #wrapper {
     background-color: #141414;
-    width: 80%;
+    width: 90%;
     max-width: 1400px;
     margin: 40px auto;
 
@@ -149,7 +149,7 @@ article h1 {
 
 article p {
     line-height: 1.6;
-    font-size: 22px;
+    font-size: 24px;
     margin-bottom: 15px;
     color: rgb(228, 217, 217);
     font-family: Georgia, 'Times New Roman', Times, serif;
@@ -615,7 +615,7 @@ section {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    gap: 20px;
+    gap: -20px;
     /* smaller gap */
     width: 100%;
     max-width: 1200px;

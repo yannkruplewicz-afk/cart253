@@ -145,7 +145,7 @@ article h1 {
 
 article p {
     line-height: 1.6;
-    font-size: 22px;
+    font-size: 25px;
     margin-bottom: 15px;
     color: rgb(228, 217, 217);
     font-family: Georgia, 'Times New Roman', Times, serif;
@@ -174,6 +174,7 @@ article p2 {
 section {
     margin-bottom: 30px;
     text-align: justify;
+
 }
 
 footer {
@@ -586,7 +587,7 @@ section {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    gap: 40px;
+    gap: 0px;
     width: 100%;
     max-width: 1200px;
     margin: 19px auto;
@@ -855,344 +856,76 @@ section2 {
     margin: 19px auto;
 }
 
+/* ───────────────────────────────────────────────
+   MAIN LAYOUT — FLEX CONTAINER FOR LEFT + RIGHT
+──────────────────────────────────────────────── */
+section {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 0px;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 40px;
+}
+
+
+/* ───────────────────────────────────────────────
+   LEFT COLUMN (TEXT BLOCK)
+──────────────────────────────────────────────── */
 .storie-left3 {
     flex: 2;
-    /* left takes twice the width */
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     color: white;
+
+    /* FIXED: no more overflow */
     margin-left: -65px;
-    /* offset wrapper padding */
-}
+    padding: 20px;
 
-.storie-right3 {
-    flex: 1;
-    /* right takes less space */
-    margin-top: 10px;
-    margin-right: 110px;
-    /* offset wrapper padding, closer to right edge */
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-/* Remove this block entirely:
-.storie-left3,
-.storie-right3 {
-    flex: 1;
-    padding: 0px;
-}
-*/
-
-
-
-
-/* Default images */
-.storie-right3 img {
-    width: 120%;
-    max-width: 500px;
-    height: 270px;
-    object-fit: cover;
-    border-radius: 50px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-    transition: transform 0.6s ease,
-        filter 0.6s ease,
-        opacity 0.6s ease;
-}
-
-/* Make only im3 taller */
-.storie-right3 img.im3 {
-    height: 1420px;
-    /* bigger height for im3 */
-}
-
-.storie-right3 img.im13 {
-    height: 3920px;
-    /* bigger height for im13 */
-}
-
-.storie-right3 figure {
-    position: relative;
-    /* parent for absolute hover-text */
-    overflow: hidden;
-    /* optional: hide overflow if text moves */
-}
-
-.storie-right3 .hover-text {
-    position: absolute;
-    bottom: 10px;
-    /* adjust vertical position */
-    left: 10px;
-    /* adjust horizontal position */
-    background-color: rgba(0, 0, 0, 0.7);
-    padding: 8px;
-    border-radius: 8px;
-    color: white;
-    font-style: italic;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-}
-
-.storie-right3 figure:hover .hover-text {
-    opacity: 1;
-}
-
-body.menu-open .storie-right3,
-body.menu-open .books {
-    display: none !important;
-}
-
-/* ---- PODCAST PLAYER - Modern Design ---- */
-
-.podcast-player {
-    margin-top: 0px;
-    padding: 30px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    background: rgba(255, 255, 255, 0.08);
-    backdrop-filter: blur(8px);
-    border-radius: 18px;
-
-    width: 70%;
-    margin-left: auto;
-    margin-right: auto;
-
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
-    transition: transform 0.25s ease, box-shadow 0.25s ease;
-}
-
-.podcast-player:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 12px 26px rgba(0, 0, 0, 0.45);
-}
-
-/* hide when menu opened */
-body.menu-open .podcast-player {
-    display: none !important;
-}
-
-/* Audio element styling */
-.podcast-player audio {
-    width: 60%;
-    padding: 10px;
-
-    background: rgba(0, 0, 0, 0.35);
-    border-radius: 12px;
-
-    box-shadow: 0 4px 14px rgba(255, 255, 255, 0.2),
-        0 0 20px rgba(234, 211, 0, 0.3);
-
-    transition: box-shadow 0.3s ease, transform 0.3s ease;
-}
-
-/* Subtle hover pulse */
-.podcast-player audio:hover {
-    box-shadow: 0 4px 18px rgba(255, 255, 255, 0.35),
-        0 0 24px rgba(234, 211, 0, 0.4);
-    transform: scale(1.015);
-}
-
-
-/* Make all headings inside .storie-left3 block */
-.storie-left3 h1,
-.storie-left3 h2,
-.storie-left3 h3 {
-    display: block;
+    max-width: 900px;
     width: 100%;
-    margin: 20px 0;
-    color: rgb(228, 217, 217);
-    font-family: Georgia, 'Times New Roman', Times, serif;
-    line-height: 1.6;
-}
-
-/* Make all paragraph-like elements inside .storie-left3 block */
-.storie-left3 p {
-    display: block;
-    /* ensures stacking */
-    width: 100%;
-    margin-bottom: 15px;
-    font-size: 24px;
-    line-height: 1.6;
-    color: rgb(228, 217, 217);
-    font-family: Georgia, 'Times New Roman', Times, serif;
-    text-shadow: 2px 2px 4px rgba(234, 211, 0, 0.5);
-}
-
-.storie-left3 p2 {
-    line-height: 1.6;
-    font-size: 20px;
-    margin-bottom: 15px;
-    color: rgb(175, 175, 175);
-    font-style: italic;
-
+    box-sizing: border-box;
 }
 
 
-.storie-left3 p,
-.storie-left3 p2,
-.storie-left3 h2 {
-    display: block;
-    width: 100%;
-    text-align: justify;
-    margin-bottom: 1.2em;
-    /* consistent spacing */
-}
 
-.big-text {
-    font-size: 1.5em;
-    /* or any size you want */
-    font-weight: bold;
-    /* optional */
-    color: #fff;
-    /* optional */
-}
-
-
-/* Style unordered and ordered lists inside .storie-left3 */
-.storie-left3 ul,
-.storie-left3 ol {
-    margin: 15px 0 20px 40px;
-    /* spacing around the list */
-    padding: 0;
-    /* remove default padding */
-    list-style-position: outside;
-    /* bullets/numbers outside the text */
-}
-
-.storie-left3 li {
-    font-family: Georgia, 'Times New Roman', Times, serif;
-    font-size: 22px;
-    /* matches paragraph font size */
-    line-height: 1.6;
-    color: rgb(228, 217, 217);
-    /* same color as paragraphs */
-    text-shadow: 2px 2px 4px rgba(234, 211, 0, 0.5);
-    /* golden glow effect */
-    margin-bottom: 12px;
-    /* space between list items */
-}
-
-/* Optional: custom bullet style for ul */
-.storie-left3 ul li::marker {
-    color: #e6d300;
-    /* golden bullet */
-    font-size: 1.2em;
-}
-
-/* Optional: custom number style for ol */
-.storie-left3 ol li::marker {
-    color: #e6d300;
-    /* golden number */
-    font-weight: bold;
-}
-
-.storie-left3 .highlight-block {
-    background-color: rgba(20, 20, 20, 0.8);
-    /* dark semi-transparent block */
-    padding: 25px 30px;
-    /* space inside the block */
-    border-radius: 12px;
-    /* rounded corners like header/footer */
-    box-shadow: 0 4px 15px rgba(0, 136, 255, 0.534);
-    /* subtle shadow */
-    margin: 20px 0;
-    /* spacing above and below */
-}
-
-.storie-left3 .highlight-block b {
-    font-size: 1.3em;
-    /* slightly bigger for the heading */
-    color: rgb(228, 217, 217);
-}
-
-.storie-left3 .highlight-block ul,
-.storie-left3 .highlight-block ol {
-    margin: 15px 0 15px 40px;
-    padding: 0;
-}
-
-.storie-left3 .highlight-block li {
-    font-family: Georgia, 'Times New Roman', Times, serif;
-    font-size: 22px;
-    line-height: 1.6;
-    color: rgb(228, 217, 217);
-    text-shadow: 2px 2px 4px rgba(234, 211, 0, 0.5);
-    margin-bottom: 12px;
-}
-
-.storie-left3 .highlight-block ul li::marker,
-.storie-left3 .highlight-block ol li::marker {
-    color: #e6d300;
-    /* golden marker */
-    font-size: 1.2em;
-}
-
-.short-wrapper {
-    position: relative;
-    width: 100%;
-    max-width: 360px;
-    /* typical phone width */
-    aspect-ratio: 9 / 16;
-    /* vertical video */
-    border-radius: 10px;
-    overflow: hidden;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-    margin: 0 auto;
-}
-
-.short-wrapper iframe {
-    width: 100%;
-    height: 100%;
-    border: none;
-}
-
-.short-wrapper .hover-text {
-    position: absolute;
-    bottom: 10px;
-    left: 10px;
-    color: white;
-    background-color: rgba(0, 0, 0, 0.7);
-    padding: 8px;
-    border-radius: 8px;
-    font-style: italic;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-}
-
-.short-wrapper:hover .hover-text {
-    opacity: 1;
-}
-
+/* ───────────────────────────────────────────────
+   PHONE / TABLET RESPONSIVE MODE
+──────────────────────────────────────────────── */
 @media (max-width: 1850px) {
 
-    section,
-    .storie-container,
-    section2 {
+    section {
         flex-direction: column;
         align-items: center;
-        gap: 20px;
+        gap: 30px;
         padding-left: 30px;
         padding-right: 30px;
-        box-sizing: border-box;
     }
 
-
-    /* ⬇ Restore storie-left3 to center */
     .storie-left3 {
-        left: 0 !important;
-        margin-right: 0 !important;
-        margin-left: 0 !important;
-        padding: 20px;
         width: 100%;
         max-width: 900px;
-        /* optional, keeps nice readable width */
         margin: 0 auto;
-        /* center horizontally */
+        padding: 20px;
     }
 
+    .storie-right3 {
+        width: 100%;
+        max-width: 500px;
+        margin: 0 auto;
+    }
+}
+
+
+/* ───────────────────────────────────────────────
+   MENU OPEN → HIDE COLUMNS
+──────────────────────────────────────────────── */
+body.menu-open .storie-right3,
+body.menu-open .storie-left3,
+body.menu-open .books {
+    display: none !important;
 }
 
 @media (max-width: 1050px) {
@@ -1308,7 +1041,231 @@ body.menu-open .podcast-player {
 
 }
 
-/* Hide next-page-arrow when menu is open */
-body.menu-open .next-page-arrow {
-    display: none !important;
+
+/* ───────────────────────────────────────────────
+   RIGHT COLUMN (IMAGES + FIGURES)
+──────────────────────────────────────────────── */
+.storie-right3 img {
+    width: 100%;
+    max-width: 500px;
+    height: 270px;
+    object-fit: cover;
+    border-radius: 50px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    transition: transform 0.6s ease, filter 0.6s ease, opacity 0.6s ease;
+}
+
+/* Make only im3 taller */
+.storie-right3 img.im3 {
+    height: 1420px;
+    /* bigger height for im3 */
+}
+
+.storie-right3 img.im13 {
+    height: 3920px;
+    /* bigger height for im13 */
+}
+
+.storie-right3 figure {
+    position: relative;
+    /* parent for absolute hover-text */
+    overflow: hidden;
+    /* optional: hide overflow if text moves */
+}
+
+.storie-right3 .hover-text {
+    position: absolute;
+    bottom: 10px;
+    /* adjust vertical position */
+    left: 10px;
+    /* adjust horizontal position */
+    background-color: rgba(0, 0, 0, 0.7);
+    padding: 8px;
+    border-radius: 8px;
+    color: white;
+    font-style: italic;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.storie-right3 figure:hover .hover-text {
+    opacity: 1;
+}
+
+section {
+    gap: 0px;
+    /* even tighter */
+}
+
+.storie-right3 {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    margin-right: 90px;
+    /* removes right margin */
+    padding: 0;
+    max-width: 500px;
+    width: 100%;
+}
+
+/* Ensure section2 and columns stay inside wrapper */
+section2 {
+    display: flex;
+    flex-wrap: wrap;
+    /* allows stacking on small screens */
+    justify-content: center;
+    /* center horizontally */
+    gap: 20px;
+    /* small gap between left and right */
+    max-width: 1200px;
+    /* stays inside wrapper */
+    margin: 0 auto;
+    /* center in page */
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+/* Left column (text) */
+.storie-left3 {
+    flex: 1 1 600px;
+    /* flexible width, min 600px */
+    max-width: 100%;
+    /* don't exceed wrapper */
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    box-sizing: border-box;
+    padding: 0 20px;
+    /* padding inside column */
+}
+
+/* Ensure articles inside left column stay inside */
+.storie-left3 article {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Paragraphs and p2 text */
+.storie-left3 p,
+.storie-left3 p2 {
+    width: 100%;
+    margin-bottom: 1.2em;
+    line-height: 1.6;
+    color: rgb(228, 217, 217);
+    text-align: justify;
+    word-break: break-word;
+    /* ensures no overflow */
+    font-size: clamp(16px, 2vw, 24px);
+    /* responsive font */
+}
+
+/* Highlight blocks inside text */
+.storie-left3 .highlight-block {
+    width: 100%;
+    /* never exceed parent */
+    box-sizing: border-box;
+    padding: 20px;
+    border-radius: 12px;
+    background-color: rgba(20, 20, 20, 0.8);
+    box-shadow: 0 4px 15px rgba(0, 136, 255, 0.534);
+    overflow-wrap: break-word;
+    /* wrap long words */
+}
+
+/* Titles in highlight blocks */
+.storie-left3 .highlight-block b {
+    display: block;
+    font-size: clamp(18px, 2.2vw, 26px);
+    margin-bottom: 10px;
+    word-break: break-word;
+}
+
+/* Responsive for smaller screens */
+@media (max-width: 780px) {
+    section2 {
+        flex-direction: column;
+        /* stack left and right columns */
+        padding: 10px;
+    }
+
+    .storie-left3 {
+        padding: 0 10px;
+    }
+
+    .storie-left3 p,
+    .storie-left3 p2 {
+        font-size: clamp(14px, 3vw, 20px);
+    }
+
+    .storie-left3 .highlight-block b {
+        font-size: clamp(16px, 3.5vw, 22px);
+    }
+}
+
+/* Right column images wrapper */
+.storie-right3 {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* centers figures horizontally */
+    gap: 0px;
+    /* space between figures */
+    max-width: 700px;
+    margin: 0 auto;
+    /* center the whole column inside wrapper */
+    padding: 0 20px;
+    box-sizing: border-box;
+}
+
+/* Ensure figures stay contained */
+.storie-right3 figure {
+    width: 100%;
+    max-width: 900px;
+    /* optional: limits figure width */
+    display: flex;
+    justify-content: center;
+    /* centers images inside figure */
+    position: relative;
+    overflow: hidden;
+}
+
+/* Images */
+.storie-right3 img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    border-radius: 50px;
+    transition: transform 0.6s ease, filter 0.6s ease, opacity 0.6s ease;
+}
+
+/* Hover text inside figure */
+.storie-right3 .hover-text {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    background-color: rgba(0, 0, 0, 0.7);
+    color: #fff;
+    padding: 8px;
+    border-radius: 8px;
+    font-style: italic;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.storie-right3 figure:hover .hover-text {
+    opacity: 1;
+}
+
+/* Responsive: smaller screens stack naturally */
+@media (max-width: 780px) {
+    .storie-right3 {
+        padding: 0 10px;
+        gap: 15px;
+    }
+
+    .storie-right3 figure {
+        max-width: 100%;
+    }
 }

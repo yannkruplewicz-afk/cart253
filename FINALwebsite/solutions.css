@@ -1412,3 +1412,117 @@ body.menu-open .podcast-player {
 body.menu-open .next-page-arrow {
     display: none !important;
 }
+
+/* Ensure section2 and columns stay inside wrapper */
+section2 {
+    display: flex;
+    flex-wrap: wrap;
+    /* allows stacking on small screens */
+    justify-content: center;
+    /* center horizontally */
+    gap: 20px;
+    /* small gap between left and right */
+    max-width: 1200px;
+    /* stays inside wrapper */
+    margin: 0 auto;
+    /* center in page */
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+/* Left column (text) */
+.storie-left3 {
+    flex: 1 1 600px;
+    /* flexible width, min 600px */
+    max-width: 100%;
+    /* don't exceed wrapper */
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    box-sizing: border-box;
+    padding: 0 20px;
+    /* padding inside column */
+}
+
+/* Ensure articles inside left column stay inside */
+.storie-left3 article {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Paragraphs and p2 text */
+.storie-left3 p,
+.storie-left3 p2 {
+    width: 100%;
+    margin-bottom: 1.2em;
+    line-height: 1.6;
+    color: rgb(228, 217, 217);
+    text-align: justify;
+    word-break: break-word;
+    /* ensures no overflow */
+    font-size: clamp(16px, 2vw, 24px);
+    /* responsive font */
+}
+
+/* Highlight blocks inside text */
+.storie-left3 .highlight-block {
+    width: 100%;
+    /* never exceed parent */
+    box-sizing: border-box;
+    padding: 20px;
+    border-radius: 12px;
+    background-color: rgba(20, 20, 20, 0.8);
+    box-shadow: 0 4px 15px rgba(0, 136, 255, 0.534);
+    overflow-wrap: break-word;
+    /* wrap long words */
+}
+
+/* Titles in highlight blocks */
+.storie-left3 .highlight-block b {
+    display: block;
+    font-size: clamp(18px, 2.2vw, 26px);
+    margin-bottom: 10px;
+    word-break: break-word;
+}
+
+/* Responsive for smaller screens */
+@media (max-width: 780px) {
+    section2 {
+        flex-direction: column;
+        /* stack left and right columns */
+        padding: 10px;
+    }
+
+    .storie-left3 {
+        padding: 0 10px;
+    }
+
+    .storie-left3 p,
+    .storie-left3 p2 {
+        font-size: clamp(14px, 3vw, 20px);
+    }
+
+    .storie-left3 .highlight-block b {
+        font-size: clamp(16px, 3.5vw, 22px);
+    }
+}
+
+article2 {
+    max-width: 100%;
+    width: 100%;
+    box-sizing: border-box;
+    margin: 0 auto;
+    padding: 0 20px;
+    /* keeps some space inside wrapper */
+}
+
+article2 h1 {
+    font-size: clamp(24px, 5vw, 48px);
+    /* responsive font size */
+    margin: 20px 0;
+    text-align: center;
+    /* optional: center the title */
+    word-break: break-word;
+    /* prevents overflow */
+    line-height: 1.4;
+}

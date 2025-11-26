@@ -4,7 +4,7 @@ body {
     margin: 0;
     width: 100%;
     /* better for full width background */
-    background-image: url('assets/fake_sport.jpg');
+    background-image: url('assets/sketchbook.jpg');
     background-size: cover;
     /* makes it fill the screen */
     background-repeat: no-repeat;
@@ -106,12 +106,16 @@ body {
 /* Headband container */
 header {
     width: 100%;
-    background-color: #867bff57;
+    background-color: #4c459c57;
     /* dark band, change color as needed */
     padding: 1px 0;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
     /* subtle shadow */
     position: sticky;
+}
+
+footer {
+    background-color: #4c459c57;
 }
 
 /* Flex container inside header */

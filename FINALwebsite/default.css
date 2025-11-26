@@ -4,7 +4,7 @@ body {
     margin: 0;
     width: 100%;
     /* better for full width background */
-    background-image: url('assets/img10.jpg');
+    background-image: url('assets/new-york-city-2263343.jpg');
     background-size: cover;
     /* makes it fill the screen */
     background-repeat: no-repeat;
@@ -113,7 +113,7 @@ body.menu-open .next-page-arrow {
 /* Headband container */
 header {
     width: 100%;
-    background-color: #715a2a57;
+    background-color: #323545c9;
     /* dark band, change color as needed */
     padding: 1px 0;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
@@ -192,7 +192,7 @@ footer {
     margin: 0;
     padding: 20px;
 
-    background-color: #5a472257;
+    background-color: #323545c9;
     border-radius: 0 0 12px 12px;
     /* keep if you want rounded wrapper bottom */
 

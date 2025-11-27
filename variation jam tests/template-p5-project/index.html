@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>School Bus Game</title>
+</head>
+
+<body>
+  <canvas id="gameCanvas" width="800" height="400" style="border:1px solid black;"></canvas>
+  <script>
+    class SchoolBus {
+      constructor(x, y, speed = 0, capacity = 40) {
+        this.x = x;
+        this.y = y;
+        this.speed = speed;
+        this.capacity = capacity;
+        this.passengers = 0;
+        this.width = 120;
+        this.height = 60;
+      }
+      move() {
+        this.x += this.speed;
+        if (this.x > 800) this.x = -this.width; // wrap around screen
+      }
+      boardPassengers(num) {
+        this.passengers = Math.min(this.capacity, this.passengers + num);
+      }
+      leavePassengers(num) {
+        this.passengers = Math.max(0, this.passengers - num);
+      }
+      draw(ctx) {
+        ctx.fillStyle = "yellow";
+        ctx.fillRect(this.x, this.y, this.width, this.height);
+        ctx.fillStyle = "lightblue";
+        for (let i = 1; i <= 4; i++) {
+          ctx.fillRect(this.x + i * 25, this.y + 10, 20, 20);
+        }
+        ctx.fillStyle = "black";
+        ctx.beginPath();
+        ctx.arc(this.x + 20, this.y + this.height, 15, 0, Math.PI * 2);
+        ctx.arc(this.x + this.width - 20, this.y + this.height, 15, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = "black";
+        ctx.font = "14px Arial";
+        ctx.fillText(`Passengers: ${this.passengers}/${this.capacity}`, this.x + 10, this.y - 10);
+      }
+    }
+
+    const canvas = document.getElementById("gameCanvas");
+    const ctx = canvas.getContext("2d");
+
+    const bus = new SchoolBus(50, 100, 2);
+
+    function gameLoop() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      bus.move();
+      bus.draw(ctx);
+      requestAnimationFrame(gameLoop);
+    }
+
+    gameLoop();
+  </script>
+</body>
+
+</html>

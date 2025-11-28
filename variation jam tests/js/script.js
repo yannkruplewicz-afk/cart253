@@ -1136,8 +1136,8 @@ function drawChevrolet(x, y, s) {
     // Wheel rims (chrome effect)
     fill(180);
     noStroke();
-    ellipse(-42, 58, 12, 18);
-    ellipse(42, 58, 12, 18);
+    ellipse(-42, 58, 2, 18);
+    ellipse(42, 58, 2, 18);
 
     // Rim spokes
     stroke(100);

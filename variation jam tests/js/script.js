@@ -15,8 +15,17 @@ function draw() {
     pop();
     drawFatGuy(200, 200, 1);
     drawChevrolet(100, 500, 1);
+    drawIShowSpeed(400, 100, 1);
+    drawWomanBiking(500, 150, 1);
+    drawOrangeTree(200, 600, 1);
+    drawCitrus(600, 600, 1);
+    drawHamburger(600, 400, 1);
+    drawMapleSyrupBottle(600, 100, 1);
+    drawBear(900, 300, 1);
 
 }
+
+let runPhase = 0;
 
 function drawSchoolBusFrontView(x, y, s) {
     push();
@@ -988,166 +997,1124 @@ function drawChevrolet(x, y, s) {
     pop();
 }
 
-function drawChevrolet(x, y, s) {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function drawIShowSpeed(x, y, s) {
     push();
     translate(x, y);
     scale(s);
 
-    // === WINDSHIELD ===
-    fill(150, 200, 230, 200);
-    stroke(0);
-    strokeWeight(2);
-    beginShape();
-    vertex(-45, -30);  // top-left of windshield
-    vertex(45, -30);   // top-right of windshield
-    vertex(50, 0);     // bottom-right
-    vertex(-50, 0);    // bottom-left
-    endShape(CLOSE);
+    // Use runPhase for synchronized animation with player
+    let legOffset = 45 * sin(runPhase + PI);
+    let armOffset = 30 * sin(runPhase);
+    let torsoTremble = sin(runPhase * 4) * 0.5;
+    let headsetTremble = sin(runPhase * 1.1) * 0.8;
+    let trembleX = sin(runPhase * 0.8) * 1.5;
+    let trembleY = sin(runPhase * 0.8) * 1;
 
-    // === ROOF (more angular, classic muscle car style) ===
-    fill(20, 20, 20); // Black car
-    stroke(0);
-    strokeWeight(2);
-    beginShape();
-    vertex(-45, -30);
-    vertex(-40, -50);
-    vertex(40, -50);
-    vertex(45, -30);
-    endShape(CLOSE);
+    rectMode(CENTER);
+    ellipseMode(CENTER);
 
-    // Roof detail line
-    stroke(40);
+    push();
+    translate(trembleX, trembleY);
+
+    stroke(0);
+    strokeWeight(3);
+
+
+
+    // ================================
+    // LEGS & SHOES
+    // ================================
+    fill(40, 50, 80);
+    strokeWeight(2);
+
+    rect(-10, 20 + legOffset / 2, 15, 40, 4); // left leg
+    rect(10, 20 - legOffset / 2, 15, 40, 4); // right leg
+
+    fill(50);
+    rect(-10, 40 + legOffset / 2, 15, 10, 2); // left shoe
+    rect(10, 40 - legOffset / 2, 15, 10, 2); // right shoe
+
+    // ================================
+    // TORSO - PORTUGAL JERSEY
+    // ================================
+    fill(220, 20, 20); // Red Portugal color
+    strokeWeight(3);
+    rect(0, -15 + torsoTremble, 30, 55, 8);
+
+    // Jersey stripes
+    stroke(150, 10, 10);
     strokeWeight(1);
-    line(-42, -40, 42, -40);
+    line(-12, -60 + torsoTremble, -12, 8 + torsoTremble);
+    line(12, -60 + torsoTremble, 12, 8 + torsoTremble);
 
-    // Wiper
-    stroke(40);
-    strokeWeight(1.5);
-    line(-20, -12, 10, -10);
-
-    // === HOOD (muscular, longer) ===
-    fill(30, 30, 30); // Slightly lighter black
-    stroke(0);
-    strokeWeight(2);
-    rect(-55, 0, 110, 50, 5);
-
-    // Hood scoops/vents (classic muscle car feature)
-    fill(15, 15, 15);
-    rect(-20, 10, 15, 25, 2);
-    rect(5, 10, 15, 25, 2);
-
-    // Hood center line
-    stroke(50);
-    strokeWeight(1.5);
-    line(0, 2, 0, 48);
-
-    // Hood side lines
-    line(-40, 5, -40, 45);
-    line(40, 5, 40, 45);
-
-    // === HEADLIGHTS (rectangular, classic Chevy style) ===
-    fill(255, 255, 200);
-    stroke(0);
-    strokeWeight(2);
-    rect(-48, 8, 18, 12, 2);
-    rect(30, 8, 18, 12, 2);
-
-    // Headlight details
-    stroke(220, 220, 180);
-    strokeWeight(1);
-    line(-46, 10, -46, 18);
-    line(32, 10, 32, 18);
-
-    // === GRILL (iconic Chevy bow-tie grill) ===
-    fill(180, 180, 180); // Chrome grill
-    stroke(0);
-    strokeWeight(2);
-    rect(-25, 25, 50, 20, 3);
-
-    // Grill horizontal bars
-    stroke(100);
-    strokeWeight(1.5);
-    for (let i = 1; i < 5; i++) {
-        line(-23, 25 + i * 4, 23, 25 + i * 4);
-    }
-
-    // === CHEVY BOW-TIE LOGO ===
-    fill(220, 180, 0); // Gold bow-tie
-    stroke(0);
-    strokeWeight(1.5);
-    beginShape();
-    vertex(-8, 30);
-    vertex(0, 28);
-    vertex(8, 30);
-    vertex(10, 35);
-    vertex(8, 40);
-    vertex(0, 42);
-    vertex(-8, 40);
-    vertex(-10, 35);
-    endShape(CLOSE);
-
-    // Bow-tie cross detail
-    stroke(180, 140, 0);
-    strokeWeight(1);
-    line(-6, 32, 6, 38);
-    line(6, 32, -6, 38);
-
-    // === BUMPER (chrome) ===
-    fill(150, 150, 150);
-    stroke(0);
-    strokeWeight(2);
-    rect(-58, 47, 116, 10, 4);
-
-    // Bumper highlights
-    stroke(200, 200, 200);
-    strokeWeight(1);
-    line(-55, 49, 55, 49);
-
-    // === LICENSE PLATE ===
+    // CR7 jersey number
     fill(255);
     stroke(0);
     strokeWeight(1.5);
-    rect(-15, 35, 30, 10, 1);
-    noStroke();
-    fill(0);
-    textAlign(CENTER, CENTER);
-    textSize(6);
-    text("CHEVY", 0, 40);
+    textSize(20);
+    textAlign(CENTER);
+    text("7", 0, -8 + torsoTremble);
 
-    // === SIDE MIRRORS ===
-    fill(30, 30, 30);
+    // Portugal coat of arms (simplified)
+    fill(255, 215, 0); // Gold
+    noStroke();
+    ellipse(0, -29 + torsoTremble, 10, 6);
+
+    // ================================
+    // ARMS
+    // ================================
+    fill(120, 80, 60);
     stroke(0);
     strokeWeight(2);
-    rect(-55, -12, 5, 14, 1);
-    rect(50, -12, 5, 14, 1);
 
-    fill(150, 200, 230, 180);
-    noStroke();
-    ellipse(-52, -5, 8, 10);
-    ellipse(52, -5, 8, 10);
+    // Left arm
+    beginShape();
+    vertex(-28, -30);
+    vertex(-32, -28);
+    vertex(-32, -30 + armOffset);
+    vertex(-28, -32 + armOffset);
+    endShape(CLOSE);
 
-    // === WHEELS (bigger, muscle car wheels) ===
+    // Right arm
+    beginShape();
+    vertex(28, -30);
+    vertex(32, -28);
+    vertex(32, -30 - armOffset);
+    vertex(28, -32 - armOffset);
+    endShape(CLOSE)
+
+    // ================================
+    // HEAD (SLIGHTLY SMALLER FOR DEPTH)
+    // ================================
+    fill(120, 80, 60);
+    stroke(0);
+    strokeWeight(2.5);
+    ellipse(0, -65, 42, 50);  // smaller head
+
+    // Hair cap
+    fill(15, 10, 8);
     stroke(0);
     strokeWeight(2);
-    fill(40);
-    arc(-42, 57, 22, 35, 0, PI, CHORD);
-    arc(42, 57, 22, 35, 0, PI, CHORD);
+    ellipse(0, -68, 45, 45);
 
-    // Wheel rims (chrome effect)
-    fill(180);
-    noStroke();
-    ellipse(-42, 58, 2, 18);
-    ellipse(42, 58, 2, 18);
-
-    // Rim spokes
-    stroke(100);
-    strokeWeight(1);
-    for (let i = 0; i < 5; i++) {
-        let angle = (TWO_PI / 5) * i;
-        line(-42, 58, -42 + cos(angle) * 5, 58 + sin(angle) * 8);
-        line(42, 58, 42 + cos(angle) * 5, 58 + sin(angle) * 8);
+    // Minimal locks (simplified since facing away)
+    for (let i = -15; i <= 15; i += 10) {
+        stroke(0);
+        strokeWeight(3);
+        line(i, -60, i + sin(frameCount * 0.1 + i) * 13, -40);
     }
+
+
+
+    pop();
+    pop();
+
+    // Update running animation
+    runPhase += 0.2;
+}
+
+
+
+
+function drawWomanBiking(x, y, s) {
+    push();
+    translate(x, y);
+    scale(s);
+
+    // Use runPhase for synchronized animation (same as IShowSpeed)
+    let pedalAngle = runPhase * 1;
+    let legOffset = 25 * sin(pedalAngle);
+    let legOffset2 = 25 * sin(pedalAngle + PI);
+    let armOffset = 1 * sin(pedalAngle);
+    let torsoTremble = sin(pedalAngle * 4) * 0.5;
+    let trembleX = sin(pedalAngle * 0.8) * 1.5;
+    let trembleY = sin(pedalAngle * 0.8) * 1;
+
+    rectMode(CENTER);
+    ellipseMode(CENTER);
+
+    push();
+    translate(trembleX, trembleY);
+
+    stroke(0);
+    strokeWeight(3);
+
+    // === BICYCLE BACK WHEEL (fixed perspective) ===
+    push();
+    translate(0, 50); // center of wheel
+
+    stroke(0);
+    strokeWeight(8);
+    noFill();
+    ellipse(0, 0, 9, 80);
+
+
+    pop();
+
+    // Frame (back view, simplified)
+    strokeWeight(3);
+    line(0, 50, 0, 5); // seat tube (vertical)
+    line(0, 5, -15, -10); // left seat stay
+    line(0, 5, 15, -10); // right seat stay
+
+    // Seat (back view)
+    fill(40);
+    stroke(0);
+    strokeWeight(2);
+    ellipse(0, 0, 30, 12);
+
+    // Handlebars (just grips visible from back)
+    strokeWeight(2);
+    line(-25, -8, -35, -10);
+    line(25, -8, 35, -10);
+    fill(80);
+    ellipse(-35, -10, 10, 10);
+    ellipse(35, -10, 10, 10);
+
+    // Pedals (bottom bracket area)
+    strokeWeight(2);
+    let pedalY = 30 + cos(pedalAngle) * 20;
+    let pedalY2 = 30 + cos(pedalAngle + PI) * 20;
+
+    // Left pedal
+    fill(60);
+    push();
+    translate(-15, pedalY);
+    rotate(pedalAngle);
+    rect(0, 0, 20, 8, 2);
+    pop();
+
+    // Right pedal
+    push();
+    translate(15, pedalY2);
+    rotate(pedalAngle + PI);
+    rect(0, 0, 20, 8, 2);
+    pop();
+
+    // === LEGS (back view, pedaling motion) ===
+    fill(60, 90, 140); // Blue jeans
+    stroke(0);
+    strokeWeight(2);
+
+    // Left leg
+    beginShape();
+    vertex(-12, 0); // hip
+    vertex(-18, 0);
+    vertex(-20, pedalY);
+    vertex(-10, pedalY);
+    vertex(-8, 0);
+    endShape(CLOSE);
+
+    // Right leg
+    beginShape();
+    vertex(8, 0);
+    vertex(10, pedalY2);
+    vertex(20, pedalY2);
+    vertex(18, 0);
+    vertex(12, 0);
+    endShape(CLOSE);
+
+    // Shoes (back view)
+    fill(255, 255, 255); // White sneakers
+    stroke(0);
+    strokeWeight(2);
+    ellipse(-15, pedalY + 8, 22, 12);
+    ellipse(15, pedalY2 + 8, 22, 12);
+
+    // Shoe soles
+    fill(100);
+    ellipse(-15, pedalY + 10, 18, 6);
+    ellipse(15, pedalY2 + 10, 18, 6);
+
+    // === TORSO (back view) ===
+    fill(255, 120, 150); // Pink athletic top
+    stroke(0);
+    strokeWeight(2);
+    beginShape();
+    vertex(-25, 0);
+    vertex(-22, -30);
+    vertex(22, -30);
+    vertex(25, 0);
+    endShape(CLOSE);
+
+    // Sports bra strap across back
+    stroke(230, 100, 130);
+    strokeWeight(2);
+    line(-20, -25, 20, -25);
+
+    // === ARMS (reaching forward to handlebars) ===
+    fill(245, 215, 190); // Skin tone
+    stroke(0);
+    strokeWeight(2);
+
+    // Left arm
+    beginShape();
+    vertex(-22, -25);
+    vertex(-24, -23);
+    vertex(-32, -12 + armOffset);
+    vertex(-36, -10 + armOffset);
+    vertex(-34, -8 + armOffset);
+    vertex(-20, -22);
+    endShape(CLOSE);
+
+    // Right arm
+    beginShape();
+    vertex(22, -25);
+    vertex(24, -23);
+    vertex(32, -12 - armOffset);
+    vertex(36, -10 - armOffset);
+    vertex(34, -8 - armOffset);
+    vertex(20, -22);
+    endShape(CLOSE);
+
+    // Hands on grips
+    fill(245, 215, 190);
+    stroke(0);
+    strokeWeight(2);
+    ellipse(-35, -10 + armOffset, 14, 12);
+    ellipse(35, -10 - armOffset, 14, 12);
+
+    // === NECK (back view) ===
+    fill(245, 215, 190);
+    stroke(0);
+    strokeWeight(2);
+    rect(0, -35, 14, 10);
+
+    // === HEAD (BACK VIEW - NO FACE) ===
+    fill(245, 215, 190);
+    stroke(0);
+    strokeWeight(2.5);
+    ellipse(0, -50, 40, 45);
+
+    // === HAIR (flowing back from motion) ===
+    fill(70, 45, 30); // Brown hair
+    stroke(0);
+    strokeWeight(2);
+
+    // Hair on head (back view)
+    ellipse(0, -52, 42, 35);
+
+    // Ponytail flowing backward dramatically
+    push();
+    let ponytailSway = sin(pedalAngle * 2) * 3;
+    translate(ponytailSway, 0);
+
+    beginShape();
+    vertex(-8, -40);
+    vertex(-12, -35);
+    vertex(-15, -25);
+    vertex(-12, -15);
+    vertex(-8, -10);
+    vertex(0, -8);
+    vertex(8, -10);
+    vertex(12, -15);
+    vertex(15, -25);
+    vertex(12, -35);
+    vertex(8, -40);
+    vertex(0, -42);
+    endShape(CLOSE);
+
+    // Hair strands in ponytail (flowing back)
+    stroke(50, 30, 20);
+    strokeWeight(1.5);
+    for (let i = -10; i <= 10; i += 5) {
+        line(i * 0.8, -38, i * 1.2 + sin(frameCount * 0.1 + i) * 2, -12);
+    }
+
+    // Hair tie
+    fill(255, 120, 150);
+    stroke(0);
+    strokeWeight(2);
+    ellipse(0, -42, 12, 8);
+
+    pop(); // End ponytail transform
+
+    // Hair strands at sides
+    stroke(70, 45, 30);
+    strokeWeight(2);
+    noFill();
+    arc(-15, -50, 12, 20, PI / 2, PI);
+    arc(15, -50, 12, 20, 0, PI / 2);
+
+    pop(); // End tremble transform
+    pop(); // End main transform
+}
+
+
+
+
+
+function drawOrangeTree(x, y, s) {
+    push();
+    translate(x, y);
+    scale(s);
+
+    // === ROOTS (at the base) ===
+    fill(101, 67, 33);
+    stroke(60, 40, 20);
+    strokeWeight(2);
+
+    // Main visible roots spreading from base
+    beginShape();
+    vertex(-6, 35);
+    vertex(-12, 38);
+    vertex(-18, 40);
+    vertex(-20, 42);
+    endShape();
+
+    beginShape();
+    vertex(6, 35);
+    vertex(12, 38);
+    vertex(18, 40);
+    vertex(20, 42);
+    endShape();
+
+    // Center roots
+    beginShape();
+    vertex(-2, 35);
+    vertex(-3, 40);
+    vertex(-4, 43);
+    endShape();
+
+    beginShape();
+    vertex(2, 35);
+    vertex(3, 40);
+    vertex(4, 43);
+    endShape();
+
+    // Additional smaller roots
+    strokeWeight(1.5);
+    line(-6, 35, -10, 41);
+    line(6, 35, 10, 41);
+    line(-3, 36, -7, 42);
+    line(3, 36, 7, 42);
+
+    // Root texture lines
+    stroke(80, 50, 25);
+    strokeWeight(0.8);
+    line(-15, 39, -17, 41);
+    line(15, 39, 17, 41);
+    line(-10, 39, -12, 40);
+    line(10, 39, 12, 40);
+
+    // === TRUNK (realistic with bark texture) ===
+    noStroke();
+
+    // Main trunk with gradient
+    for (let i = 0; i < 12; i++) {
+        let yPos = i * 3;
+        let darkness = map(i, 0, 12, 0, 30);
+        fill(101 - darkness, 67 - darkness / 2, 33 - darkness / 3);
+        rect(-6, yPos, 12, 3);
+    }
+
+    // Bark texture - vertical lines
+    stroke(70, 45, 25);
+    strokeWeight(1.5);
+    line(-5, 2, -5.5, 10);
+    line(-5, 12, -4.5, 22);
+    line(-5.5, 24, -5, 33);
+
+    line(5, 3, 5.5, 11);
+    line(5, 13, 4.5, 21);
+    line(5.5, 23, 5, 32);
+
+    line(-1, 0, -1.5, 15);
+    line(-1.5, 17, -1, 30);
+    line(1, 5, 1.5, 18);
+    line(1.5, 20, 1, 34);
+
+    // Bark knots
+    strokeWeight(1);
+    stroke(60, 40, 20);
+    noFill();
+    ellipse(-3, 12, 4, 3);
+    ellipse(3, 20, 3, 4);
+    ellipse(0, 8, 3, 2);
+    ellipse(2, 28, 4, 3);
+
+    // Horizontal bark cracks
+    stroke(80, 50, 25);
+    strokeWeight(0.8);
+    line(-5, 7, -2, 7);
+    line(2, 7, 5, 7);
+    line(-5, 15, -1, 15);
+    line(1, 15, 5, 15);
+    line(-5, 25, -2, 25);
+    line(2, 25, 5, 25);
+
+    // Shadow and highlight on trunk
+    fill(70, 45, 25, 100);
+    noStroke();
+    rect(-6, 0, 2, 35);
+
+    fill(130, 90, 50, 80);
+    rect(4, 0, 2, 35);
+
+    // === BRANCHES ===
+    stroke(80, 50, 25);
+    strokeWeight(2);
+    line(0, 5, -15, -5);
+    line(0, 5, 15, -5);
+    line(0, 0, -10, -15);
+    line(0, 0, 10, -15);
+
+    // === GREEN LEAVES (dense foliage) ===
+    noStroke();
+
+    // Multiple shades of green for depth
+    let leafGreen1 = color(34, 139, 34);   // Forest green
+    let leafGreen2 = color(50, 205, 50);   // Lime green
+    let leafGreen3 = color(60, 179, 113);  // Medium sea green
+    let leafGreen4 = color(46, 125, 50);   // Dark green
+    let leafGreen5 = color(76, 175, 80);   // Light green
+
+    // LAYER 1: Background leaves
+    fill(leafGreen4);
+    ellipse(-16, -10, 20, 15);
+    ellipse(16, -10, 20, 15);
+    ellipse(-18, -20, 22, 18);
+    ellipse(18, -20, 22, 18);
+    ellipse(-12, -28, 24, 20);
+    ellipse(12, -28, 24, 20);
+    ellipse(0, -32, 26, 22);
+
+    // LAYER 2: Mid-depth leaves
+    fill(leafGreen3);
+    ellipse(-14, -8, 18, 14);
+    ellipse(14, -8, 18, 14);
+    ellipse(-10, -15, 20, 16);
+    ellipse(10, -15, 20, 16);
+    ellipse(-8, -22, 22, 18);
+    ellipse(8, -22, 22, 18);
+    ellipse(-4, -28, 20, 16);
+    ellipse(4, -28, 20, 16);
+    ellipse(0, -25, 24, 20);
+
+    // LAYER 3: Core foliage
+    fill(leafGreen1);
+    ellipse(-12, -12, 16, 14);
+    ellipse(12, -12, 16, 14);
+    ellipse(-6, -18, 18, 16);
+    ellipse(6, -18, 18, 16);
+    ellipse(0, -20, 20, 18);
+    ellipse(-3, -26, 18, 16);
+    ellipse(3, -26, 18, 16);
+    ellipse(0, -30, 22, 20);
+
+    // LAYER 4: Dense center
+    fill(leafGreen2);
+    ellipse(-8, -10, 14, 12);
+    ellipse(8, -10, 14, 12);
+    ellipse(-4, -15, 16, 14);
+    ellipse(4, -15, 16, 14);
+    ellipse(0, -17, 18, 16);
+    ellipse(-2, -23, 16, 14);
+    ellipse(2, -23, 16, 14);
+
+    // LAYER 5: Top highlights
+    fill(leafGreen5);
+    ellipse(-5, -8, 12, 10);
+    ellipse(5, -8, 12, 10);
+    ellipse(0, -12, 14, 12);
+    ellipse(-3, -20, 13, 11);
+    ellipse(3, -20, 13, 11);
+    ellipse(0, -28, 16, 14);
+
+    // LAYER 6: Final fill gaps
+    fill(leafGreen1);
+    ellipse(-10, -5, 10, 8);
+    ellipse(10, -5, 10, 8);
+    ellipse(0, -8, 12, 10);
+    ellipse(-6, -24, 12, 10);
+    ellipse(6, -24, 12, 10);
+
+    // === ORANGES ===
+    stroke(0);
+    strokeWeight(1);
+
+    // Multiple oranges scattered throughout tree
+    // Bottom layer oranges
+    fill(255, 140, 0); // Orange color
+    ellipse(-12, -8, 8, 8);
+    ellipse(10, -10, 7, 7);
+    ellipse(-8, -6, 6, 6);
+
+    // Mid layer oranges
+    ellipse(-14, -16, 8, 8);
+    ellipse(12, -18, 7, 7);
+    ellipse(-4, -14, 7, 7);
+    ellipse(6, -12, 6, 6);
+
+    // Upper layer oranges
+    ellipse(-10, -24, 7, 7);
+    ellipse(8, -26, 6, 6);
+    ellipse(0, -22, 8, 8);
+    ellipse(-6, -20, 6, 6);
+
+    // Top oranges
+    ellipse(-3, -28, 6, 6);
+    ellipse(4, -30, 7, 7);
+
+    // Orange highlights (to make them look round/3D)
+    noStroke();
+    fill(255, 180, 0, 150);
+    ellipse(-12, -9, 3, 3);
+    ellipse(10, -11, 2, 2);
+    ellipse(-14, -17, 3, 3);
+    ellipse(12, -19, 2, 2);
+    ellipse(-10, -25, 2, 2);
+    ellipse(0, -23, 3, 3);
+    ellipse(4, -31, 2, 2);
+
+    // Orange stems (small brown dots)
+    fill(80, 50, 25);
+    ellipse(-12, -10, 2, 2);
+    ellipse(10, -12, 1.5, 1.5);
+    ellipse(-14, -18, 2, 2);
+    ellipse(12, -20, 1.5, 1.5);
+    ellipse(-10, -26, 1.5, 1.5);
+    ellipse(0, -24, 2, 2);
 
     pop();
 }
 
+function drawCitrus(x, y, s) {
+    push();
+    translate(x, y);
+    scale(s);
+
+    // === SHADOW ===
+    noStroke();
+    fill(0, 0, 0, 60);
+    ellipse(0, 55, 80, 20);
+
+    // === MAIN ORANGE BODY ===
+    stroke(0);
+    strokeWeight(2);
+
+    // Create gradient effect with multiple circles
+    for (let r = 45; r > 0; r -= 3) {
+        let brightness = map(r, 0, 45, 200, 255);
+        let orangeShade = map(r, 0, 45, 180, 255);
+        noStroke();
+        fill(orangeShade, brightness * 0.5, 0);
+        ellipse(-8, -8, r * 2, r * 2);
+    }
+
+    // Main orange outline
+    stroke(0);
+    strokeWeight(2);
+    noFill();
+    ellipse(-8, -8, 90, 90);
+
+
+    // === HIGHLIGHT (makes it look round and shiny) ===
+    noStroke();
+    fill(255, 255, 200, 150);
+    ellipse(-20, -20, 25, 20);
+
+    fill(255, 255, 200, 80);
+    ellipse(-18, -18, 35, 28);
+
+    // === STEM AREA (top indentation) ===
+    fill(139, 90, 43);
+    stroke(0);
+    strokeWeight(2);
+    ellipse(-8, -52, 10, 8);
+
+    // === STEM ===
+    fill(101, 67, 33);
+    stroke(0);
+    strokeWeight(2);
+    rect(-10, -62, 4, 12);
+
+    // === LEAF ===
+    fill(34, 139, 34);
+    stroke(0);
+    strokeWeight(1.5);
+    beginShape();
+    vertex(-5, -65);
+    bezierVertex(-5, -75, 10, -75, 15, -65);
+    bezierVertex(10, -70, 0, -70, -5, -65);
+    endShape(CLOSE);
+
+    // Leaf vein
+    stroke(20, 100, 20);
+    strokeWeight(1);
+    line(5, -65, 7, -72);
+
+    // === DARKER SHADING (bottom) ===
+    noStroke();
+    fill(200, 100, 0, 60);
+    ellipse(-8, 10, 70, 30);
+
+    pop();
+}
+function drawHamburger(x, y, s) {
+    push();
+    translate(x, y);
+    scale(s);
+
+    // === SHADOW ===
+    noStroke();
+    fill(0, 0, 0, 50);
+    ellipse(0, 45, 140, 25);
+
+    // === BOTTOM BUN ===
+    fill(210, 170, 100);
+    stroke(0);
+    strokeWeight(2);
+
+    // Bottom bun shape
+    arc(0, 30, 120, 40, 0, PI, CHORD);
+
+    // === PATTY ===
+    fill(100, 60, 40);
+    stroke(0);
+    strokeWeight(2);
+    ellipse(0, 20, 110, 18);
+
+    // Patty char marks
+    stroke(60, 40, 20);
+    strokeWeight(1.5);
+    line(-30, 17, -25, 23);
+    line(-15, 15, -10, 21);
+    line(0, 16, 5, 22);
+    line(15, 15, 20, 21);
+    line(30, 17, 35, 23);
+
+
+
+    // === CHEESE ===
+    fill(255, 200, 50);
+    stroke(0);
+    strokeWeight(2);
+    beginShape();
+    vertex(-60, 12);
+    vertex(60, 12);
+    vertex(55, 16);
+    vertex(-55, 16);
+    endShape(CLOSE);
+
+    // Cheese holes
+    fill(230, 180, 40);
+    noStroke();
+    ellipse(-25, 14, 4, 3);
+    ellipse(-10, 13, 3, 2);
+    ellipse(15, 14, 4, 3);
+    ellipse(35, 13, 3, 2);
+
+    // === LETTUCE ===
+    fill(100, 180, 80);
+    stroke(0);
+    strokeWeight(2);
+    noFill();
+
+    // Wavy lettuce edges
+    beginShape();
+    vertex(-55, 10);
+    bezierVertex(-45, 5, -35, 13, -25, 8);
+    bezierVertex(-15, 3, -5, 11, 5, 7);
+    bezierVertex(15, 3, 25, 12, 35, 8);
+    bezierVertex(45, 4, 55, 11, 58, 10);
+    endShape();
+
+    beginShape();
+    vertex(-55, 7);
+    bezierVertex(-40, 12, -30, 5, -20, 10);
+    bezierVertex(-10, 13, 0, 6, 10, 11);
+    bezierVertex(20, 14, 30, 7, 40, 12);
+    bezierVertex(50, 8, 58, 12, 58, 10);
+    endShape();
+
+    // Fill lettuce
+    fill(100, 180, 80, 200);
+    noStroke();
+    ellipse(-35, 9, 25, 8);
+    ellipse(-10, 8, 30, 8);
+    ellipse(15, 9, 28, 8);
+    ellipse(40, 8, 20, 8);
+
+    // === TOMATO SLICES ===
+    fill(220, 60, 50);
+    stroke(0);
+    strokeWeight(2);
+    ellipse(-28, 3, 28, 8);
+    ellipse(5, 2, 30, 8);
+    ellipse(32, 3, 26, 8);
+
+    // Tomato seeds
+    fill(200, 180, 160);
+    noStroke();
+    ellipse(-30, 2, 2, 1);
+    ellipse(-26, 3, 1.5, 1);
+    ellipse(3, 1, 2, 1);
+    ellipse(7, 2, 1.5, 1);
+    ellipse(30, 2, 2, 1);
+    ellipse(34, 3, 1.5, 1);
+
+    // === TOP BUN ===
+    fill(200, 160, 90);
+    stroke(0);
+    strokeWeight(2);
+
+    // Top bun main shape - moved down and made taller
+    arc(0, 1, 120, 60, PI, TWO_PI, CHORD);
+
+
+    // Bun highlight
+    noStroke();
+    fill(220, 190, 120, 150);
+    ellipse(-15, -15, 30, 15);
+
+    // === SESAME SEEDS ===
+    fill(245, 235, 200);
+    stroke(0);
+    strokeWeight(0.5);
+
+    // Random sesame seeds on top
+    ellipse(-30, -12, 3, 4);
+    ellipse(-20, -16, 2.5, 3.5);
+    ellipse(-8, -18, 3, 4);
+    ellipse(5, -17, 2.5, 3.5);
+    ellipse(15, -16, 3, 4);
+    ellipse(25, -13, 2.5, 3.5);
+    ellipse(35, -10, 3, 4);
+    ellipse(-15, -18, 2.5, 3.5);
+    ellipse(10, -16, 3, 4);
+    ellipse(-35, -18, 2.5, 3.5);
+    ellipse(0, -19, 3, 4);
+    ellipse(30, -18, 2.5, 3.5);
+
+
+
+    pop();
+}
+
+
+function drawMapleSyrupBottle(x, y, s) {
+    push();
+    translate(x, y);
+    scale(s);
+
+    // === SHADOW ===
+    noStroke();
+    fill(0, 0, 0, 60);
+    ellipse(0, 95, 60, 15);
+
+    // === BOTTLE BODY (glass with syrup inside) ===
+
+    // Outer glass bottle shape
+    stroke(0);
+    strokeWeight(2);
+    fill(240, 245, 250, 100); // Light glass color
+
+    // Main bottle body
+    beginShape();
+    vertex(-25, 80);
+    vertex(-25, 20);
+    vertex(-20, 10);
+    vertex(-20, -20);
+    vertex(20, -20);
+    vertex(20, 10);
+    vertex(25, 20);
+    vertex(25, 80);
+    endShape(CLOSE);
+
+    // === SYRUP INSIDE (amber/brown color) ===
+    noStroke();
+    fill(150, 80, 20, 200); // Dark amber syrup
+    beginShape();
+    vertex(-23, 78);
+    vertex(-23, 22);
+    vertex(-18, 12);
+    vertex(-18, -18);
+    vertex(18, -18);
+    vertex(18, 12);
+    vertex(23, 22);
+    vertex(23, 78);
+    endShape(CLOSE);
+
+    // Syrup gradient (lighter at top for realism)
+    fill(180, 100, 30, 150);
+    beginShape();
+    vertex(-23, 78);
+    vertex(-23, 40);
+    vertex(23, 40);
+    vertex(23, 78);
+    endShape(CLOSE);
+
+    // === GLASS HIGHLIGHTS (to show it's glass) ===
+    noStroke();
+    fill(255, 255, 255, 120);
+
+    // Left highlight
+    beginShape();
+    vertex(-22, 70);
+    vertex(-20, 30);
+    vertex(-18, 30);
+    vertex(-20, 70);
+    endShape(CLOSE);
+
+    // Right highlight
+    fill(255, 255, 255, 80);
+    beginShape();
+    vertex(18, 60);
+    vertex(20, 25);
+    vertex(22, 25);
+    vertex(20, 60);
+    endShape(CLOSE);
+
+    // === BOTTLE NECK ===
+    stroke(0);
+    strokeWeight(2);
+    fill(240, 245, 250, 150);
+    rect(-15, -30, 30, 10);
+
+    // Neck threads (screw top)
+    stroke(200, 210, 220);
+    strokeWeight(1);
+    line(-15, -27, 15, -27);
+    line(-15, -24, 15, -24);
+    line(-15, -21, 15, -21);
+
+    // === CAP ===
+    fill(180, 50, 50); // Red cap
+    stroke(0);
+    strokeWeight(2);
+
+    // Cap main body
+    beginShape();
+    vertex(-18, -50);
+    vertex(-16, -30);
+    vertex(16, -30);
+    vertex(18, -50);
+    vertex(18, -52);
+    vertex(-18, -52);
+    endShape(CLOSE);
+
+    // Cap top
+    ellipse(0, -50, 36, 10);
+
+    // Cap ridges for grip
+    stroke(150, 40, 40);
+    strokeWeight(1);
+    for (let i = -15; i <= 15; i += 3) {
+        line(i, -49, i, -32);
+    }
+
+    // Cap highlight
+    noStroke();
+    fill(220, 80, 80, 150);
+    ellipse(-8, -48, 12, 4);
+
+    // === LABEL ===
+    fill(210, 180, 140); // Tan/beige label
+    stroke(0);
+    strokeWeight(2);
+
+    // Main label rectangle
+    rect(-22, 0, 44, 40);
+
+    // Label border decoration
+    noFill();
+    stroke(160, 120, 80);
+    strokeWeight(1.5);
+    rect(-20, 2, 40, 36);
+
+    // === MAPLE LEAF ON LABEL ===
+    fill(200, 50, 50); // Red maple leaf
+    stroke(0);
+    strokeWeight(1);
+
+    push();
+    translate(0, 20);
+    scale(0.6);
+
+    // Maple leaf shape
+    beginShape();
+    vertex(0, 0);
+    vertex(-3, -2);
+    vertex(-6, -3);
+    vertex(-5, -6);
+    vertex(-8, -8);
+    vertex(-6, -10);
+    vertex(-3, -9);
+    vertex(-2, -12);
+    vertex(0, -15);
+    vertex(2, -12);
+    vertex(3, -9);
+    vertex(6, -10);
+    vertex(8, -8);
+    vertex(5, -6);
+    vertex(6, -3);
+    vertex(3, -2);
+    endShape(CLOSE);
+
+    // Leaf veins
+    stroke(150, 30, 30);
+    strokeWeight(0.5);
+    line(0, 0, 0, -12);
+    line(0, -6, -4, -8);
+    line(0, -6, 4, -8);
+    pop();
+
+    // === LABEL TEXT ===
+    fill(100, 50, 20);
+    noStroke();
+    textAlign(CENTER, CENTER);
+    textSize(7);
+    textStyle(BOLD);
+    text("PURE", 0, 5);
+
+    textSize(6);
+    text("MAPLE", 0, 26);
+    text("SYRUP", 0, 34);
+
+    // === BOTTOM BASE ===
+    stroke(0);
+    strokeWeight(2);
+    fill(240, 245, 250, 100);
+    ellipse(0, 80, 50, 12);
+
+    // Glass shine on bottom
+    noStroke();
+    fill(255, 255, 255, 100);
+    ellipse(-8, 78, 15, 4);
+
+    pop();
+}
+
+function drawBear(x, y, s, runPhase = 0) {
+    push();
+    translate(x, y);
+    scale(s);
+
+    // === ANIMATION OFFSETS ===
+    let legSwing = sin(runPhase) * 12;
+    let armSwing = sin(runPhase + PI) * 12;
+    let bounce = sin(runPhase * 2) * 2;
+
+    translate(0, bounce);
+
+    // === BACK LEGS (running) ===
+    fill(100, 70, 40);
+    stroke(0);
+    strokeWeight(2);
+
+    ellipse(-30 + legSwing, 80, 30, 45);
+    ellipse(30 - legSwing, 80, 30, 45);
+
+    // Paw pads
+    fill(80, 50, 30);
+    noStroke();
+    ellipse(-30 + legSwing, 95, 22, 14);
+    ellipse(30 - legSwing, 95, 22, 14);
+
+    // === BODY ===
+    fill(110, 75, 45);
+    stroke(0);
+    strokeWeight(2);
+    ellipse(0, 40, 90, 100);
+
+    // Belly patch
+    fill(130, 95, 65);
+    noStroke();
+    ellipse(0, 50, 60, 70);
+
+    // === FRONT ARMS (running swing) ===
+    fill(100, 70, 40);
+    stroke(0);
+    strokeWeight(2);
+
+    // Left arm
+    push();
+    translate(-40, 40 + armSwing * 0.4);
+    rotate(radians(armSwing * 0.8));
+    ellipse(0, 0, 25, 45);
+    pop();
+
+    // Right arm
+    push();
+    translate(40, 40 - armSwing * 0.4);
+    rotate(radians(-armSwing * 0.8));
+    ellipse(0, 0, 25, 45);
+    pop();
+
+    // === HEAD ===
+    fill(110, 75, 45);
+    stroke(0);
+    strokeWeight(2);
+    ellipse(0, -15, 70, 75);
+
+    // === EARS ===
+    fill(100, 70, 40);
+    stroke(0);
+    strokeWeight(2);
+    ellipse(-25, -45, 25, 28);
+    ellipse(25, -45, 25, 28);
+
+    fill(80, 55, 30);
+    noStroke();
+    ellipse(-25, -43, 15, 18);
+    ellipse(25, -43, 15, 18);
+
+    // === SNOUT ===
+    fill(130, 95, 65);
+    stroke(0);
+    strokeWeight(2);
+    ellipse(0, 0, 45, 35);
+
+    // Nose
+    fill(40, 30, 25);
+    beginShape();
+    vertex(0, -8);
+    vertex(-8, 2);
+    vertex(8, 2);
+    endShape(CLOSE);
+
+    // === NEUTRAL MOUTH (removed smile) ===
+    stroke(0);
+    strokeWeight(2);
+    line(-8, 12, 8, 12); // Straight mouth line
+    line(0, 5, 0, 12);   // Vertical crease
+
+    // === EYES ===
+    fill(40, 30, 25);
+    stroke(0);
+    strokeWeight(2);
+    ellipse(-15, -15, 12, 14);
+    ellipse(15, -15, 12, 14);
+
+    fill(0);
+    ellipse(-15, -14, 6, 7);
+    ellipse(15, -14, 6, 7);
+
+    // Minimal reflections
+    fill(255);
+    ellipse(-14, -16, 2, 2);
+    ellipse(16, -16, 2, 2);
+
+    // === NEUTRAL EYEBROWS ===
+    stroke(60, 40, 20);
+    strokeWeight(3);
+    line(-22, -25, -10, -25);
+    line(22, -25, 10, -25);
+
+    pop();
+}

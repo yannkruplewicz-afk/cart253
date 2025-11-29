@@ -22,8 +22,12 @@ function draw() {
     drawHamburger(600, 400, 1);
     drawMapleSyrupBottle(600, 100, 1);
     drawBear(900, 300, 1);
+    drawKidSoccer(300, 600, 1)
 
 }
+
+let leftThighAngle = 0;
+let rightThighAngle = 0;
 
 let runPhase = 0;
 
@@ -1128,8 +1132,6 @@ function drawIShowSpeed(x, y, s) {
 }
 
 
-
-
 function drawWomanBiking(x, y, s) {
     push();
     translate(x, y);
@@ -1162,20 +1164,19 @@ function drawWomanBiking(x, y, s) {
     noFill();
     ellipse(0, 0, 9, 80);
 
-
     pop();
 
-    // Frame (back view, simplified)
+    // Frame (back view, simplified) - ADJUSTED FOR HIGHER SEAT
     strokeWeight(3);
-    line(0, 50, 0, 5); // seat tube (vertical)
-    line(0, 5, -15, -10); // left seat stay
-    line(0, 5, 15, -10); // right seat stay
+    line(0, 50, 0, -10); // seat tube (vertical) - extended up
+    line(0, -10, -15, -10); // left seat stay
+    line(0, -10, 15, -10); // right seat stay
 
-    // Seat (back view)
+    // Seat (back view) - RAISED HIGHER
     fill(40);
     stroke(0);
     strokeWeight(2);
-    ellipse(0, 0, 30, 12);
+    ellipse(0, -10, 30, 52);
 
     // Handlebars (just grips visible from back)
     strokeWeight(2);
@@ -1205,27 +1206,27 @@ function drawWomanBiking(x, y, s) {
     rect(0, 0, 20, 8, 2);
     pop();
 
-    // === LEGS (back view, pedaling motion) ===
+    // === LEGS (back view, pedaling motion) - ADJUSTED FOR LONGER SHIRT ===
     fill(60, 90, 140); // Blue jeans
     stroke(0);
     strokeWeight(2);
 
     // Left leg
     beginShape();
-    vertex(-12, 0); // hip
-    vertex(-18, 0);
+    vertex(-12, 5); // hip - adjusted to new shirt bottom
+    vertex(-18, 5);
     vertex(-20, pedalY);
     vertex(-10, pedalY);
-    vertex(-8, 0);
+    vertex(-8, 5);
     endShape(CLOSE);
 
     // Right leg
     beginShape();
-    vertex(8, 0);
+    vertex(8, 5);
     vertex(10, pedalY2);
     vertex(20, pedalY2);
-    vertex(18, 0);
-    vertex(12, 0);
+    vertex(18, 5);
+    vertex(12, 5);
     endShape(CLOSE);
 
     // Shoes (back view)
@@ -1240,45 +1241,45 @@ function drawWomanBiking(x, y, s) {
     ellipse(-15, pedalY + 10, 18, 6);
     ellipse(15, pedalY2 + 10, 18, 6);
 
-    // === TORSO (back view) ===
+    // === TORSO (back view) - LONGER SHIRT ===
     fill(255, 120, 150); // Pink athletic top
     stroke(0);
     strokeWeight(2);
     beginShape();
-    vertex(-25, 0);
-    vertex(-22, -30);
-    vertex(22, -30);
-    vertex(25, 0);
+    vertex(-25, 5); // Extended downward
+    vertex(-22, -40); // Extended upward
+    vertex(22, -40);
+    vertex(25, 5); // Extended downward
     endShape(CLOSE);
 
     // Sports bra strap across back
     stroke(230, 100, 130);
     strokeWeight(2);
-    line(-20, -25, 20, -25);
+    line(-20, -35, 20, -35);
 
-    // === ARMS (reaching forward to handlebars) ===
+    // === ARMS (reaching forward to handlebars) - ADJUSTED FOR TALLER TORSO ===
     fill(245, 215, 190); // Skin tone
     stroke(0);
     strokeWeight(2);
 
     // Left arm
     beginShape();
-    vertex(-22, -25);
-    vertex(-24, -23);
+    vertex(-22, -35);
+    vertex(-24, -33);
     vertex(-32, -12 + armOffset);
     vertex(-36, -10 + armOffset);
     vertex(-34, -8 + armOffset);
-    vertex(-20, -22);
+    vertex(-20, -32);
     endShape(CLOSE);
 
     // Right arm
     beginShape();
-    vertex(22, -25);
-    vertex(24, -23);
+    vertex(22, -35);
+    vertex(24, -33);
     vertex(32, -12 - armOffset);
     vertex(36, -10 - armOffset);
     vertex(34, -8 - armOffset);
-    vertex(20, -22);
+    vertex(20, -32);
     endShape(CLOSE);
 
     // Hands on grips
@@ -1288,25 +1289,25 @@ function drawWomanBiking(x, y, s) {
     ellipse(-35, -10 + armOffset, 14, 12);
     ellipse(35, -10 - armOffset, 14, 12);
 
-    // === NECK (back view) ===
+    // === NECK (back view) - ADJUSTED FOR TALLER TORSO ===
     fill(245, 215, 190);
     stroke(0);
     strokeWeight(2);
-    rect(0, -35, 14, 10);
+    rect(0, -45, 14, 10);
 
-    // === HEAD (BACK VIEW - NO FACE) ===
+    // === HEAD (BACK VIEW - NO FACE) - ADJUSTED FOR TALLER TORSO ===
     fill(245, 215, 190);
     stroke(0);
     strokeWeight(2.5);
-    ellipse(0, -50, 40, 45);
+    ellipse(0, -60, 40, 45);
 
-    // === HAIR (flowing back from motion) ===
+    // === HAIR (flowing back from motion) - ADJUSTED FOR TALLER TORSO ===
     fill(70, 45, 30); // Brown hair
     stroke(0);
     strokeWeight(2);
 
     // Hair on head (back view)
-    ellipse(0, -52, 42, 35);
+    ellipse(0, -62, 42, 35);
 
     // Ponytail flowing backward dramatically
     push();
@@ -1314,32 +1315,32 @@ function drawWomanBiking(x, y, s) {
     translate(ponytailSway, 0);
 
     beginShape();
-    vertex(-8, -40);
-    vertex(-12, -35);
-    vertex(-15, -25);
-    vertex(-12, -15);
-    vertex(-8, -10);
-    vertex(0, -8);
-    vertex(8, -10);
-    vertex(12, -15);
-    vertex(15, -25);
-    vertex(12, -35);
-    vertex(8, -40);
-    vertex(0, -42);
+    vertex(-8, -50);
+    vertex(-12, -45);
+    vertex(-15, -35);
+    vertex(-12, -25);
+    vertex(-8, -20);
+    vertex(0, -18);
+    vertex(8, -20);
+    vertex(12, -25);
+    vertex(15, -35);
+    vertex(12, -45);
+    vertex(8, -50);
+    vertex(0, -52);
     endShape(CLOSE);
 
     // Hair strands in ponytail (flowing back)
     stroke(50, 30, 20);
     strokeWeight(1.5);
     for (let i = -10; i <= 10; i += 5) {
-        line(i * 0.8, -38, i * 1.2 + sin(frameCount * 0.1 + i) * 2, -12);
+        line(i * 0.8, -48, i * 1.2 + sin(frameCount * 0.1 + i) * 2, -22);
     }
 
     // Hair tie
     fill(255, 120, 150);
     stroke(0);
     strokeWeight(2);
-    ellipse(0, -42, 12, 8);
+    ellipse(0, -52, 12, 8);
 
     pop(); // End ponytail transform
 
@@ -1347,13 +1348,12 @@ function drawWomanBiking(x, y, s) {
     stroke(70, 45, 30);
     strokeWeight(2);
     noFill();
-    arc(-15, -50, 12, 20, PI / 2, PI);
-    arc(15, -50, 12, 20, 0, PI / 2);
+    arc(-15, -60, 12, 20, PI / 2, PI);
+    arc(15, -60, 12, 20, 0, PI / 2);
 
     pop(); // End tremble transform
     pop(); // End main transform
 }
-
 
 
 
@@ -2116,5 +2116,296 @@ function drawBear(x, y, s, runPhase = 0) {
     line(-22, -25, -10, -25);
     line(22, -25, 10, -25);
 
+    pop();
+}
+
+
+
+function drawKidSoccer(x, y, s) {
+    push();
+    translate(x, y);
+    scale(s);
+    // Use runPhase for synchronized animation (opposite direction)
+    let legOffset = 35 * sin(-runPhase + PI); // Negative for opposite direction
+    let armOffset = 30 * sin(-runPhase * 0.7); // Slower arm movement (0.5x speed)
+    let torsoTremble = sin(-runPhase * 4) * 0.5;
+    let trembleX = sin(-runPhase * 0.8) * 1.5;
+    let trembleY = sin(-runPhase * 0.8) * 1;
+
+    rectMode(CENTER);
+    ellipseMode(CENTER);
+
+    push();
+    translate(trembleX, trembleY);
+
+    stroke(0);
+    strokeWeight(3);
+
+    // Calculate knee bend for running animation
+    let leftLegPhase = -runPhase;
+    let rightLegPhase = -runPhase;
+
+    // Vertical leg movement (up and down) - smaller range for perspective
+    let leftLegY = abs(sin(leftLegPhase)) * 1;
+    let rightLegY = abs(sin(rightLegPhase)) * 20;
+
+    // Slight forward angle for perspective (legs coming towards viewer)
+    let leftLegAngle = sin(leftLegPhase) * -1; // Slight angle forward/back
+    let rightLegAngle = sin(rightLegPhase) * 1;
+
+    // Knee angles (lower leg bend) - bend more when lifted
+    let leftKneeBend = sin(leftLegPhase) * 15 + 15; // Less extreme bend
+    let rightKneeBend = sin(rightLegPhase) * 15 + 15;
+
+    // ================================
+    // SOCCER BALL (in front, being kicked forward)
+    // ================================
+    let ballX = sin(leftLegPhase) * 15;
+    let ballY = 50 + abs(sin(leftLegPhase)) * 10;
+
+    fill(255);
+    stroke(0);
+    strokeWeight(2);
+    ellipse(ballX, ballY, 15, 15);
+
+    // Black pentagons pattern
+    fill(0);
+    noStroke();
+    beginShape();
+    vertex(ballX, ballY - 5);
+    vertex(ballX - 3, ballY - 2);
+    vertex(ballX - 2, ballY + 2);
+    vertex(ballX + 2, ballY + 2);
+    vertex(ballX + 3, ballY - 2);
+    endShape(CLOSE);
+
+    // ================================
+    // LEGS & SHOES (with knees, running vertically)
+    // ================================
+
+    fill(40, 50, 80);
+    stroke(0);
+    strokeWeight(2);
+
+    // LEFT LEG
+    push();
+    translate(-10, 15 - leftLegY); // Vertical movement
+    rotate(radians(leftLegAngle)); // Slight angle for perspective
+
+    // Left thigh
+    rect(0, 10, 12, 20, 4);
+
+    // Left knee joint
+    fill(35, 45, 75);
+    ellipse(0, 20, 10, 10);
+
+    // Left shin (lower leg)
+    push();
+    translate(0, 20);
+    rotate(radians(leftKneeBend));
+    fill(40, 50, 80);
+    rect(0, 10, 11, 20, 4);
+
+    // Left shoe
+    fill(255, 50, 50);
+    rect(0, 22, 16, 10, 2);
+
+    // Shoe stripes
+    stroke(255);
+    strokeWeight(1);
+    line(-3, 20, 3, 20);
+    line(-3, 22, 3, 22);
+    line(-3, 24, 3, 24);
+    pop();
+    pop();
+
+    // RIGHT LEG
+    push();
+    translate(10, 15 - rightLegY); // Vertical movement
+    rotate(radians(rightLegAngle)); // Slight angle for perspective
+
+    // Right thigh
+    fill(40, 50, 80);
+    stroke(0);
+    strokeWeight(2);
+    rect(0, 10, 12, 20, 4);
+
+    // Right knee joint
+    fill(35, 45, 75);
+    ellipse(0, 20, 10, 10);
+
+    // Right shin (lower leg)
+    push();
+    translate(0, 20);
+    rotate(radians(rightKneeBend));
+    fill(40, 50, 80);
+    rect(0, 10, 11, 20, 4);
+
+    // Right shoe
+    fill(255, 50, 50);
+    rect(0, 22, 16, 10, 2);
+
+    // Shoe stripes
+    stroke(255);
+    strokeWeight(1);
+    line(-3, 20, 3, 20);
+    line(-3, 22, 3, 22);
+    line(-3, 24, 3, 24);
+    pop();
+    pop();
+
+    // ================================
+    // TORSO - BARCELONA JERSEY
+    // ================================
+    fill(165, 0, 52); // Barcelona burgundy/garnet
+    stroke(0);
+    strokeWeight(3);
+    rect(0, -15 + torsoTremble, 30, 55, 8);
+
+    // Barcelona horizontal stripes (blue)
+    fill(0, 51, 160); // Barcelona blue
+    noStroke();
+    rect(0, -38 + torsoTremble, 27, 6);
+    rect(0, -26 + torsoTremble, 30, 6);
+    rect(0, -14 + torsoTremble, 30, 6);
+    rect(0, -2 + torsoTremble, 30, 6);
+
+    // Barcelona crest (simplified)
+    stroke(0);
+    strokeWeight(1.5);
+    fill(255, 215, 0); // Gold
+    beginShape();
+    vertex(-8, -36 + torsoTremble);
+    vertex(-8, -30 + torsoTremble);
+    vertex(0, -28 + torsoTremble);
+    vertex(8, -30 + torsoTremble);
+    vertex(8, -36 + torsoTremble);
+    vertex(0, -38 + torsoTremble);
+    endShape(CLOSE);
+
+    // Cross on crest (red)
+    fill(200, 16, 46);
+    noStroke();
+    rect(-1, -36 + torsoTremble, 2, 6);
+    rect(-4, -34 + torsoTremble, 8, 2);
+
+    // Jersey collar
+    stroke(0);
+    strokeWeight(2);
+    fill(165, 0, 52);
+    arc(0, -42 + torsoTremble, 20, 12, 0, PI);
+
+    // Jersey number
+    fill(255, 215, 0); // Gold number
+    stroke(0);
+    strokeWeight(1.5);
+    textSize(9);
+    textAlign(CENTER);
+    text("10", 3, -22 + torsoTremble);
+    // ================================
+    // ARMS (with elbows, closer to body)
+    // ================================
+    fill(200, 160, 130); // Lighter skin tone for kid
+    stroke(0);
+    strokeWeight(2);
+
+    // LEFT ARM
+    push();
+    translate(-15, -25); // Closer to body
+
+    // Left upper arm
+    beginShape();
+    vertex(0, 0);
+    vertex(-3, 0);
+    vertex(-3, 15);
+    vertex(0, 15);
+    endShape(CLOSE);
+
+    // Left elbow joint
+    fill(180, 140, 110);
+    ellipse(-1.5, 15, 7, 7);
+
+    // Left forearm (bends at elbow)
+    push();
+    translate(-1.5, 15);
+    rotate(radians(-armOffset * 0.7)); // Bend at elbow
+    fill(200, 160, 130);
+    beginShape();
+    vertex(-2, 0);
+    vertex(2, 0);
+    vertex(2, 12);
+    vertex(-2, 12);
+    endShape(CLOSE);
+
+    // Left hand
+    fill(200, 160, 130);
+    ellipse(0, 14, 6, 7);
+    pop();
+    pop();
+
+    // RIGHT ARM
+    push();
+    translate(15, -25); // Closer to body
+
+    // Right upper arm
+    fill(200, 160, 130);
+    stroke(0);
+    strokeWeight(2);
+    beginShape();
+    vertex(0, 0);
+    vertex(3, 0);
+    vertex(3, 15);
+    vertex(0, 15);
+    endShape(CLOSE);
+
+    // Right elbow joint
+    fill(180, 140, 110);
+    ellipse(1.5, 15, 7, 7);
+
+    // Right forearm (bends at elbow)
+    push();
+    translate(1.5, 15);
+    rotate(radians(armOffset * 1)); // Bend at elbow (opposite direction)
+    fill(200, 160, 130);
+    beginShape();
+    vertex(-2, 0);
+    vertex(2, 0);
+    vertex(2, 12);
+    vertex(-2, 12);
+    endShape(CLOSE);
+
+    // Right hand
+    fill(200, 160, 130);
+    ellipse(0, 14, 6, 7);
+    pop();
+    pop();
+
+    // ================================
+    // HEAD (SMALLER - it's a kid)
+    // ================================
+    fill(200, 160, 130);
+    stroke(0);
+    strokeWeight(2.5);
+    ellipse(0, -65, 38, 46);  // Smaller head for child
+
+    // Hair (short, messy kid hair)
+    fill(40, 30, 20); // Dark brown
+    stroke(0);
+    strokeWeight(2);
+    ellipse(0, -75, 35, 27);
+
+    // Eyebrows (determined expression)
+    stroke(30, 20, 10);
+    strokeWeight(4);
+    line(-12, -59, -5, -57);
+    line(12, -59, 5, -57);
+
+    // Mouth (small smile/determined)
+    noFill();
+    stroke(0);
+    strokeWeight(1.5);
+    arc(0, -50, 10, 2, 0, PI);
+
+    pop();
     pop();
 }

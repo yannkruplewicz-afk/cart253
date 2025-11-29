@@ -622,11 +622,18 @@ function keyPressed() {
     }
 }
 
-
-// === OBSTACLES ===
 function spawnObstacle() {
     const lane = int(random(0, 3));
-    const type = random(["car", "rock", "maple"]);
+    let type;
+
+    // Determine obstacle type based on current game mode
+    if (currentMode === "Q") {
+        type = random(["woman_biking", "maple_syrup", "bear", "maple_tree"]);
+    } else if (currentMode === "U") {
+        type = random(["fat_guy", "school_bus", "chevrolet", "hamburger", "i_show_speed"]);
+    } else if (currentMode === "E") {
+        type = random(["citrus", "orange_tree", "kid_soccer", "fiat_car"]);
+    }
 
     const startY = 200;
     const targetY = height;
@@ -644,10 +651,10 @@ function spawnObstacle() {
         type
     });
 }
+
 function drawObstacles(scrollSpeed) {
     // Spawn obstacles more frequently over time and when song changes
     const roadMidY = (200 + height) / 2;
-    // Spawn threshold increases with score and song number
     const spawnThreshold = roadMidY - (score / 10) - (currentSongIndex * 30);
 
     if (obstacles.length === 0 || obstacles[obstacles.length - 1].y > spawnThreshold) {
@@ -668,16 +675,77 @@ function drawObstacles(scrollSpeed) {
 
         push();
         translate(ob.x, ob.y);
-        rectMode(CENTER);
-        fill(ob.type === "maple" ? color(255, 200, 0) :
-            ob.type === "car" ? color(180, 50, 50) : color(30));
-        rect(0, -20, 40, 40, 8);
+        scale(0.5);
+
+        // Draw obstacles based on type
+        if (ob.type === "maple_syrup") {
+            drawMapleSyrupBottle(0, 0, 1);
+        } else if (ob.type === "woman_biking") {
+            drawWomanBiking(0, 0, 2);
+        } else if (ob.type === "bear") {
+            drawBear(0, 0, 2);
+        } else if (ob.type === "maple_tree") {
+            drawMappleTree(0, 0, 5);
+        } else if (ob.type === "fat_guy") {
+            drawFatGuy(0, 0, 2.3);
+            // } else if (ob.type === "school_bus") {
+            //  drawSchoolBusFrontView(0, 0, 1);
+        } else if (ob.type === "fiat_car") {
+            drawFiatCar(0, 0, 3);
+        } else if (ob.type === "chevrolet") {
+            drawChevrolet(0, 0, 2);
+        } else if (ob.type === "hamburger") {
+            drawHamburger(0, 0, 1);
+        } else if (ob.type === "i_show_speed") {
+            drawIShowSpeed(0, 0, 2.5);
+        } else if (ob.type === "orange_tree") {
+            drawOrangeTree(0, 0, 5);
+        } else if (ob.type === "citrus") {
+            drawCitrus(0, 0, 1);
+        } else if (ob.type === "kid_soccer") {
+            drawKidSoccer(0, 0, 2);
+        }
+
         pop();
 
         if (ob.y > height + 50) obstacles.splice(i, 1);
     }
 }
+/*function checkCollisions() {
+    const playerY = player.y - player.jumpY;
+    const playerX = player.x;
+    const size = 30;
 
+    for (let i = obstacles.length - 1; i >= 0; i--) {
+        const ob = obstacles[i];
+
+        // Power-ups that can be collected while jumping
+        const powerUps = ["maple_syrup", "hamburger", "citrus"];
+
+        // If player is in the air, ignore damaging floor obstacles.
+        // Still allow collecting power-ups while airborne.
+        if (player.isJumping && !powerUps.includes(ob.type)) {
+            continue;
+        }
+
+        if (abs(ob.x - playerX) < size && abs(ob.y - playerY) < size) {
+            // Slow-down power-ups
+            if (powerUps.includes(ob.type)) {
+                mapleSlowActive = true;
+                mapleTimer = millis();
+                obstacles.splice(i, 1);
+            } else {
+                // Regular obstacles damage the player
+                player.life--;
+                hitCooldown = true;
+                applyVolumeDamage(); // Apply volume damage
+                setTimeout(() => hitCooldown = false, 1000);
+                obstacles.splice(i, 1); // remove the obstacle we hit
+                if (player.life <= 0) gameOver();
+            }
+        }
+    }
+}*/
 
 function checkCollisions() {
     const playerY = player.y - player.jumpY;
@@ -687,18 +755,23 @@ function checkCollisions() {
     for (let i = obstacles.length - 1; i >= 0; i--) {
         const ob = obstacles[i];
 
+        // Power-ups that can be collected while jumping
+        const powerUps = ["maple_syrup", "hamburger", "citrus"];
+
         // If player is in the air, ignore damaging floor obstacles.
-        // Still allow collecting "maple" while airborne.
-        if (player.isJumping && ob.type !== "maple") {
+        // Still allow collecting power-ups while airborne.
+        if (player.isJumping && !powerUps.includes(ob.type)) {
             continue;
         }
 
         if (abs(ob.x - playerX) < size && abs(ob.y - playerY) < size) {
-            if (ob.type === "maple") {
+            // Slow-down power-ups
+            if (powerUps.includes(ob.type)) {
                 mapleSlowActive = true;
                 mapleTimer = millis();
                 obstacles.splice(i, 1);
             } else {
+                // Regular obstacles damage the player
                 player.life--;
                 hitCooldown = true;
                 applyVolumeDamage(); // Apply volume damage

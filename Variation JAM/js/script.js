@@ -8,7 +8,9 @@ let victory = false;
 let victoryFade = 0;
 let gameStartTime = 0;
 const GAME_DURATION = 300000; // 300 seconds in milliseconds
+
 let cloudParticles = []; // cloud particles at player's feet
+let carDustParticles = [];
 let player;
 let obstacles = [];
 let obstacleTimer = 0;
@@ -123,6 +125,7 @@ function resetAll() {
     hitCooldown = false;
     worldScroll = 0;
     cloudParticles = []; // reset cloud particles
+    carDustParticles = []; // ADD THIS LINE
 
     bottomLaneX = [
         width / 2 - width * 0.25,
@@ -270,10 +273,12 @@ function drawGame() {
 
     drawParallaxBackground(currentMode, worldScroll);
     drawRoad(scrollSpeed);
+    updateCarDustParticles();
+    drawCarDustParticles();
     drawObstacles(scrollSpeed);
     updatePlayerJump();
     updateCloudParticles();
-    drawCloudParticles(); // draw before player so clouds are behind
+    drawCloudParticles();
     drawPlayer();
 
 
@@ -356,15 +361,73 @@ function mousePressed() {
 
 }
 
-
 // === ROAD ===
 function drawRoad(scrollSpeed) {
     const bottomWidth = width * 1.8;
     const topWidth = width * 0.03;
     const roadBottomY = height;
-    const roadTopY = 200; // start of road
+    const roadTopY = 200;
     const centerX = width / 2;
 
+    if (currentMode === "Q") {
+        // QUEBEC: Forest dirt path
+        drawQuebecPath(topWidth, bottomWidth, roadTopY, roadBottomY, centerX);
+    } else if (currentMode === "U") {
+        // USA: Modern asphalt road
+        drawUSARoad(topWidth, bottomWidth, roadTopY, roadBottomY, centerX);
+    } else {
+        // ESPAÑA: Zigzag paving stones
+        drawSpainRoad(topWidth, bottomWidth, roadTopY, roadBottomY, centerX);
+    }
+}
+
+function drawQuebecPath(topWidth, bottomWidth, roadTopY, roadBottomY, centerX) {
+    // Brown earth/dust path
+    const pathColor = color(101, 67, 33);
+    fill(pathColor);
+    noStroke();
+    quad(
+        centerX - topWidth / 2, roadTopY,
+        centerX + topWidth / 2, roadTopY,
+        centerX + bottomWidth / 2, roadBottomY,
+        centerX - bottomWidth / 2, roadBottomY
+    );
+
+    // Add dirt texture with random spots
+    for (let i = 0; i < 150; i++) {
+        const randY = random(roadTopY, roadBottomY);
+        const depth = map(randY, roadTopY, roadBottomY, 0, 1);
+        const w = lerp(topWidth, bottomWidth, depth);
+        const randX = centerX + random(-w / 2, w / 2);
+
+        fill(85, 55, 25, 120);
+        noStroke();
+        ellipse(randX, randY, random(3, 8));
+    }
+
+    // Darker worn tracks (no lines, just darker earth)
+    fill(101, 67, 33); // Same color as the rest of the road
+    noStroke();
+    for (let lane = 0; lane < 3; lane++) {
+        beginShape();
+        for (let y = roadTopY; y <= roadBottomY; y += 10) {
+            const x = laneCenterX(lane, y);
+            const depth = map(y, roadTopY, roadBottomY, 0, 1);
+            const trackWidth = lerp(2, 12, depth);
+            vertex(x - trackWidth / 2, y);
+        }
+        for (let y = roadBottomY; y >= roadTopY; y -= 10) {
+            const x = laneCenterX(lane, y);
+            const depth = map(y, roadTopY, roadBottomY, 0, 1);
+            const trackWidth = lerp(2, 12, depth);
+            vertex(x + trackWidth / 2, y);
+        }
+        endShape(CLOSE);
+    }
+}
+
+function drawUSARoad(topWidth, bottomWidth, roadTopY, roadBottomY, centerX) {
+    // Modern asphalt (original design)
     const roadColor = color(40);
     fill(roadColor);
     noStroke();
@@ -375,7 +438,7 @@ function drawRoad(scrollSpeed) {
         centerX - bottomWidth / 2, roadBottomY
     );
 
-    // === White dashed lane dividers ===
+    // White dashed lane dividers
     stroke(255);
     strokeWeight(4);
     const dashSpacing = 100;
@@ -396,18 +459,67 @@ function drawRoad(scrollSpeed) {
         line(midLaneX, y, midLaneX2, y2);
     }
 
-    // === Dark lane center lines (for player & obstacle guidance) ===
-    stroke(roadColor);  // same as road
+    // Dark lane center lines
+    stroke(roadColor);
     strokeWeight(2);
     for (let lane = 0; lane < 3; lane++) {
         beginShape();
-        for (let y = roadTopY; y <= roadBottomY; y += 5) { // start from roadTopY
+        for (let y = roadTopY; y <= roadBottomY; y += 5) {
             const x = laneCenterX(lane, y);
             vertex(x, y);
         }
         endShape();
     }
 }
+function drawSpainRoad(topWidth, bottomWidth, roadTopY, roadBottomY, centerX) {
+    // Warm stone base
+    const stoneBase = color(180, 160, 140);
+    fill(stoneBase);
+    noStroke();
+    quad(
+        centerX - topWidth / 2, roadTopY,
+        centerX + topWidth / 2, roadTopY,
+        centerX + bottomWidth / 2, roadBottomY,
+        centerX - bottomWidth / 2, roadBottomY
+    );
+
+    // Draw zigzagging paving stones
+    const stoneSize = 40;
+    const scrollOffset = (worldScroll * 0.6) % stoneSize;
+
+    for (let y = roadTopY + scrollOffset; y < roadBottomY + stoneSize; y += stoneSize) {
+        const depth = map(y, roadTopY, roadBottomY, 0, 1);
+        const w = lerp(topWidth, bottomWidth, depth);
+        const leftEdge = centerX - w / 2;
+        const rightEdge = centerX + w / 2;
+
+        // Create zigzag pattern across the width
+        const numStones = max(3, floor(w / stoneSize));
+
+        for (let i = 0; i < numStones; i++) {
+            const stoneX = lerp(leftEdge, rightEdge, i / numStones);
+            const nextStoneX = lerp(leftEdge, rightEdge, (i + 1) / numStones);
+            const stoneWidth = nextStoneX - stoneX;
+
+            // Zigzag offset
+            const zigzagOffset = sin((y / stoneSize + i) * 0.5) * 8;
+
+            // Draw individual stone
+            fill(170 + random(-5, 5), 150 + random(-3, 3), 130 + random(-3, 3));
+            stroke(140, 130, 110);
+            strokeWeight(2);
+
+            const stoneDepth = map(y, roadTopY, roadBottomY, 0, 1);
+            const stoneH = lerp(stoneSize * 0.3, stoneSize, stoneDepth);
+
+            rect(stoneX + zigzagOffset, y, stoneWidth - 4, stoneH - 4, 2);
+        }
+    }
+
+
+}
+
+
 
 //      PLAYER JUMP LOGIC
 // ==========================
@@ -458,7 +570,7 @@ function drawPlayer() {
     push();
     translate(player.x, renderY);
     rotate(angle); // tilt player toward lane side
-    scale(scaleFactor * 2);
+    scale(scaleFactor * 1.7);
     rectMode(CENTER);
     ellipseMode(CENTER);
 
@@ -630,7 +742,7 @@ function spawnObstacle() {
     if (currentMode === "Q") {
         type = random(["woman_biking", "maple_syrup", "bear", "maple_tree"]);
     } else if (currentMode === "U") {
-        type = random(["fat_guy", "school_bus", "chevrolet", "hamburger", "i_show_speed"]);
+        type = random(["fat_guy", "chevrolet", "hamburger", "i_show_speed"]);
     } else if (currentMode === "E") {
         type = random(["citrus", "orange_tree", "kid_soccer", "fiat_car"]);
     }
@@ -676,12 +788,14 @@ function drawObstacles(scrollSpeed) {
         push();
         translate(ob.x, ob.y);
         scale(0.5);
-
+        if ((ob.type === "fiat_car" || ob.type === "chevrolet") && frameCount % 3 === 0) {
+            spawnCarDust(ob.x, ob.y + 30);
+        }
         // Draw obstacles based on type
         if (ob.type === "maple_syrup") {
             drawMapleSyrupBottle(0, 0, 1);
         } else if (ob.type === "woman_biking") {
-            drawWomanBiking(0, 0, 2);
+            drawWomanBiking(0, 0, 2.5);
         } else if (ob.type === "bear") {
             drawBear(0, 0, 2);
         } else if (ob.type === "maple_tree") {
@@ -691,7 +805,7 @@ function drawObstacles(scrollSpeed) {
             // } else if (ob.type === "school_bus") {
             //  drawSchoolBusFrontView(0, 0, 1);
         } else if (ob.type === "fiat_car") {
-            drawFiatCar(0, 0, 3);
+            drawFiatCar(0, 0, 3.3);
         } else if (ob.type === "chevrolet") {
             drawChevrolet(0, 0, 2);
         } else if (ob.type === "hamburger") {
@@ -703,18 +817,16 @@ function drawObstacles(scrollSpeed) {
         } else if (ob.type === "citrus") {
             drawCitrus(0, 0, 1);
         } else if (ob.type === "kid_soccer") {
-            drawKidSoccer(0, 0, 2);
+            drawKidSoccer(0, 0, 2.5);
         }
 
         pop();
 
         if (ob.y > height + 50) obstacles.splice(i, 1);
     }
-}
-/*function checkCollisions() {
+} function checkCollisions() {
     const playerY = player.y - player.jumpY;
     const playerX = player.x;
-    const size = 30;
 
     for (let i = obstacles.length - 1; i >= 0; i--) {
         const ob = obstacles[i];
@@ -728,7 +840,42 @@ function drawObstacles(scrollSpeed) {
             continue;
         }
 
-        if (abs(ob.x - playerX) < size && abs(ob.y - playerY) < size) {
+        // Define collision sizes based on obstacle type (scaled by 0.5 in drawObstacles)
+        let collisionSize = 30; // default
+        let yOffset = 0; // vertical offset for better alignment
+
+        if (ob.type === "woman_biking") {
+            collisionSize = 45;
+            yOffset = -10;
+        } else if (ob.type === "bear") {
+            collisionSize = 60;
+            yOffset = 0;
+        } else if (ob.type === "maple_tree" || ob.type === "orange_tree") {
+            collisionSize = 55;
+            yOffset = -20;
+        } else if (ob.type === "fat_guy") {
+            collisionSize = 85;
+            yOffset = -15;
+        } else if (ob.type === "fiat_car" || ob.type === "chevrolet") {
+            collisionSize = 75;
+            yOffset = 10;
+        } else if (ob.type === "i_show_speed") {
+            collisionSize = 55;
+            yOffset = -5;
+        } else if (ob.type === "kid_soccer") {
+            collisionSize = 50;
+            yOffset = -5;
+        } else if (ob.type === "maple_syrup" || ob.type === "citrus" || ob.type === "hamburger") {
+            collisionSize = 37;
+            yOffset = 0;
+        }
+
+        // Adjust for the 0.5 scale applied in drawObstacles
+        collisionSize *= 0.5;
+        yOffset *= 0.5;
+
+        // Check collision with adjusted parameters
+        if (abs(ob.x - playerX) < collisionSize && abs((ob.y + yOffset) - playerY) < collisionSize) {
             // Slow-down power-ups
             if (powerUps.includes(ob.type)) {
                 mapleSlowActive = true;
@@ -738,45 +885,9 @@ function drawObstacles(scrollSpeed) {
                 // Regular obstacles damage the player
                 player.life--;
                 hitCooldown = true;
-                applyVolumeDamage(); // Apply volume damage
+                applyVolumeDamage();
                 setTimeout(() => hitCooldown = false, 1000);
-                obstacles.splice(i, 1); // remove the obstacle we hit
-                if (player.life <= 0) gameOver();
-            }
-        }
-    }
-}*/
-
-function checkCollisions() {
-    const playerY = player.y - player.jumpY;
-    const playerX = player.x;
-    const size = 30;
-
-    for (let i = obstacles.length - 1; i >= 0; i--) {
-        const ob = obstacles[i];
-
-        // Power-ups that can be collected while jumping
-        const powerUps = ["maple_syrup", "hamburger", "citrus"];
-
-        // If player is in the air, ignore damaging floor obstacles.
-        // Still allow collecting power-ups while airborne.
-        if (player.isJumping && !powerUps.includes(ob.type)) {
-            continue;
-        }
-
-        if (abs(ob.x - playerX) < size && abs(ob.y - playerY) < size) {
-            // Slow-down power-ups
-            if (powerUps.includes(ob.type)) {
-                mapleSlowActive = true;
-                mapleTimer = millis();
                 obstacles.splice(i, 1);
-            } else {
-                // Regular obstacles damage the player
-                player.life--;
-                hitCooldown = true;
-                applyVolumeDamage(); // Apply volume damage
-                setTimeout(() => hitCooldown = false, 1000);
-                obstacles.splice(i, 1); // remove the obstacle we hit
                 if (player.life <= 0) gameOver();
             }
         }
@@ -867,4 +978,47 @@ function drawHUD() {
     text(`Life: ${player.life}`, 20, 50);
 
 
+}
+
+
+
+function spawnCarDust(x, y) {
+    for (let i = 0; i < 3; i++) {
+        carDustParticles.push({
+            x: x + random(-15, 15),
+            y: y + random(-5, 5),
+            size: random(8, 20),
+            opacity: 180,
+            speedX: random(-1, 1),
+            speedY: random(-2, -4), // moves upward
+            life: 1.0
+        });
+    }
+}
+
+function updateCarDustParticles() {
+    for (let i = carDustParticles.length - 1; i >= 0; i--) {
+        const dust = carDustParticles[i];
+        dust.x += dust.speedX;
+        dust.y += dust.speedY;
+        dust.life -= 0.04;
+        dust.opacity = dust.life * 180;
+        dust.size *= 1.02; // grows slightly
+
+        if (dust.life <= 0) {
+            carDustParticles.splice(i, 1);
+        }
+    }
+}
+
+function drawCarDustParticles() {
+    for (const dust of carDustParticles) {
+        noStroke();
+        fill(100, 100, 100, dust.opacity * 0.5);
+        ellipse(dust.x, dust.y, dust.size, dust.size);
+
+        // Inner lighter dust
+        fill(150, 150, 150, dust.opacity * 0.3);
+        ellipse(dust.x, dust.y, dust.size * 0.6, dust.size * 0.6);
+    }
 }

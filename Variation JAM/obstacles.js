@@ -8,7 +8,7 @@ function spawnObstacle() {
     if (currentMode === "Q") {
         type = random(["woman_biking", "maple_syrup", "bear", "maple_tree"]);
     } else if (currentMode === "U") {
-        type = random(["fat_guy", "school_bus", "chevrolet", "hamburger", "i_show_speed"]);
+        type = random(["fat_guy", "chevrolet", "hamburger", "i_show_speed"]);
     } else if (currentMode === "E") {
         type = random(["citrus", "orange_tree", "kid_soccer", "fiat_car"]);
     }
@@ -53,8 +53,8 @@ function drawObstacles(scrollSpeed) {
             drawMappleTree(0, 0, 5);  // ← Change from 1 to 5
         } else if (ob.type === "fat_guy") {
             drawFatGuy(0, 0, 2.3);  // ← Change from 1 to 2.3
-        } else if (ob.type === "school_bus") {
-            drawSchoolBusFrontView(0, 0, 1.5);  // ← Change from 1 to 1.5
+            // } else if (ob.type === "school_bus") {
+            // drawSchoolBusFrontView(0, 0, 1.5);  // ← Change from 1 to 1.5
         } else if (ob.type === "fiat_car") {
             drawFiatCar(0, 0, 3);  // ← Change from 1 to 3
         } else if (ob.type === "chevrolet") {
@@ -364,11 +364,7 @@ function drawFiatCar(x, y, s) {
     arc(-35, 44, 16, 28, 0, PI, CHORD);
     arc(35, 44, 16, 28, 0, PI, CHORD);
 
-    // Wheel rims
-    fill(150);
-    noStroke();
-    ellipse(-35, 46, 2, 4);
-    ellipse(35, 46, 2, 4);
+
 
     pop();
 }
@@ -1032,20 +1028,7 @@ function drawChevrolet(x, y, s) {
     arc(-42, 57, 24, 35, 0, PI, CHORD);
     arc(42, 57, 24, 35, 0, PI, CHORD);
 
-    // Wheel rims (chrome effect)
-    fill(180);
-    noStroke();
-    ellipse(-42, 58, 2, 18);
-    ellipse(42, 58, 2, 18);
 
-    // Rim spokes
-    stroke(100);
-    strokeWeight(1);
-    for (let i = 0; i < 5; i++) {
-        let angle = (TWO_PI / 5) * i;
-        line(-42, 58, -42 + cos(angle) * 5, 58 + sin(angle) * 8);
-        line(42, 58, 42 + cos(angle) * 5, 58 + sin(angle) * 8);
-    }
 
     pop();
 }
@@ -2458,3 +2441,5 @@ function drawKidSoccer(x, y, s) {
     pop();
     pop();
 }
+
+

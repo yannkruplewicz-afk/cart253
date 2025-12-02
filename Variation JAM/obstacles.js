@@ -1074,7 +1074,7 @@ function drawIShowSpeed(x, y, s) {
     // ================================
     // LEGS & SHOES
     // ================================
-    fill(40, 50, 80);
+    fill(170, 50, 80);
     strokeWeight(2);
 
     rect(-10, 20 + legOffset / 2, 15, 40, 4); // left leg
@@ -1087,7 +1087,7 @@ function drawIShowSpeed(x, y, s) {
     // ================================
     // TORSO - PORTUGAL JERSEY
     // ================================
-    fill(220, 20, 20); // Red Portugal color
+    fill(255, 255, 255); // Red Portugal color
     strokeWeight(3);
     rect(0, -15 + torsoTremble, 30, 55, 8);
 
@@ -1103,7 +1103,7 @@ function drawIShowSpeed(x, y, s) {
     strokeWeight(1.5);
     textSize(20);
     textAlign(CENTER);
-    text("7", 0, -8 + torsoTremble);
+    text("7", 0, -16 + torsoTremble);
 
     // Portugal coat of arms (simplified)
     fill(255, 215, 0); // Gold

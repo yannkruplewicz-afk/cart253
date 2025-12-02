@@ -566,94 +566,172 @@ function drawPlayer() {
     // Horizontal angle based on distance from center
     const horizontalOffset = (player.x - centerX) / (width * 0.5); // -1 left, 1 right
     const angle = -horizontalOffset * PI / 22; // max ±12°, reversed direction
-
     push();
     translate(player.x, renderY);
-    rotate(angle); // tilt player toward lane side
+    rotate(angle);
     scale(scaleFactor * 1.7);
     rectMode(CENTER);
     ellipseMode(CENTER);
-
-    // --- Drawing code ---
-    let shirtColor, pantsColor, skinColor;
+    // Define colors
+    let pantsColor, skinColor;
     if (currentMode === "Q") {
-        shirtColor = color(220, 60, 40);
         pantsColor = color(50, 50, 80);
         skinColor = color(255, 220, 180);
     } else if (currentMode === "U") {
-        shirtColor = color(60, 100, 220);
-        pantsColor = color(40, 40, 80);
+        pantsColor = color(100, 150, 220);
         skinColor = color(255, 220, 180);
     } else {
-        shirtColor = color(255, 200, 60);
-        pantsColor = color(80, 50, 30);
+        pantsColor = color(120, 80, 160);
         skinColor = color(255, 200, 160);
     }
 
-    stroke(0);
-    strokeWeight(3);
-    // Headset
-    fill(40, 40, 40); // dark gray/black headset
-    strokeWeight(2);
-    const headsetTrembleX = sin(runPhase * 1.1) * 0.8;
-    // Headband
-    arc(headsetTrembleX, -60, 50, 50, PI, 0, OPEN); // curved band over head
-    // Ear cups
-    ellipse(-20 + headsetTrembleX, -60, 15, 20); // left ear cup
-    ellipse(20 + headsetTrembleX, -60, 15, 20); // right ear cup
-
-    const legOffset = 25 * sin(runPhase + PI);
-    // --- Legs & Shoes ---
-    fill(pantsColor);
-
-    if (player.isJumping) {
-        // Shortened and lifted legs
-        const jumpLegOffset = 15; // smaller than running offset
-        rect(-10, 20 + jumpLegOffset, 10, 20, 4); // left leg
-        rect(10, 20 - jumpLegOffset, 10, 20, 4); // right leg
-
-        // Small shoes
-        fill(50);
-        rect(-10, 35 + jumpLegOffset, 10, 6, 2); // left shoe
-        rect(10, 35 - jumpLegOffset, 10, 6, 2); // right shoe
-    } else {
-        // Normal running legs
-        const legOffset = 25 * sin(runPhase + PI);
-        rect(-10, 20 + legOffset / 2, 15, 40, 4); // left leg
-        rect(10, 20 - legOffset / 2, 15, 40, 4); // right leg
-
-        // Shoes
-        fill(50);
-        rect(-10, 40 + legOffset / 2, 15, 10, 2); // left shoe
-        rect(10, 40 - legOffset / 2, 15, 10, 2); // right shoe
-    }
-
-    fill(shirtColor);
-    const torsoTrembleY = sin(runPhase * 4) * 0.5;
-    rect(0, -15 + torsoTrembleY, 30, 55, 8);
-    // --- Arms ---
-    let armSwingSpeed = player.isJumping ? 0.05 : 0.1; // slower when jumping
-    runPhase += armSwingSpeed; // update run phase
-    // Running trembling effect
+    // Animation variables
+    let armSwingSpeed = player.isJumping ? 0.05 : 0.1;
+    runPhase += armSwingSpeed;
     const trembleX = sin(runPhase * 0.8) * 1.5;
     const trembleY = sin(runPhase * 0.8) * 1;
+    const torsoTrembleY = sin(runPhase * 4) * 0.5;
+    let armOffset = 20 * sin(runPhase);
+    if (player.isJumping) armOffset *= 0.5;
+    const legOffset = 25 * sin(runPhase + PI);
+
+    // === LEGS & SHOES ===
+    stroke(0);
+    strokeWeight(3);
+    fill(pantsColor);
+    if (player.isJumping) {
+        const jumpLegOffset = 15;
+        rect(-10, 20 + jumpLegOffset, 10, 20, 4);
+        rect(10, 20 - jumpLegOffset, 10, 20, 4);
+        fill(50);
+        rect(-10, 35 + jumpLegOffset, 10, 6, 2);
+        rect(10, 35 - jumpLegOffset, 10, 6, 2);
+    } else {
+        rect(-10, 20 + legOffset / 2, 15, 40, 4);
+        rect(10, 20 - legOffset / 2, 15, 40, 4);
+        fill(50);
+        rect(-10, 40 + legOffset / 2, 15, 10, 2);
+        rect(10, 40 - legOffset / 2, 15, 10, 2);
+    }
+
+    // Apply trembling
     translate(trembleX, trembleY);
 
-    let armOffset = 20 * sin(runPhase);
-    if (player.isJumping) armOffset *= 0.5; // smaller swing in air
+    // === REGION-SPECIFIC OUTFITS ===
+    if (currentMode === "Q") {
+        // QUEBEC - Winter Coat
+        fill(200, 40, 40);
+        stroke(0);
+        strokeWeight(3);
+        rect(0, -15 + torsoTrembleY, 35, 58, 10);
 
-    line(-25, -30, -25, -30 + armOffset); // left arm
-    line(25, -30, 25, -30 - armOffset);   // right arm
-    // Head
+        stroke(180, 30, 30);
+        strokeWeight(2);
+        for (let i = -35; i <= 15; i += 12) {
+            line(-17, i + torsoTrembleY, 17, i + torsoTrembleY);
+        }
+
+        stroke(0);
+        strokeWeight(2);
+        fill(240, 230, 220);
+        ellipse(-12, -38 + torsoTrembleY, 8, 8);
+        ellipse(-6, -42 + torsoTrembleY, 8, 8);
+        ellipse(0, -43 + torsoTrembleY, 8, 8);
+        ellipse(6, -42 + torsoTrembleY, 8, 8);
+        ellipse(12, -38 + torsoTrembleY, 8, 8);
+
+        fill(40, 40, 40);
+        stroke(0);
+        strokeWeight(2);
+        ellipse(-25, -10 - armOffset, 8, 10);
+        ellipse(25, -10 + armOffset, 8, 10);
+
+        fill(200, 40, 40);
+        stroke(0);
+        strokeWeight(3);
+        ellipse(-25, -25 - armOffset / 2, 12, 25);
+        ellipse(25, -25 + armOffset / 2, 12, 25);
+
+    } else if (currentMode === "U") {
+        // USA - Baseball Jacket
+        fill(40, 80, 180);
+        stroke(0);
+        strokeWeight(3);
+        rect(0, -15 + torsoTrembleY, 32, 52, 8);
+
+        stroke(0);
+        strokeWeight(2);
+        fill(255);
+        rect(0, -38 + torsoTrembleY, 28, 6, 2);
+
+
+        // Skin-colored arms
+        stroke(skinColor);
+        strokeWeight(8);
+        line(-25, -30, -25, -22 - armOffset);
+        line(25, -30, 25, -22 + armOffset);
+
+    } else {
+        // ESPAÑA - Real Madrid Jersey
+        fill(255);
+        stroke(0);
+        strokeWeight(3);
+        rect(0, -15 + torsoTrembleY, 32, 56, 8);
+
+        stroke(200, 170, 80);
+        strokeWeight(3);
+        line(-16, -38 + torsoTrembleY, -16, -25 + torsoTrembleY);
+        line(-12, -38 + torsoTrembleY, -12, -25 + torsoTrembleY);
+        line(-8, -38 + torsoTrembleY, -8, -25 + torsoTrembleY);
+        line(16, -38 + torsoTrembleY, 16, -25 + torsoTrembleY);
+        line(12, -38 + torsoTrembleY, 12, -25 + torsoTrembleY);
+        line(8, -38 + torsoTrembleY, 8, -25 + torsoTrembleY);
+
+        stroke(0);
+        strokeWeight(2);
+        fill(80, 50, 120);
+
+        // increase the corner radius (e.g., 4, 6, 8, 10...)
+        rect(0, -40 + torsoTrembleY, 20, 8, 126);
+
+        fill(200, 170, 80);
+        noStroke();
+        triangle(-8, -28 + torsoTrembleY, -6, -32 + torsoTrembleY, -4, -28 + torsoTrembleY);
+        triangle(-4, -28 + torsoTrembleY, -2, -32 + torsoTrembleY, 0, -28 + torsoTrembleY);
+        triangle(0, -28 + torsoTrembleY, 2, -32 + torsoTrembleY, 4, -28 + torsoTrembleY);
+        triangle(4, -28 + torsoTrembleY, 6, -32 + torsoTrembleY, 8, -28 + torsoTrembleY);
+
+        fill(200, 170, 80);
+        textSize(18);
+        textAlign(CENTER, CENTER);
+        textFont("Impact");
+        text("7", 0, -15 + torsoTrembleY);
+        // Golden yellow arms
+        stroke(235, 235, 235);
+        strokeWeight(7);
+        line(-25, -30, -25, -22 - armOffset);
+        line(25, -30, 25, -22 + armOffset);
+
+
+    }
+
+    // === HEADSET ===
+    fill(40, 40, 40);
+    stroke(0);
+    strokeWeight(2);
+    const headsetTrembleX = sin(runPhase * 1.1) * 0.8;
+    arc(headsetTrembleX, -60, 50, 50, PI, 0, OPEN);
+    ellipse(-20 + headsetTrembleX, -60, 15, 20);
+    ellipse(20 + headsetTrembleX, -60, 15, 20);
+
+    // === HEAD & HAIR ===
+    strokeWeight(3);
     fill(skinColor);
     ellipse(0, -60, 40, 40);
+    fill(70, 30, 10);
+    ellipse(0, -60, 40, 40);
 
-    // Hair / Cap
-    fill(50, 30, 10);
-    ellipse(0, -60, 40, 40); // Full hair coverage matching head size
     pop();
-
-
 
     // Update running animation
     runPhase += 0.2;
@@ -854,7 +932,7 @@ function drawObstacles(scrollSpeed) {
             collisionSize = 55;
             yOffset = -20;
         } else if (ob.type === "fat_guy") {
-            collisionSize = 85;
+            collisionSize = 70;
             yOffset = -15;
         } else if (ob.type === "fiat_car" || ob.type === "chevrolet") {
             collisionSize = 75;

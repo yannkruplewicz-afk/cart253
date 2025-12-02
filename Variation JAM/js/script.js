@@ -15,6 +15,9 @@ let player;
 let obstacles = [];
 let obstacleTimer = 0;
 const spawnIntervalBase = 1500;
+let planes = []; // planes flying in the sky
+let lastPlaneSpawn = 0;
+
 
 let worldScroll = 0;
 let mapleSlowActive = false;
@@ -126,6 +129,8 @@ function resetAll() {
     worldScroll = 0;
     cloudParticles = []; // reset cloud particles
     carDustParticles = []; // ADD THIS LINE
+    planes = []; // reset planes
+    lastPlaneSpawn = millis();
 
     bottomLaneX = [
         width / 2 - width * 0.25,
@@ -312,10 +317,7 @@ function drawParallaxBackground(mode, scroll) {
     if (mode === "Q") {
         drawQuebecForest(scroll);
     } else if (mode === "U") {
-        let sky = color(100, 150, 240);
-        let mid = color(80, 80, 100);
-        background(sky);
-        fill(mid);
+        drawNYCStreets(scroll);
     } else {
         drawSpainStreets(scroll);
     }
@@ -537,7 +539,351 @@ function drawSingleTree(treeX, treeY, depthScale, treeType, fallColors, index, r
 
 function drawSpainStreets(scroll) {
 
+
+
+
+    // Sky gradient
+    for (let y = 0; y < height / 2; y++) {
+        let inter = map(y, 0, height / 2, 0, 1);
+        let c = lerpColor(color(135, 180, 230), color(255, 200, 150), inter);
+        stroke(c);
+        line(0, y, width, y);
+    }
+    // --- NEW SIDEWALK / BACKGROUND (behind buildings) ---
+
+    push();
+    fill(240, 200, 150);   // building-colored sidewalk
+    noStroke();
+    ellipse(400, 400, 600, 300);
+    rect(0, 300, 800, 600);
+
+
+    pop();
+
+
+
+    // Distant hills
+    fill(180, 150, 120, 120);
+    noStroke();
+    beginShape();
+    vertex(0, height / 2 + 50);
+    for (let x = 0; x <= width; x += 50) {
+        let y = height / 2 - 100 + sin(x * 0.012) * 40;
+        vertex(x, y);
+    }
+    vertex(width, height / 2 + 50);
+    endShape(CLOSE);
+
+    // --- REVERSED PARALLAX (negative scroll) ---
+    const extraFarScroll = -scroll * 0.08;
+    const farScroll = -scroll * 0.12;
+    const midFarScroll = -scroll * 0.18;
+    const midScroll = -scroll * 0.25;
+    const midCloseScroll = -scroll * 0.32;
+    const closeScroll = -scroll * 0.40;
+    const veryCloseScroll = -scroll * 0.48;
+
+    // Buildings layers
+    drawBuildingLayer(extraFarScroll, 0.25, height / 2 - 100, 150, 50, color(200, 160, 120));
+    drawBuildingLayer(farScroll, 0.35, height / 2 - 50, 200, 45, color(220, 180, 140));
+    drawBuildingLayer(midFarScroll, 0.5, height / 2 + 20, 250, 40, color(240, 200, 150));
+    drawBuildingLayer(midScroll, 0.7, height / 2 + 100, 320, 35, color(255, 220, 180));
+    drawBuildingLayer(midCloseScroll, 0.85, height / 2 + 180, 400, 30, color(255, 230, 190));
+    drawBuildingLayer(closeScroll, 1.0, height / 2 + 260, 480, 25, color(255, 235, 200));
+    drawBuildingLayer(veryCloseScroll, 1.2, height / 2 + 340, 550, 22, color(255, 240, 210));
+
+    // Ground
+    fill(200, 170, 140);
+    noStroke();
+    rect(0, height - 100, width, 100);
 }
+
+function drawBuildingLayer(scroll, scale, baseY, buildingHeight, numBuildings, buildingColor) {
+    const roadTopY = 200;
+    const roadBottomY = height;
+    const spacing = scale < 0.4 ? 80 : 120; // tighter spacing for far layers
+    const offset = scroll * scale;
+
+    for (let i = 0; i < numBuildings; i++) {
+        let buildingIndex = floor(offset / spacing) + i;
+        let buildingOffset = (buildingIndex * spacing) - offset;
+        let buildingY = baseY + buildingOffset * 0.3;
+
+        // Remove top cutoff so buildings can appear near top of screen
+        if (buildingY > roadBottomY) continue;
+
+        let depthScale = scale;
+        const roadCenterX = width / 2;
+        const depth = map(buildingY, roadTopY, roadBottomY, 0, 1);
+        const roadWidth = lerp(width * 0.03, width * 1.8, depth);
+        let alpha = 255;
+
+        for (let side = 0; side < 2; side++) {
+            let sideMultiplier = side === 0 ? -1 : 1;
+            let buildingsPerSide = scale > 0.7 ? 4 : 3;
+
+            for (let b = 0; b < buildingsPerSide; b++) {
+                let distanceFromRoad = 50 + b * 80;
+                let buildingX = roadCenterX + sideMultiplier * (roadWidth / 2 + distanceFromRoad * depthScale);
+
+                randomSeed(buildingIndex * 2000 + side * 300 + b);
+                let bWidth = random(60, 120) * depthScale;
+                let bHeight = (buildingHeight + random(-40, 40)) * depthScale;
+
+                // Static window colors
+                let windowSize = 20 * depthScale;
+                let windowSpacing = 28 * depthScale;
+                let windowRows = floor(bHeight / windowSpacing);
+                let windowCols = floor(bWidth / windowSpacing);
+
+                let windowColors = [];
+                for (let r = 0; r < windowRows; r++) {
+                    for (let c = 0; c < windowCols; c++) {
+                        if (random() < 0.5) {
+                            windowColors.push(color(180, 220, 255, alpha * 0.7));
+                        } else {
+                            windowColors.push(color(red(buildingColor), green(buildingColor), blue(buildingColor), alpha));
+                        }
+                    }
+                }
+
+                // Draw building
+                fill(red(buildingColor), green(buildingColor), blue(buildingColor), alpha);
+                stroke(0, alpha * 0.3);
+                strokeWeight(2);
+                rect(buildingX - bWidth / 2, buildingY - bHeight, bWidth, bHeight);
+
+                // Draw windows
+                let wIndex = 0;
+                for (let r = 0; r < windowRows; r++) {
+                    for (let c = 0; c < windowCols; c++) {
+                        let wx = buildingX - bWidth / 2 + (c + 0.5) * windowSpacing;
+                        let wy = buildingY - bHeight + (r + 0.5) * windowSpacing;
+
+                        fill(windowColors[wIndex]);
+                        noStroke();
+                        rect(wx - windowSize / 2, wy - windowSize / 2, windowSize * 0.8, windowSize);
+
+                        stroke(80, 80, 80, alpha * 0.5);
+                        strokeWeight(1);
+                        noFill();
+                        rect(wx - windowSize / 2, wy - windowSize / 2, windowSize * 0.8, windowSize);
+
+                        wIndex++;
+                    }
+                }
+
+                // Roof
+                fill(180, 80, 60, alpha);
+                triangle(
+                    buildingX - bWidth / 2 - 8 * depthScale, buildingY - bHeight,
+                    buildingX + bWidth / 2 + 8 * depthScale, buildingY - bHeight,
+                    buildingX, buildingY - bHeight - 20 * depthScale
+                );
+
+                // Balcony
+                if ((buildingIndex + b) % 3 === 0) {
+                    fill(100, 100, 100, alpha);
+                    let balconyY = buildingY - bHeight * 0.6;
+                    rect(buildingX - bWidth / 2, balconyY, bWidth, 4 * depthScale);
+                }
+            }
+        }
+    }
+}
+
+
+
+function drawNYCStreets(scroll) {
+    // Sky gradient
+    for (let y = 0; y < height / 2; y++) {
+        let inter = map(y, 0, height / 2, 0, 1);
+        let c = lerpColor(color(135, 206, 250), color(180, 220, 255), inter);
+        stroke(c);
+        line(0, y, width, y);
+    }
+
+
+
+    // Spawn plane every 20 seconds
+    if (millis() - lastPlaneSpawn > 20000) {
+        planes.push({
+            x: -100,
+            y: random(50, 150),
+            speed: random(2, 4)
+        });
+        lastPlaneSpawn = millis();
+    }
+
+    // Update and draw planes
+    for (let i = planes.length - 1; i >= 0; i--) {
+        let p = planes[i];
+        p.x += p.speed;
+
+        // Draw plane
+        push();
+        translate(p.x, p.y);
+        fill(255, 255, 255);
+        stroke(0);
+        strokeWeight(2);
+        // Fuselage
+        ellipse(0, 0, 60, 15);
+        // Wings
+        triangle(-20, 0, -10, -15, 10, 0);
+        triangle(-20, 0, -10, 15, 10, 0);
+        // Tail
+        triangle(25, 0, 30, -10, 35, 0);
+        // Banner with FIFA World Cup 2026
+        fill(255, 255, 255);
+        rect(40, -8, 120, 16);
+        fill(0);
+        textSize(10);
+        textAlign(LEFT, CENTER);
+        text("FIFA WORLD CUP 2026", 45, 0);
+        pop();
+
+        if (p.x > width + 200) planes.splice(i, 1);
+    }
+
+    // Sidewalk background
+    push();
+    fill(140, 160, 180);
+    noStroke();
+    ellipse(400, 300, 600, 300);
+    rect(0, 200, 800, 600);
+    pop();
+
+    // Building layers using Spain logic (reusing drawBuildingLayer)
+    const extraFarScroll = -scroll * 0.08;
+    const farScroll = -scroll * 0.12;
+    const midFarScroll = -scroll * 0.18;
+    const midScroll = -scroll * 0.25;
+    const midCloseScroll = -scroll * 0.32;
+    const closeScroll = -scroll * 0.40;
+    const veryCloseScroll = -scroll * 0.48;
+
+    // Use taller buildings and add World Cup banners
+    drawNYCBuildingLayer(extraFarScroll, 0.25, height / 2 - 150, 300, 35, color(100, 120, 140));
+    drawNYCBuildingLayer(farScroll, 0.35, height / 2 - 100, 380, 32, color(120, 140, 160));
+    drawNYCBuildingLayer(midFarScroll, 0.5, height / 2 - 20, 450, 28, color(140, 160, 180));
+    drawNYCBuildingLayer(midScroll, 0.7, height / 2 + 80, 520, 25, color(160, 180, 200));
+    drawNYCBuildingLayer(midCloseScroll, 0.85, height / 2 + 160, 600, 22, color(180, 190, 210));
+    drawNYCBuildingLayer(closeScroll, 1.0, height / 2 + 240, 680, 20, color(190, 200, 220));
+    drawNYCBuildingLayer(veryCloseScroll, 1.2, height / 2 + 320, 750, 18, color(200, 210, 230));
+
+    // Ground
+    fill(160, 160, 160);
+    noStroke();
+    rect(0, height - 100, width, 100);
+
+    // Sidewalk cracks
+    stroke(120, 120, 120);
+    strokeWeight(2);
+    const crackScroll = scroll * 0.8;
+    for (let x = -crackScroll % 40; x < width; x += 40) {
+        line(x, height - 100, x + random(-10, 10), height);
+    }
+}
+
+function drawNYCBuildingLayer(scroll, scale, baseY, buildingHeight, numBuildings, buildingColor) {
+    const roadTopY = 200;
+    const roadBottomY = height;
+    const spacing = scale < 0.4 ? 100 : 140;
+    const offset = scroll * scale;
+
+    for (let i = 0; i < numBuildings; i++) {
+        let buildingIndex = floor(offset / spacing) + i;
+        let buildingOffset = (buildingIndex * spacing) - offset;
+        let buildingY = baseY + buildingOffset * 0.3;
+
+        if (buildingY > roadBottomY) continue;
+
+        let depthScale = scale;
+        const roadCenterX = width / 2;
+        const depth = map(buildingY, roadTopY, roadBottomY, 0, 1);
+        const roadWidth = lerp(width * 0.03, width * 1.8, depth);
+        let alpha = 255;
+
+        for (let side = 0; side < 2; side++) {
+            let sideMultiplier = side === 0 ? -1 : 1;
+            let buildingsPerSide = scale > 0.7 ? 3 : 2;
+
+            for (let b = 0; b < buildingsPerSide; b++) {
+                let distanceFromRoad = 80 + b * 100;
+                let buildingX = roadCenterX + sideMultiplier * (roadWidth / 2 + distanceFromRoad * depthScale);
+
+                randomSeed(buildingIndex * 3000 + side * 500 + b);
+                let bWidth = random(80, 150) * depthScale;
+                let bHeight = (buildingHeight + random(-60, 80)) * depthScale;
+
+                // Building body (glass skyscraper) - simplified
+                let glassColor = lerpColor(buildingColor, color(150, 180, 220), random(0.3, 0.7));
+                fill(red(glassColor), green(glassColor), blue(glassColor), alpha);
+                stroke(0, alpha * 0.3);
+                strokeWeight(1);
+                rect(buildingX - bWidth / 2, buildingY - bHeight, bWidth, bHeight);
+
+                // Optimized windows - only draw for closer buildings with fewer windows
+                if (scale > 0.5) {
+                    let windowSize = 20 * depthScale;
+                    let windowSpacing = 35 * depthScale;
+                    let windowRows = floor(bHeight / windowSpacing);
+                    let windowCols = floor(bWidth / windowSpacing);
+
+                    noStroke();
+                    for (let r = 0; r < windowRows; r++) {
+                        for (let c = 0; c < windowCols; c++) {
+                            let wx = buildingX - bWidth / 2 + (c + 0.5) * windowSpacing;
+                            let wy = buildingY - bHeight + (r + 0.5) * windowSpacing;
+
+                            if (random() < 0.6) {
+                                fill(200, 230, 255, alpha * 0.7);
+                            } else {
+                                fill(255, 255, 200, alpha * 0.5);
+                            }
+                            rect(wx - windowSize / 2, wy - windowSize / 2, windowSize * 0.8, windowSize);
+                        }
+                    }
+                }
+
+                // World Cup 2026 banners on buildings
+                if ((buildingIndex + b) % 3 === 0 && scale > 0.5) {
+                    push();
+                    fill(255, 215, 0);
+                    noStroke();
+                    let bannerY = buildingY - bHeight * 0.7;
+                    rect(buildingX - bWidth / 2, bannerY, bWidth, 15 * depthScale);
+                    fill(0);
+                    textSize(8 * depthScale);
+                    textAlign(CENTER, CENTER);
+                    text("WORLD CUP 2026", buildingX, bannerY + 7 * depthScale);
+                    pop();
+                }
+
+                // MORE USA flags - increased frequency
+                if ((buildingIndex + b) % 2 === 0 && scale > 0.4) {
+                    let flagX = buildingX;
+                    let flagY = buildingY - bHeight + 20 * depthScale;
+                    let wave = sin(frameCount * 0.1 + flagX) * 2 * depthScale;
+
+                    stroke(100, 100, 100, alpha);
+                    strokeWeight(2 * depthScale);
+                    line(flagX, flagY, flagX, flagY - 40 * depthScale);
+
+                    // Simple USA flag
+                    noStroke();
+                    fill(200, 16, 46, alpha);
+                    rect(flagX, flagY - 35 * depthScale + wave, 25 * depthScale, 15 * depthScale);
+                    fill(60, 59, 110, alpha);
+                    rect(flagX, flagY - 35 * depthScale + wave, 10 * depthScale, 8 * depthScale);
+                }
+
+                // Soccer ball decorations - removed to improve performance
+            }
+        }
+    }
+}
+
 
 
 function mousePressed() {
@@ -688,7 +1034,7 @@ function drawUSARoad(topWidth, bottomWidth, roadTopY, roadBottomY, centerX) {
 }
 function drawSpainRoad(topWidth, bottomWidth, roadTopY, roadBottomY, centerX) {
     // Warm stone base
-    const stoneBase = color(180, 160, 140);
+    const stoneBase = color(240, 200, 150);
     fill(stoneBase);
     noStroke();
     quad(
@@ -720,7 +1066,7 @@ function drawSpainRoad(topWidth, bottomWidth, roadTopY, roadBottomY, centerX) {
             const zigzagOffset = sin((y / stoneSize + i) * 0.5) * 8;
 
             // Draw individual stone
-            fill(170 + random(-5, 5), 150 + random(-3, 3), 130 + random(-3, 3));
+            fill(220 + random(-5, 5), 180 + random(-3, 3), 140 + random(-3, 3));
             stroke(140, 130, 110);
             strokeWeight(2);
 

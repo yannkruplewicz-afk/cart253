@@ -2031,28 +2031,45 @@ function drawMapleSyrupBottle(x, y, s) {
 
     pop();
 }
-
 function drawBear(x, y, s, runPhase = 0) {
     push();
     translate(x, y);
     scale(s);
 
-    // === ANIMATION OFFSETS ===
+    // === ANIMATION VARIABLES ===
     let legSwing = sin(runPhase) * 12;
     let armSwing = sin(runPhase + PI) * 12;
     let bounce = sin(runPhase * 2) * 2;
+    let reachAmount = sin(frameCount * 0.05) * 8;
+
+    // === EYE TRACKING CALCULATION ===
+    let eyeLookX = 0;
+    let eyeLookY = 0;
+
+    if (typeof player !== 'undefined') {
+        let dx = player.x - x;
+        let dy = (player.renderY || player.y) - y;
+        let distance = sqrt(dx * dx + dy * dy);
+
+        if (distance > 0) {
+            eyeLookX = constrain((dx / distance) * 3, -3, 3);
+            eyeLookY = constrain((dy / distance) * 2, -2, 2);
+        }
+    }
 
     translate(0, bounce);
 
-    // === BACK LEGS (running) ===
+    // === BACK LEGS ===
     fill(100, 70, 40);
     stroke(0);
     strokeWeight(2);
 
+    // Left back leg
     ellipse(-30 + legSwing, 80, 30, 45);
+    // Right back leg
     ellipse(30 - legSwing, 80, 30, 45);
 
-    // Paw pads
+    // Paw pads on back legs
     fill(80, 50, 30);
     noStroke();
     ellipse(-30 + legSwing, 95, 22, 14);
@@ -2064,28 +2081,57 @@ function drawBear(x, y, s, runPhase = 0) {
     strokeWeight(2);
     ellipse(0, 40, 90, 100);
 
-    // Belly patch
+    // Belly patch (lighter color)
     fill(130, 95, 65);
     noStroke();
     ellipse(0, 50, 60, 70);
 
-    // === FRONT ARMS (running swing) ===
+    // === FRONT LEFT ARM (reaching toward player) ===
+    push();
+    translate(-40, 40 + armSwing * 0.4);
+    rotate(radians(armSwing * 0.8 + reachAmount * 0.5));
+
+    // Left arm
     fill(100, 70, 40);
     stroke(0);
     strokeWeight(2);
-
-    // Left arm
-    push();
-    translate(-40, 40 + armSwing * 0.4);
-    rotate(radians(armSwing * 0.8));
     ellipse(0, 0, 25, 45);
+
+    // Left paw
+    fill(80, 50, 30);
+    ellipse(0, 20, 18, 16);
+
+    // Left claws
+    stroke(40, 30, 25);
+    strokeWeight(1.5);
+    line(-6, 25, -8, 30);
+    line(-2, 26, -2, 32);
+    line(2, 26, 2, 32);
+    line(6, 25, 8, 30);
     pop();
 
-    // Right arm
+    // === FRONT RIGHT ARM (reaching toward player) ===
     push();
     translate(40, 40 - armSwing * 0.4);
-    rotate(radians(-armSwing * 0.8));
+    rotate(radians(-armSwing * 0.8 - reachAmount * 0.5));
+
+    // Right arm
+    fill(100, 70, 40);
+    stroke(0);
+    strokeWeight(2);
     ellipse(0, 0, 25, 45);
+
+    // Right paw
+    fill(80, 50, 30);
+    ellipse(0, 20, 18, 16);
+
+    // Right claws
+    stroke(40, 30, 25);
+    strokeWeight(1.5);
+    line(-6, 25, -8, 30);
+    line(-2, 26, -2, 32);
+    line(2, 26, 2, 32);
+    line(6, 25, 8, 30);
     pop();
 
     // === HEAD ===
@@ -2095,12 +2141,16 @@ function drawBear(x, y, s, runPhase = 0) {
     ellipse(0, -15, 70, 75);
 
     // === EARS ===
+    // Left ear
     fill(100, 70, 40);
     stroke(0);
     strokeWeight(2);
     ellipse(-25, -45, 25, 28);
+
+    // Right ear
     ellipse(25, -45, 25, 28);
 
+    // Inner ear details
     fill(80, 55, 30);
     noStroke();
     ellipse(-25, -43, 15, 18);
@@ -2112,7 +2162,7 @@ function drawBear(x, y, s, runPhase = 0) {
     strokeWeight(2);
     ellipse(0, 0, 45, 35);
 
-    // Nose
+    // === NOSE ===
     fill(40, 30, 25);
     beginShape();
     vertex(0, -8);
@@ -2120,37 +2170,46 @@ function drawBear(x, y, s, runPhase = 0) {
     vertex(8, 2);
     endShape(CLOSE);
 
-    // === NEUTRAL MOUTH (removed smile) ===
+    // === MOUTH ===
     stroke(0);
     strokeWeight(2);
-    line(-8, 12, 8, 12); // Straight mouth line
-    line(0, 5, 0, 12);   // Vertical crease
+    line(-8, 12, 8, 12);
+    line(0, 5, 0, 12);
 
-    // === EYES ===
+    // === EYES (with player tracking) ===
+    // Left eye white
     fill(40, 30, 25);
     stroke(0);
     strokeWeight(2);
     ellipse(-15, -15, 12, 14);
+
+    // Right eye white
     ellipse(15, -15, 12, 14);
 
+    // Left pupil (tracks player)
     fill(0);
-    ellipse(-15, -14, 6, 7);
-    ellipse(15, -14, 6, 7);
+    noStroke();
+    ellipse(-15 + eyeLookX, -14 + eyeLookY, 6, 7);
 
-    // Minimal reflections
+    // Right pupil (tracks player)
+    ellipse(15 + eyeLookX, -14 + eyeLookY, 6, 7);
+
+    // Left eye reflection
     fill(255);
-    ellipse(-14, -16, 2, 2);
-    ellipse(16, -16, 2, 2);
+    ellipse(-14 + eyeLookX, -16 + eyeLookY, 2, 2);
 
-    // === NEUTRAL EYEBROWS ===
+    // Right eye reflection
+    ellipse(16 + eyeLookX, -16 + eyeLookY, 2, 2);
+
+    // === EYEBROWS (focused expression) ===
     stroke(60, 40, 20);
     strokeWeight(3);
-    line(-22, -25, -10, -25);
-    line(22, -25, 10, -25);
+    noFill();
+    line(-22, -25, -10, -23);
+    line(22, -25, 10, -23);
 
     pop();
 }
-
 
 
 function drawKidSoccer(x, y, s) {

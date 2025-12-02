@@ -306,25 +306,240 @@ function drawGame() {
     // Update music playback
     updateMusicPlayback();
 }
-
+// === BACKGROUND ===
 // === BACKGROUND ===
 function drawParallaxBackground(mode, scroll) {
-    let sky, mid;
     if (mode === "Q") {
-        sky = color(190, 220, 255);
-        mid = color(200, 80, 60);
+        drawQuebecForest(scroll);
     } else if (mode === "U") {
-        sky = color(100, 150, 240);
-        mid = color(80, 80, 100);
+        let sky = color(100, 150, 240);
+        let mid = color(80, 80, 100);
+        background(sky);
+        fill(mid);
     } else {
-        sky = color(230, 200, 150);
-        mid = color(180, 140, 90);
+        drawSpainStreets(scroll);
+    }
+}
+
+function drawQuebecForest(scroll) {
+    // Sky gradient
+    for (let y = 0; y < height / 2; y++) {
+        let inter = map(y, 0, height / 2, 0, 1);
+        let c = lerpColor(color(135, 206, 250), color(190, 220, 255), inter);
+        stroke(c);
+        line(0, y, width, y);
     }
 
-    background(sky);
-    fill(mid);
+    // Distant mountains (much higher)
+    fill(100, 120, 140, 150);
+    noStroke();
+    beginShape();
+    vertex(0, height / 2 + 50);
+    for (let x = 0; x <= width; x += 50) {
+        let y = height / 2 - 200 + sin(x * 0.01) * 50 + cos(x * 0.008) * 40;
+        vertex(x, y);
+    }
+    vertex(width, height / 2 + 50);
+    endShape(CLOSE);
+
+    // Extra far tree layer (very slow) - REDUCED TREES - SLOWER
+    const extraFarScroll = scroll * 0.15;
+    drawTreeLayer(extraFarScroll, 0.3, null, height / 2 - 20, 100, 40, true);
+
+    // Far tree layer (slowest parallax) - REDUCED TREES - SLOWER
+    const farScroll = scroll * 0.25;
+    drawTreeLayer(farScroll, 0.4, null, height / 2 - 20, 120, 35, true);
+
+    // Mid-far tree layer - REDUCED TREES - SLOWER
+    const midFarScroll = scroll * 0.35;
+    drawTreeLayer(midFarScroll, 0.5, null, height / 2 + 20, 150, 30, true);
+
+    // Mid tree layer - REDUCED TREES - SLOWER
+    const midScroll = scroll * 0.45;
+    drawTreeLayer(midScroll, 0.6, null, height / 2 + 40, 180, 25, true);
+
+    // Mid-close tree layer - REDUCED TREES - SLOWER
+    const midCloseScroll = scroll * 0.55;
+    drawTreeLayer(midCloseScroll, 0.8, null, height / 2 + 80, 220, 20, true);
+
+    // Close tree layer (fastest parallax) - REDUCED TREES - SLOWER
+    const closeScroll = scroll * 0.65;
+    drawTreeLayer(closeScroll, 1.0, null, height / 2 + 120, 250, 18, true);
+
+    // Ground foliage
+    fill(40, 70, 40);
+    noStroke();
+    rect(0, height - 100, width, 100);
+
+    // Grass details
+    stroke(50, 90, 50);
+    strokeWeight(2);
+    const grassScroll = scroll * 0.8;
+    for (let x = -grassScroll % 20; x < width; x += 20) {
+        for (let i = 0; i < 3; i++) {
+            let gx = x + random(-5, 5);
+            let gy = height - 100 + random(0, 80);
+            line(gx, gy, gx + random(-3, 3), gy - random(8, 15));
+        }
+    }
+}
+
+function drawTreeLayer(scroll, scale, treeColor, baseY, treeHeight, numTreesOverride, fillScreen) {
+    const roadTopY = 200;
+    const roadBottomY = height;
+    const spacing = fillScreen ? 40 : 60; // Tighter spacing when filling screen
+    const offset = scroll * scale;
+
+    // More trees for smoother motion, or use override
+    const numTrees = numTreesOverride || 25;
+
+    // Fall colors palette (yellow, red, orange, green)
+    const fallColors = [
+        color(255, 215, 0),     // Golden yellow
+        color(255, 140, 0),     // Dark orange
+        color(220, 20, 60),     // Crimson red
+        color(255, 69, 0),      // Red-orange
+        color(184, 134, 11),    // Dark goldenrod
+        color(34, 139, 34),     // Forest green
+        color(255, 165, 0),     // Orange
+        color(178, 34, 34),     // Firebrick red
+        color(50, 90, 50),      // Dark green
+        color(218, 165, 32)     // Goldenrod
+    ];
+
+    for (let i = 0; i < numTrees; i++) {
+        // Position trees from top (far) to bottom (near) of the road
+        let progress = (i + (offset / spacing) % numTrees) / numTrees;
+        while (progress > 1) progress -= 1;
+        while (progress < 0) progress += 1;
+
+        // Smooth easing for more natural motion
+        let easedProgress = progress * progress * (3 - 2 * progress); // smoothstep
+
+        let treeY = lerp(roadTopY - 50, roadBottomY - 80, easedProgress);
+
+        // Calculate depth-based scale (smaller at top, larger at bottom)
+        let depthScale = map(treeY, roadTopY - 50, roadBottomY - 80, 0.2, 2.0) * scale;
+
+        // Position trees on sides of the road using perspective
+        const roadCenterX = width / 2;
+        const depth = map(treeY, roadTopY, roadBottomY, 0, 1);
+        const roadWidth = lerp(width * 0.03, width * 1.8, depth);
+
+        // ALL TREES ARE PINE NOW (treeType = 0)
+        let treeType = 0; // Only pine trees
+
+        if (fillScreen) {
+            // REDUCED DENSITY: Only 3 trees per position (was 6)
+            // Draw trees on both sides with only ONE distance from road
+            for (let sideIdx = 0; sideIdx < 2; sideIdx++) {
+                let side = sideIdx === 0 ? -1 : 1;
+
+                // Place 1.5 trees at different distances from road on each side (REDUCED from 3)
+                for (let distIdx = 0; distIdx < 1.5; distIdx++) {
+                    let distMultiplier = 1.0 + distIdx * 0.7; // Spread out more
+                    let treeX = roadCenterX + side * (roadWidth / 2 + 30 * depthScale * distMultiplier);
+
+                    // Add horizontal variation
+                    treeX += sin(i * 2.5 + distIdx * 3.7 + offset * 0.05) * 12 * depthScale;
+
+                    drawSingleTree(treeX, treeY, depthScale, treeType, fallColors, i, roadTopY, progress);
+                }
+            }
+        } else {
+            // Normal mode: standard tree placement
+            let sideMultiplier = (i % 4 === 0) ? 1.5 : 1.0;
+            let side = (i % 2 === 0) ? -1 : 1;
+            let treeX = roadCenterX + side * (roadWidth / 2 + 40 * depthScale * sideMultiplier);
+            treeX += sin(i * 2.5 + offset * 0.05) * 15 * depthScale;
+
+            drawSingleTree(treeX, treeY, depthScale, treeType, fallColors, i, roadTopY, progress);
+        }
+    }
+}
+
+function drawSingleTree(treeX, treeY, depthScale, treeType, fallColors, index, roadTopY, progress) {
+    const roadBottomY = height;
+    const treeHeight = 250; // Default height
+
+    // Skip if tree is off screen
+    if (treeY < roadTopY - 100 || treeY > roadBottomY) return;
+
+    // Fade in/out at edges for smoother appearance
+    let alpha = 255;
+    if (progress < 0.05) alpha *= progress / 0.05;
+    if (progress > 0.95) alpha *= (1 - progress) / 0.05;
+
+    // Hide trees at road beginning (top area)
+    if (treeY < roadTopY + 30) alpha *= (treeY - (roadTopY - 50)) / 80;
+
+    // Pick a consistent fall color for this tree
+    let foliageBaseColor = fallColors[index % fallColors.length];
+
+    // Tree trunk
+    fill(60, 40, 20, alpha);
+    noStroke();
+    let trunkW = 15 * depthScale;
+    let trunkH = treeHeight * 0.4 * depthScale;
+    rect(treeX - trunkW / 2, treeY, trunkW, trunkH);
+
+    let foliageColor = color(
+        red(foliageBaseColor),
+        green(foliageBaseColor),
+        blue(foliageBaseColor),
+        alpha * 0.9
+    );
+    fill(foliageColor);
+    stroke(0, min(50, alpha * 0.2));
+    strokeWeight(1);
+
+    // Draw different tree types
+    if (treeType === 0) {
+        // Pine tree (triangular)
+        let w1 = 80 * depthScale;
+        let h1 = treeHeight * 0.35 * depthScale;
+        triangle(treeX - w1 / 2, treeY, treeX + w1 / 2, treeY, treeX, treeY - h1);
+
+        let w2 = 70 * depthScale;
+        let h2 = treeHeight * 0.3 * depthScale;
+        triangle(treeX - w2 / 2, treeY - h1 * 0.6, treeX + w2 / 2, treeY - h1 * 0.6, treeX, treeY - h1 - h2);
+
+        let w3 = 60 * depthScale;
+        let h3 = treeHeight * 0.25 * depthScale;
+        triangle(treeX - w3 / 2, treeY - h1 - h2 * 0.6, treeX + w3 / 2, treeY - h1 - h2 * 0.6, treeX, treeY - h1 - h2 - h3);
+    } else if (treeType === 1) {
+        // Maple tree (iconic maple leaf shape)
+        let mapleW = 90 * depthScale;
+        let mapleH = treeHeight * 0.8 * depthScale;
+
+        // Main crown (round-ish top)
+        ellipse(treeX, treeY - mapleH * 0.5, mapleW * 0.8, mapleH * 0.7);
+
+        // Side lobes
+        ellipse(treeX - mapleW * 0.35, treeY - mapleH * 0.4, mapleW * 0.5, mapleH * 0.5);
+        ellipse(treeX + mapleW * 0.35, treeY - mapleH * 0.4, mapleW * 0.5, mapleH * 0.5);
+
+        // Top point
+        ellipse(treeX, treeY - mapleH * 0.8, mapleW * 0.4, mapleH * 0.4);
+    } else {
+        // Rounded tree (simple deciduous)
+        let roundW = 85 * depthScale;
+        let roundH = treeHeight * 0.75 * depthScale;
+
+        // Main round crown
+        ellipse(treeX, treeY - roundH * 0.5, roundW, roundH);
+
+        // Additional rounded clusters for natural look
+        ellipse(treeX - roundW * 0.25, treeY - roundH * 0.3, roundW * 0.6, roundH * 0.6);
+        ellipse(treeX + roundW * 0.25, treeY - roundH * 0.3, roundW * 0.6, roundH * 0.6);
+    }
+}
+
+function drawSpainStreets(scroll) {
 
 }
+
+
 function mousePressed() {
     userStartAudio();
     if (currentScreen === "gameover") {

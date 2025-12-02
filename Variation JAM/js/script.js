@@ -217,7 +217,8 @@ function drawMenu() {// chose a letter = chose a sub game
     drawMenuLetter("E", width / 2 + 120, height / 2);//spain
 
     drawMenuLetter("?", width / 2, height / 2 + 100);
-
+    textSize(20);
+    text("Run so that the music doesn't stop !", width / 2, height / 3 + 250);
     // Draw choice message if any
     if (choiceMessage && millis() - choiceMessageTimer < 1000) {
         fill(255, 255, 0);

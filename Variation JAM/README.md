@@ -1,61 +1,62 @@
-# The 21st Century Frog Game
+# QUE ? The variation run game.
 
-A game about catching flies.
+A game, three sub games showing different places and talking about different things.
 
-[Play it!](https://yannkruplewicz-afk.github.io/cart253/MOD%20JAM/)
-
-- [Ideas](./ideas.md)
-- [Planning](./planning.md)
-- [Pseudocode](./pseudocode.md)
+[Play it!](https://yannkruplewicz-afk.github.io/cart253/Variation%20JAM/)
 
 
 ## Description
 
-This video game is about a frog, controlled by the player, catching flies, the frog.x position being liked to the x position of the mouse. This is the basic principle that was given at the beggining. Then i elaborated on it.
-
-In my game, there is an instructions screen with a retro style. In it, we can see a teenajer in his room listening to music, playing a game in his computer while oustide is the storm, the player can identify with this character, that's the goal. The game begins once the mouse is clicked, by a frog sound, the backrgound sound is a basic nature sound. Whenever the player begins to move, he can't stop, otherwise he looses because the score decreases by one each second. If the player looses, an end screen with a frog sound, the same sound, appears. Clouds are in the sky, moving at different speed to give a real nature ambience. Flies are worth different points, from 5 for the smallest ones to 2 for the biggest ones.
-Regarding flies, they can avoid the frog's attacks 30% of the time. if the player reaches a score of 10 or more, a streak also begins. The sky turns orange, it is the twilight, water drops fall from the sky and damage the player by retiring 2 points to the score. Additionally, the clouds become faster as well as the flies and the background sound changes. The frog sound and the vibrating screen announce the streak. The aim of the streak is to put the player in a 'flow' mode, by being captivated by the pace of the game. That's why the flies' speed grows gradually. Once the player looses, his best score is saved at the top of the screen.
-
-By the way the game is called "the 21st century frog game" because the frog is wearing glasses otherwise she doesn't see the flies, probably because she played too much video games when she was younger, in the 20th century. It is also from the 21st century because the teenajer and his computer in the instructions screen are from the 21st century.
+This video game was inspired by Subway Surfer. My first idea was : " a character running, a music playing, when he hits an obstacle the music's volume decreases, when the song is over, the player wins". I have made 3 different games based on that. In three different places. Quebec, USA and Spain. The name QUE ? refers to What is that ? There is no real intention there, i have just a spanish friend who often say " QUUUEEEEE", i just got inspired. Depending on the sub game, the atmosphere changes. Quebec : the forest, bears, people biking, trees, maple trees, maple sirup, It can be sometimes a little "chliche", that's the point. Each region has musics associated with it. For each level, the tempo of the music leads the game. As the obstacles arrive faster, the music, depending on level 1, 2 or 3, has a faster tempo, to help the player be in a state of flow. Finally, after 300 seconds, the 3 songs have been played ( 100 seconds per song ), the screen fades, the obstacles disappear, the player wins. We can see contrasts and different ways of living through the games. Small cars for Spain, big Chevrolets for USA, biking for Quebec. The player has 3 lives, if he hits an obstacle, he loses 1 and the song's volume decreases for 2 seconds. 3 lives lost and the player loses. 
 
 
 ## Screenshot(s)
 
 
 
-> ![coding advancement part1](./assets/images/VARmodjam.jpg) on oct 29
+> ![Drawn elements](./assets/images/img1.png) on nov 28
 
-Here is a picture displaying all the variables i have used in my program, to do all sorts of things, from music playing to streaks to fly escaping, with a comment for each, describing their exact function.
-
-
-
-> ![coding advancement part2](./assets/images/MousePmodjam.jpg) on oct 28
-
-This part represents the MOUSEPRESSED function which plays a central role in my program. Thanks to it, the flies can escape, the game can start, or restart, the frog can use its tongue, musics can play and the score can change. This is all due to "if" conditionnals.
+I have made a separate folder called "Variation Jam tests" in which i have been designing the charcters for my game. 4 for each region, + a school bus intended to be for USA but was taking too much space on the screen so i removed it.
 
 
 
-> ![coding advancement part3](./assets/images/MoveFlymoodjam.jpg), on oct 29
+> ![USA WORLD CUP 2026](./assets/images/img2.png) on dec 1
 
-This part represents in details how i have made to make the flies be able to move independently, and at unexpected moments. We can see here that the variables shown is "coding advancement part1" are being used to make this effect happen. The combination of "if" conditionnals and variables make them retreat sommetimes, with a curved trajectory and go forward again, 1.3 times faster. Sommetimes, the same fly can unexpectedly avoid the frog's attacks three times in a row !
-
-
-
-> ![Instructions screen screenshot](./assets/images/instructionsScreen.jpg), picture taken on october 29th
-This picture shows the instructions screen with the font i added from google font as well as the background video that i believe, fits pretty much well with the game itself, giving it a retro like effect.
+References to the WORLD CUP of soccer of 2026 added in the background of USA. We can see banners on buildings and held by planes passing by every 20 seconds
 
 
-> ![Basic Gameplay screenshot](./assets/images/playBASIC.jpg), picture taken on october 29th
-Picture showing what the game looks like. A frog with glasses in link to the title, flies, a blue sky and clouds.
+
+> ![Music structure](./assets/images/img3.png), on nov 15
+> ![Music structure part 2](./assets/images/img4.png), on nov 15
+
+This part represents the playlist / music playing structure. It shows how the music are encoded to follow each other depending on the levels.
+
+> ![Player and obstacles](./assets/images/img5.png), on november 17
+Invisible lines guide the spawning obstacles to the player, the player moves on those same lines, here's the code. These lines have the same colors as the different roads.
 
 
-> ![Streak Gameplay screenshot](./assets/images/playSTREAK.png), picture taken on october 29th
-Here we can see what the game looks like during the streak, we have a twilight like sky with bubbles falling from it, damaging the frog if touched, these bubbles have a splash effect if touched. Everything is faster here.
+
+> ![Player's design](./assets/images/img6.png), on nov 27
+> ![Player's design part 2](./assets/images/img7.png), on nov 27
+> ![Player's design part 3](./assets/images/img8.png), on nov 27
+> ![Player's design part 4](./assets/images/img9.png), on nov 27
+This picture shows the player's design, depending on the sub game / region chosen. He is wearing a headset, from which the music is coming, that's we hear it, because we are the player. The perspective of the whole player changes if he goes right / left. When he jumps, his right leg bends forward. He is wearing a coat for Quebec because it is cold. A real madrid jersey for Spain with the inconic number 7. He also shakes a bit for more realism.
 
 
-> ![End screen screenshot](./assets/images/endScreen.jpg), picture taken on october 29th
-This shows the end screen, there was a twilight during the streak, now there is a sunset, with the same retro font.
+> ![CHARACTERS ADDED IN REFERENCE TO REGIONS / PLACES](./assets/images/img1.png), on november 28
+The iconic number 7 of CR7 " SUUUIIIIIIIII" is also present in the USA version with famous streamer Ishowspeed racing the player, but loosing because the player is faster.
 
+
+> ![Streak Gameplay screenshot](./assets/images/img10.png), on november 30
+This picture shows the end of game when the screen fades and that the player is redirected to the main menu, made using the 'victory fade' and the 'currentScreen' variables.
+
+
+> ![End screen screenshot](./assets/images/img11.png), on december 2
+The check collision function is adapted for each elements, with realistic values depending on their respective sizes.
+
+
+> ![End screen screenshot](./assets/images/img12.png), on december 2
+The USA and Spain backgrounds originally had windows in every buildings, but the game was lagging, so i had to remove them. I kept them only in the first buildings in the foreground, which, i think, is a good compromise.
 
 
 
@@ -67,26 +68,30 @@ This shows the end screen, there was a twilight during the streak, now there is 
 > - This project uses [p5.js](https://p5js.org).
 
 
-> - The font used comes from google Font, it is called "PressStart2P" : https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap
+> - The font used comes from google Font, it is called "Bungee+Spice" : https://fonts.google.com/specimen/Bungee+Spice
 
-> - This project uses [music1.mp3] as the instructions screen's song (Pixabay).
+> - This project uses musics such as 
 
-> - This project uses [song2.mp3] as the frog's sound at the beggining and end of the game (Pixabay).
-
-> - This project uses [Begstreaksound.mp3] as the frog's sound during streaks (Pixabay).
-
-> - This project uses [song3.mp3] as the frog's tongue sound (by default in the program).
-
-> - This project uses [sound3.mp3] as the flies'sound (Pixabay).
-
-> - This project uses [sound4.mp3] as the nature sound during basic gameplay (Pixabay).
-> - This project uses [StreakSound.mp3] as the nature sound during streaks (Pixabay).
+Les colories (quebec song1) by Alex Nevsky
+Jaime ta grand mere(quebec song2) by Les Trois Accords
+Fais moi un show de boucane(quebec song3) Les soeurs Boulay
 
 
-> - This project uses [intro.mp4] as the instructions screen background video (https://pixabay.com/fr/videos/pi%C3%A8ce-temp%C3%AAte-chien-cat-lit-164386/).
->-  animated video from u_zys3fy54t3
-> - This project uses [video2.mp4] as the end of game screen background video (https://pixabay.com/fr/videos/%C3%A9clipse-le-coucher-du-soleil-pixels-184857/).
->-  animated video from u_3ufeinwaqh
+Let me down slowly(USA song1) by Alec Benjamin
+SEE you again(USA song2) by Wiz Khalifa and Charlie Puth
+Big Poppa(USA song3) by The Notorious B.I.G
+
+
+La primavera(Spain song1) by Manu Chao
+Hasta el almanecer (Spain song2) by Nicky Jam
+Ana Mena, Rocco Hunt - A Un Paso De La Luna(Spain song3) by Reik, Rocco Hunt, Ana Mena 
+ 
+
+
+
+> - This project uses [endvideo.mp3] by olenchic as (https://pixabay.com/fr/videos/%c3%a9couteur-microphone-%c3%a9galiseur-156605/), found on pixabay.
+
+
 
 
 ## License

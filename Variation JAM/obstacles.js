@@ -2052,8 +2052,8 @@ function drawBear(x, y, s, runPhase = 0) {
         let distance = sqrt(dx * dx + dy * dy);
 
         if (distance > 0) {
-            eyeLookX = constrain((dx / distance) * 3, -3, 3);
-            eyeLookY = constrain((dy / distance) * 2, -2, 2);
+            eyeLookX = constrain((dx / distance) * 3, -13, 3);
+            eyeLookY = constrain((dy / distance) * 2, -12, 2);
         }
     }
 
@@ -2196,10 +2196,10 @@ function drawBear(x, y, s, runPhase = 0) {
 
     // Left eye reflection
     fill(255);
-    ellipse(-14 + eyeLookX, -16 + eyeLookY, 2, 2);
+    ellipse(-16 + eyeLookX, -16 + eyeLookY, 3, 3);
 
     // Right eye reflection
-    ellipse(16 + eyeLookX, -16 + eyeLookY, 2, 2);
+    ellipse(16 + eyeLookX, -16 + eyeLookY, 3, 3);
 
     // === EYEBROWS (focused expression) ===
     stroke(60, 40, 20);

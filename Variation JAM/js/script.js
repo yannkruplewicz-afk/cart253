@@ -70,9 +70,9 @@ function preload() {
     // Load music playlists for each region
     // Q = Quebec (3 songs)
     musicPlaylists.Q = [
-        createAudio('assets/sounds/Q_song1.mp3'),
+        createAudio('assets/sounds/faismoiunshow.mp3'),
         createAudio('assets/sounds/Jaimetagrandmere.mp3'),
-        createAudio('assets/sounds/faismoiunshow.mp3')
+        createAudio('assets/sounds/Q_song1.mp3')
     ];
 
 
@@ -598,7 +598,6 @@ function drawSpainStreets(scroll) {
     noStroke();
     rect(0, height - 100, width, 100);
 }
-
 function drawBuildingLayer(scroll, scale, baseY, buildingHeight, numBuildings, buildingColor) {
     const roadTopY = 200;
     const roadBottomY = height;
@@ -631,46 +630,32 @@ function drawBuildingLayer(scroll, scale, baseY, buildingHeight, numBuildings, b
                 let bWidth = random(60, 120) * depthScale;
                 let bHeight = (buildingHeight + random(-40, 40)) * depthScale;
 
-                // Static window colors
-                let windowSize = 20 * depthScale;
-                let windowSpacing = 28 * depthScale;
-                let windowRows = floor(bHeight / windowSpacing);
-                let windowCols = floor(bWidth / windowSpacing);
-
-                let windowColors = [];
-                for (let r = 0; r < windowRows; r++) {
-                    for (let c = 0; c < windowCols; c++) {
-                        if (random() < 0.5) {
-                            windowColors.push(color(180, 220, 255, alpha * 0.7));
-                        } else {
-                            windowColors.push(color(red(buildingColor), green(buildingColor), blue(buildingColor), alpha));
-                        }
-                    }
-                }
-
                 // Draw building
                 fill(red(buildingColor), green(buildingColor), blue(buildingColor), alpha);
                 stroke(0, alpha * 0.3);
                 strokeWeight(2);
                 rect(buildingX - bWidth / 2, buildingY - bHeight, bWidth, bHeight);
 
-                // Draw windows
-                let wIndex = 0;
-                for (let r = 0; r < windowRows; r++) {
-                    for (let c = 0; c < windowCols; c++) {
-                        let wx = buildingX - bWidth / 2 + (c + 0.5) * windowSpacing;
-                        let wy = buildingY - bHeight + (r + 0.5) * windowSpacing;
+                // Optimized windows - only draw for closer buildings (like NYC)
+                if (scale > 0.5) {
+                    let windowSize = 20 * depthScale;
+                    let windowSpacing = 28 * depthScale;
+                    let windowRows = floor(bHeight / windowSpacing);
+                    let windowCols = floor(bWidth / windowSpacing);
 
-                        fill(windowColors[wIndex]);
-                        noStroke();
-                        rect(wx - windowSize / 2, wy - windowSize / 2, windowSize * 0.8, windowSize);
+                    noStroke();
+                    for (let r = 0; r < windowRows; r++) {
+                        for (let c = 0; c < windowCols; c++) {
+                            let wx = buildingX - bWidth / 2 + (c + 0.5) * windowSpacing;
+                            let wy = buildingY - bHeight + (r + 0.5) * windowSpacing;
 
-                        stroke(80, 80, 80, alpha * 0.5);
-                        strokeWeight(1);
-                        noFill();
-                        rect(wx - windowSize / 2, wy - windowSize / 2, windowSize * 0.8, windowSize);
-
-                        wIndex++;
+                            if (random() < 0.5) {
+                                fill(180, 220, 255, alpha * 0.7);
+                            } else {
+                                fill(255, 255, 200, alpha * 0.5);
+                            }
+                            rect(wx - windowSize / 2, wy - windowSize / 2, windowSize * 0.8, windowSize);
+                        }
                     }
                 }
 
@@ -692,8 +677,6 @@ function drawBuildingLayer(scroll, scale, baseY, buildingHeight, numBuildings, b
         }
     }
 }
-
-
 
 function drawNYCStreets(scroll) {
     // Sky gradient

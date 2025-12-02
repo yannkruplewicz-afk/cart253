@@ -10,8 +10,9 @@ let gameStartTime = 0;
 const GAME_DURATION = 300000; // 300 seconds in milliseconds
 
 let cloudParticles = []; // cloud particles at player's feet
-let carDustParticles = [];
-let player;
+let carDustParticles = [];// Dust from car movement
+// Player and obstacles
+let player; // Timer for spawning obstacles
 let obstacles = [];
 let obstacleTimer = 0;
 const spawnIntervalBase = 1500;
@@ -20,10 +21,10 @@ let lastPlaneSpawn = 0;
 
 
 let worldScroll = 0;
-let mapleSlowActive = false;
+let mapleSlowActive = false;// Maple slow effect active
 let mapleTimer = 0;
-let hitCooldown = false;
-let lastScoreTick = 0;
+let hitCooldown = false;   // Player invulnerability after hit for 1 sec
+let lastScoreTick = 0;// Last score update time
 
 // new (lower, more realistic)
 const JUMP_FORCE = -10;
@@ -53,13 +54,13 @@ let musicPlaylists = {
     U: [],
     E: []
 };
-let currentSongIndex = 0;
-let currentSong = null;
-let volumeDamageActive = false;
-let volumeDamageTimer = 0;
-const NORMAL_VOLUME = 0.5;
-const DAMAGED_VOLUME = 0.2;
-const DAMAGE_DURATION = 3000;
+let currentSongIndex = 0;// Index of the currently playing song
+let currentSong = null; // Current song object
+let volumeDamageActive = false;// Is volume temporarily reduced due to damage
+let volumeDamageTimer = 0; // Timer for how long the damage effect lasts
+const NORMAL_VOLUME = 0.5;// Default volume
+const DAMAGED_VOLUME = 0.2; // Volume when damaged
+const DAMAGE_DURATION = 3000;  // Duration of volume damage effect (ms)
 
 function preload() {
     retroFont = loadFont('assets/font1/BungeeSpice-Regular.ttf');
@@ -119,7 +120,7 @@ function resetAll() {
     };
 
     score = 0;
-    lastScoreTick = millis(); // ADD THIS LINE - initialize the timer
+    lastScoreTick = millis();
     obstacles = [];
     obstacleTimer = millis();
     victory = false;
@@ -151,12 +152,12 @@ function stopAllMusic() {
     }
 }
 
-function startPlaylist(mode) {
+function startPlaylist(mode) { // 9 songs, 3 per sub game
     stopAllMusic();
     currentSongIndex = 0;
     playNextSong(mode);
 }
-function playNextSong(mode) {
+function playNextSong(mode) { // plays 3 songs in a row for each sub game
     if (currentSongIndex < musicPlaylists[mode].length) {
         currentSong = musicPlaylists[mode][currentSongIndex];
 
@@ -188,7 +189,7 @@ function updateMusicPlayback() {
 }
 
 
-function applyVolumeDamage() {
+function applyVolumeDamage() {// song's volume turns down for 2 secs if player is hurt
     volumeDamageActive = true;
     volumeDamageTimer = millis();
     if (currentSong) currentSong.volume(DAMAGED_VOLUME);
@@ -202,7 +203,7 @@ function draw() {
 
 
 
-function drawMenu() {
+function drawMenu() {// chose a letter = chose a sub game
     endVideo.hide();   // extra protection
     fill(255);
     textAlign(CENTER, CENTER);
@@ -211,9 +212,9 @@ function drawMenu() {
     textSize(20);
     text("Click on a letter to choose your region", width / 2, height / 3 + 150);
 
-    drawMenuLetter("Q", width / 2 - 120, height / 2);
-    drawMenuLetter("U", width / 2, height / 2);
-    drawMenuLetter("E", width / 2 + 120, height / 2);
+    drawMenuLetter("Q", width / 2 - 120, height / 2);//quebec
+    drawMenuLetter("U", width / 2, height / 2);//usa
+    drawMenuLetter("E", width / 2 + 120, height / 2);//spain
 
     drawMenuLetter("?", width / 2, height / 2 + 100);
 
@@ -225,7 +226,7 @@ function drawMenu() {
     }
 }
 
-function drawMenuLetter(letter, x, y) {
+function drawMenuLetter(letter, x, y) {// chose a letter = chose a sub game mechanism
     push();
     textAlign(CENTER, CENTER);
     textSize(70);
@@ -260,7 +261,7 @@ function startGame(mode) {
     resetAll();
     startPlaylist(mode);
     gameStartTime = millis();
-    lastScoreTick = millis(); // ADD THIS LINE - reset score timer when game starts
+    lastScoreTick = millis();
 }
 
 // === GAMEPLAY ===
@@ -312,7 +313,7 @@ function drawGame() {
     updateMusicPlayback();
 }
 // === BACKGROUND ===
-// === BACKGROUND ===
+
 function drawParallaxBackground(mode, scroll) {
     if (mode === "Q") {
         drawQuebecForest(scroll);
@@ -344,27 +345,27 @@ function drawQuebecForest(scroll) {
     vertex(width, height / 2 + 50);
     endShape(CLOSE);
 
-    // Extra far tree layer (very slow) - REDUCED TREES - SLOWER
+    // Extra far tree layer (very slow)
     const extraFarScroll = scroll * 0.15;
     drawTreeLayer(extraFarScroll, 0.3, null, height / 2 - 20, 100, 40, true);
 
-    // Far tree layer (slowest parallax) - REDUCED TREES - SLOWER
+    // Far tree layer (slowest parallax)
     const farScroll = scroll * 0.25;
     drawTreeLayer(farScroll, 0.4, null, height / 2 - 20, 120, 35, true);
 
-    // Mid-far tree layer - REDUCED TREES - SLOWER
+    // Mid-far tree layer
     const midFarScroll = scroll * 0.35;
     drawTreeLayer(midFarScroll, 0.5, null, height / 2 + 20, 150, 30, true);
 
-    // Mid tree layer - REDUCED TREES - SLOWER
+    // Mid tree layer
     const midScroll = scroll * 0.45;
     drawTreeLayer(midScroll, 0.6, null, height / 2 + 40, 180, 25, true);
 
-    // Mid-close tree layer - REDUCED TREES - SLOWER
+    // Mid-close tree layerc
     const midCloseScroll = scroll * 0.55;
     drawTreeLayer(midCloseScroll, 0.8, null, height / 2 + 80, 220, 20, true);
 
-    // Close tree layer (fastest parallax) - REDUCED TREES - SLOWER
+    // Close tree layer (fastest parallax) 
     const closeScroll = scroll * 0.65;
     drawTreeLayer(closeScroll, 1.0, null, height / 2 + 120, 250, 18, true);
 
@@ -788,32 +789,31 @@ function drawNYCStreets(scroll) {
 function drawNYCBuildingLayer(scroll, scale, baseY, buildingHeight, numBuildings, buildingColor) {
     const roadTopY = 200;
     const roadBottomY = height;
-    const spacing = scale < 0.4 ? 100 : 140;
-    const offset = scroll * scale;
-
+    const spacing = scale < 0.4 ? 100 : 140; // Distance between buildings
+    const offset = scroll * scale;             // Scroll offset for animation
     for (let i = 0; i < numBuildings; i++) {
         let buildingIndex = floor(offset / spacing) + i;
         let buildingOffset = (buildingIndex * spacing) - offset;
-        let buildingY = baseY + buildingOffset * 0.3;
+        let buildingY = baseY + buildingOffset * 0.3;// Vertical position with parallax
 
-        if (buildingY > roadBottomY) continue;
+        if (buildingY > roadBottomY) continue;// Skip if below screen
 
         let depthScale = scale;
         const roadCenterX = width / 2;
-        const depth = map(buildingY, roadTopY, roadBottomY, 0, 1);
-        const roadWidth = lerp(width * 0.03, width * 1.8, depth);
-        let alpha = 255;
-
+        const depth = map(buildingY, roadTopY, roadBottomY, 0, 1); // Perspective depth
+        const roadWidth = lerp(width * 0.03, width * 1.8, depth);// Road width at this depth
+        let alpha = 255;   // Default opacity
+        // Draw buildings on both sides of the road
         for (let side = 0; side < 2; side++) {
             let sideMultiplier = side === 0 ? -1 : 1;
-            let buildingsPerSide = scale > 0.7 ? 3 : 2;
+            let buildingsPerSide = scale > 0.7 ? 3 : 2;// More buildings if zoomed in
 
             for (let b = 0; b < buildingsPerSide; b++) {
                 let distanceFromRoad = 80 + b * 100;
                 let buildingX = roadCenterX + sideMultiplier * (roadWidth / 2 + distanceFromRoad * depthScale);
 
-                randomSeed(buildingIndex * 3000 + side * 500 + b);
-                let bWidth = random(80, 150) * depthScale;
+                randomSeed(buildingIndex * 3000 + side * 500 + b);// Seed for consistent randomness
+                let bWidth = random(80, 150) * depthScale;          // Building width
                 let bHeight = (buildingHeight + random(-60, 80)) * depthScale;
 
                 // Building body (glass skyscraper) - simplified
@@ -878,7 +878,7 @@ function drawNYCBuildingLayer(scroll, scale, baseY, buildingHeight, numBuildings
                     rect(flagX, flagY - 35 * depthScale + wave, 10 * depthScale, 8 * depthScale);
                 }
 
-                // Soccer ball decorations - removed to improve performance
+
             }
         }
     }
@@ -1091,7 +1091,7 @@ function updatePlayerJump() {
         player.jumpY += player.jumpSpeed;
         player.jumpSpeed += GRAVITY;
 
-        // When landing
+        // When landing, pace slows down
         if (player.jumpY >= 0) {
             player.jumpY = 0;
             player.isJumping = false;
@@ -1104,16 +1104,16 @@ function drawPlayer() {
 
     const physY = player.y - player.jumpY; // account for jump height
 
-    // 1. Render Y
+    // Compute vertical render position
     let renderY = physY - 90;
-    renderY = constrain(renderY, 80, height - 50);
+    renderY = constrain(renderY, 80, height - 50); // Keep on screen
     player.renderY = renderY;
 
-    // compute depth: 0 = top of road, 1 = bottom
+    // Depth for perspective
     const roadTopY = 200;
     const roadBottomY = height;
     const depth = map(physY, roadTopY, roadBottomY, 0, 1);
-
+    // Horizontal position with lane adjustment and smoothing
     const rawX = laneCenterX(player.targetLane, physY);
     const centerX = laneCenterX(1, physY); // middle lane
     const laneOffsetFactor = 0.3 * (1 - depth);
@@ -1125,8 +1125,8 @@ function drawPlayer() {
     // Scale and jump height
     const scaleFactorY = map(renderY, 1180, height, 0., 1.1);
     // Horizontal angle based on distance from center
-    const horizontalOffset = (player.x - centerX) / (width * 0.5); // -1 left, 1 right
-    const angle = -horizontalOffset * PI / 22; // max ±12°, reversed direction
+    const horizontalOffset = (player.x - centerX) / (width * 0.5);
+    const angle = -horizontalOffset * PI / 22;  //perspective effect when player running on left or right sides
     push();
     translate(player.x, renderY);
     rotate(angle);
@@ -1297,15 +1297,15 @@ function drawPlayer() {
     // Update running animation
     runPhase += 0.2;
 
-    const cloudSpawnRate = max(3, 32 - floor(score / 300)); // I suggest using 12 instead of 92
+    const cloudSpawnRate = max(3, 32 - floor(score / 300));  // number of clouds to spawn
     if (!player.isJumping && frameCount % cloudSpawnRate === 0) {
         spawnCloudParticle();
     }
-} function spawnCloudParticle() {
+} function spawnCloudParticle() { // make the clouds spawn behind player when he runs
     const physY = player.y - player.jumpY;
     cloudParticles.push({
         x: player.x + random(-25, 25),
-        y: physY + 15, // more at the bottom
+        y: physY + 15, // controls the y position of the clouds
         size: random(25, 40),
         opacity: 220,
         speedX: random(-2, 2),
@@ -1314,7 +1314,7 @@ function drawPlayer() {
     });
 }
 
-function updateCloudParticles() {
+function updateCloudParticles() { // updates the clouds, make them disappear
     for (let i = cloudParticles.length - 1; i >= 0; i--) {
         const cloud = cloudParticles[i];
         cloud.x += cloud.speedX;
@@ -1330,7 +1330,7 @@ function updateCloudParticles() {
 
 function drawCloudParticles() {
     for (const cloud of cloudParticles) {
-        // 3D shadow effect
+        // 3D shadow effect behind the player when he runs
         noStroke();
         fill(100, 100, 100, cloud.opacity * 0.3);
         beginShape();
@@ -1364,7 +1364,7 @@ function drawCloudParticles() {
         endShape(CLOSE);
     }
 }
-function keyPressed() {
+function keyPressed() {  // character's movements controls
     if (keyCode === LEFT_ARROW) player.targetLane = max(0, player.targetLane - 1);
     if (keyCode === RIGHT_ARROW) player.targetLane = min(2, player.targetLane + 1);
     if ((keyCode === UP_ARROW || key === ' ') && !player.isJumping) {
@@ -1442,7 +1442,7 @@ function drawObstacles(scrollSpeed) {
         } else if (ob.type === "fat_guy") {
             drawFatGuy(0, 0, 2.3);
             // } else if (ob.type === "school_bus") {
-            //  drawSchoolBusFrontView(0, 0, 1);
+            //  drawSchoolBusFrontView(0, 0, 1);  too heavy, so i commented it
         } else if (ob.type === "fiat_car") {
             drawFiatCar(0, 0, 3.3);
         } else if (ob.type === "chevrolet") {
@@ -1483,7 +1483,7 @@ function drawObstacles(scrollSpeed) {
         let collisionSize = 30; // default
         let yOffset = 0; // vertical offset for better alignment
 
-        if (ob.type === "woman_biking") {
+        if (ob.type === "woman_biking") { // puts different collision sizes depending on the logical size of the elements themselves
             collisionSize = 45;
             yOffset = -10;
         } else if (ob.type === "bear") {
@@ -1593,22 +1593,26 @@ function drawGameOver() {
     arc(btnX, btnY, 50, 50, PI * 0.3, PI * 1.7);
 
 }
+
+// Trigger victory state
 function beginVictory() {
     victory = true;
-    if (score > bestScores[currentMode]) {
+    if (score > bestScores[currentMode]) { // Update best score
         bestScores[currentMode] = score;
         saveBestScores(); // Save immediately when new best score is achieved
     }
 }
 function drawVictoryRun() {
-    victoryFade += 0.003;
-    fill(255, 255 * victoryFade);
-    rect(0, 0, width, height);
-    if (victoryFade > 2.5) {
-        currentScreen = "menu";
-        resetAll();
+    victoryFade += 0.003;                  // Gradually increase fade
+    fill(255, 255 * victoryFade);          // White overlay with opacity
+    rect(0, 0, width, height);             // Cover entire screen
+
+    if (victoryFade > 2.5) {               // After fade completes
+        currentScreen = "menu";            // Return to menu
+        resetAll();                         // Reset game state
     }
 }
+// Draw the heads-up display (HUD)
 function drawHUD() {
     fill(255);
     textSize(26);
@@ -1620,43 +1624,50 @@ function drawHUD() {
 }
 
 
-
+// Spawn new car dust particles at (x, y)
 function spawnCarDust(x, y) {
     for (let i = 0; i < 3; i++) {
         carDustParticles.push({
-            x: x + random(-15, 15),
-            y: y + random(-5, 5),
-            size: random(8, 20),
-            opacity: 180,
-            speedX: random(-1, 1),
-            speedY: random(-2, -4), // moves upward
-            life: 1.0
+            x: x + random(-15, 15),   // Slight horizontal offset
+            y: y + random(-5, 5),     // Slight vertical offset
+            size: random(8, 20),      // Random size
+            opacity: 180,              // Initial opacity
+            speedX: random(-1, 1),    // Horizontal movement
+            speedY: random(-2, -4),   // Upward movement
+            life: 1.0                  // Full life
         });
     }
 }
-
+// Update car dust particles
 function updateCarDustParticles() {
+    // Loop backwards to allow removal
     for (let i = carDustParticles.length - 1; i >= 0; i--) {
         const dust = carDustParticles[i];
-        dust.x += dust.speedX;
-        dust.y += dust.speedY;
-        dust.life -= 0.04;
-        dust.opacity = dust.life * 180;
+        dust.x += dust.speedX;// Move particle
+        dust.y += dust.speedY;// Move particle
+        dust.life -= 0.04;  // Decrease life
+        dust.opacity = dust.life * 180; // Fade out
         dust.size *= 1.02; // grows slightly
 
         if (dust.life <= 0) {
-            carDustParticles.splice(i, 1);
+            carDustParticles.splice(i, 1);// Remove dead particle
         }
     }
 }
 
+// Function to draw dust particles kicked up by the car
 function drawCarDustParticles() {
+    // Loop through each dust particle in the carDustParticles array
     for (const dust of carDustParticles) {
-        noStroke();
-        fill(100, 100, 100, dust.opacity * 0.5);
-        ellipse(dust.x, dust.y, dust.size, dust.size);
+        noStroke(); // Disable outlines for the dust shapes
 
-        // Inner lighter dust
+        // Draw the main dust particle
+        // The fill color is a semi-transparent gray based on the particle's opacity
+        fill(100, 100, 100, dust.opacity * 0.5);
+        ellipse(dust.x, dust.y, dust.size, dust.size); // Draw the ellipse at particle's position with its size
+
+        // Draw a smaller, lighter inner dust particle to create a soft, layered effect
+        // This gives the dust a more realistic, airy appearance
         fill(150, 150, 150, dust.opacity * 0.3);
         ellipse(dust.x, dust.y, dust.size * 0.6, dust.size * 0.6);
     }
